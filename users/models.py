@@ -43,11 +43,12 @@ class User(AbstractUser):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     middle_name = models.CharField(max_length=50)
-    suffix = models.CharField(max_length=10, choices=Suffix)
+    suffix = models.CharField(max_length=10, choices=Suffix, null=True, blank=True)
     gender = models.CharField(max_length=10, choices=Gender)
     educational_attainment = models.CharField(max_length=30, choices=EducationalAttainment)
     civil_status = models.CharField(max_length=10, choices=CivilStatus)
     
+    employee_id = models.IntegerField(unique=True, null=True, blank=True)
     career = models.ForeignKey(Careers, on_delete=models.SET_NULL, null=True)
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
     position = models.ForeignKey(Position, on_delete=models.SET_NULL, null=True)
@@ -67,7 +68,7 @@ class User(AbstractUser):
     objects = Manager()
     
     def __str__(self) -> str:
-        return self.get_full_name()
+        return f'{self.get_full_name()}'
     
     def has_module_perms(self, app_label: str) -> bool:
         return self.is_superuser
@@ -76,6 +77,8 @@ class User(AbstractUser):
         return self.is_superuser
     
     def get_full_name(self) -> str:
-        return f'{self.first_name} {self.last_name}'
+        if self.first_name and self.last_name:
+            return f'{self.first_name} {self.last_name} {self.suffix}'
+        return f'{self.employee_id} | {self.username}'
     
     

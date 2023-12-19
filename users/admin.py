@@ -7,7 +7,8 @@ from .positions.models import Position
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
-    list_display = ('username', 
+    list_display = ('employee_id',
+                    'username', 
                     'email', 
                     'first_name', 
                     'last_name', 
@@ -26,6 +27,7 @@ class CustomUserAdmin(UserAdmin):
                                         'gender',
                                         'civil_status',
                                         'educational_attainment',
+                                        'employee_id',
                                         'career',
                                         'department',
                                         'position',

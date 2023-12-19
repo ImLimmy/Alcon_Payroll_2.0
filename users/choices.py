@@ -35,3 +35,7 @@ class EducationalAttainment(models.TextChoices):
     COLLEGE = 'College', 'College'
     MASTERS = 'Masters', 'Masters'
     DOCTORATE = 'Doctorate', 'Doctorate'
+    
+class LogStatus(models.TextChoices):
+    TIME_IN = 'Time In', 'Time In'
+    TIME_OUT = 'Time Out', 'Time Out'
