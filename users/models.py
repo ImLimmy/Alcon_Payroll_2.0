@@ -3,6 +3,8 @@ from typing import Any
 from django.db import models
 from .departments.models import Department
 from .positions.models import Position
+from careers.models import Careers
+from .choices import Gender, CivilStatus, Suffix, EducationalAttainment
 
 from django.contrib.auth.models import AbstractUser, UserManager
 
@@ -40,7 +42,13 @@ class User(AbstractUser):
     # Profile   
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
+    middle_name = models.CharField(max_length=50)
+    suffix = models.CharField(max_length=10, choices=Suffix)
+    gender = models.CharField(max_length=10, choices=Gender)
+    educational_attainment = models.CharField(max_length=30, choices=EducationalAttainment)
+    civil_status = models.CharField(max_length=10, choices=CivilStatus)
     
+    career = models.ForeignKey(Careers, on_delete=models.SET_NULL, null=True)
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
     position = models.ForeignKey(Position, on_delete=models.SET_NULL, null=True)
     
