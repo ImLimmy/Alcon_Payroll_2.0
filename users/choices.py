@@ -39,3 +39,30 @@ class EducationalAttainment(models.TextChoices):
 class LogStatus(models.TextChoices):
     TIME_IN = 'Time In', 'Time In'
     TIME_OUT = 'Time Out', 'Time Out'
+    
+class Status(models.TextChoices):
+    PENDING = 'Pending', 'Pending'
+    APPROVED = 'Approved', 'Approved'
+    REJECTED = 'Rejected', 'Rejected'
+    CANCELLED = 'Cancelled', 'Cancelled'
+    CLOSED = 'Closed', 'Closed'
+    
+class Leave(models.TextChoices):
+    SICK_LEAVE = 'Sick Leave', 'Sick Leave'
+    EMERGENCY_LEAVE = 'Emergency Leave', 'Emergency Leave'
+    VACATION_LEAVE_WITHOUT_PAY = 'Vacation Leave without Pay', 'Vacation Leave without Pay'
+    VACATION_LEAVE_WITH_PAY = 'Vacation Leave with Pay', 'Vacation Leave with Pay'
+    MATERNITY_LEAVE = 'Maternity Leave', 'Maternity Leave'
+    PATERNITY_LEAVE = 'Paternity Leave', 'Paternity Leave'
+    OTHER = 'Other', 'Other'
+    
+class Career(models.TextChoices):
+    PROBATIONARY = 'Probationary', 'Probationary'
+    CONTRACTUAL = 'Contractual', 'Contractual'
+    END_OF_CONTRACT = 'End of Contract', 'End of Contract'
+    REGULAR = 'Regular', 'Regular'
+    RESIGNED = 'Resigned', 'Resigned'
+    RETIRED = 'Retired', 'Retired'
+    TERMINATED = 'Terminated', 'Terminated'
+    ABSENT_WITHOUT_LEAVE = 'Absent without Leave', 'Absent without Leave'
+    

@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'attendance',
     'calendars',
     'careers',
+    'forms',
+    'shift',
     'users',
 ]
 

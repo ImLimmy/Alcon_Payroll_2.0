@@ -5,6 +5,7 @@ from .departments.models import Department
 from .positions.models import Position
 from careers.models import Careers
 from .choices import Gender, CivilStatus, Suffix, EducationalAttainment
+from shift.models import Shift
 
 from django.contrib.auth.models import AbstractUser, UserManager
 
@@ -49,6 +50,7 @@ class User(AbstractUser):
     civil_status = models.CharField(max_length=10, choices=CivilStatus)
     
     employee_id = models.IntegerField(unique=True, null=True, blank=True)
+    shift = models.ForeignKey(Shift, on_delete=models.SET_NULL, null=True)
     career = models.ForeignKey(Careers, on_delete=models.SET_NULL, null=True)
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
     position = models.ForeignKey(Position, on_delete=models.SET_NULL, null=True)

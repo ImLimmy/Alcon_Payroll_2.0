@@ -28,6 +28,7 @@ class CustomUserAdmin(UserAdmin):
                                         'civil_status',
                                         'educational_attainment',
                                         'employee_id',
+                                        'shift',
                                         'career',
                                         'department',
                                         'position',
