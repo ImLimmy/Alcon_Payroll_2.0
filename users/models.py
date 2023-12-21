@@ -7,7 +7,28 @@ from careers.models import Careers
 from api.choices import Gender, CivilStatus, Suffix, EducationalAttainment
 from shift.models import Shift
 
-from django.contrib.auth.models import AbstractUser, UserManager
+from django.contrib.auth.models import AbstractUser, UserManager, Group
+
+class Privilege(models.Model):
+    privilege = models.CharField(max_length=100, unique=True)
+    
+    def __str__(self) -> str:
+        return f'{self.privilege}'
+    
+class Permission(models.Model):
+    permission = models.ForeignKey(Group, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return f'{self.permission}'
+    
+    class Meta:
+        abstract = True
+    
+class PrivilegesPermission(Permission):
+    privileges = models.ForeignKey(Privilege, on_delete=models.CASCADE, related_name='privilege_permissions')
+    
+    class Meta:
+        unique_together = ('privileges', 'permission')
 
 class Manager(UserManager):
     def create_user(self,username:str, email:str | None = None, password:str | None = None, **extra_fields: Any) -> Any:
@@ -54,6 +75,7 @@ class User(AbstractUser):
     career = models.ForeignKey(Careers, on_delete=models.SET_NULL, null=True)
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
     position = models.ForeignKey(Position, on_delete=models.SET_NULL, null=True)
+    privilege = models.ForeignKey(Privilege, on_delete=models.SET_NULL, null=True)
     
     # Permissions
     created_at = models.DateTimeField(auto_now_add=True)
@@ -82,5 +104,4 @@ class User(AbstractUser):
         if self.first_name and self.last_name:
             return f'{self.first_name} {self.last_name} {self.suffix}'
         return f'{self.employee_id} | {self.username}'
-    
     

@@ -22,6 +22,10 @@ urlpatterns = [
     path('positions/', views.PositionList.as_view(), name='position_list'),
     path('positions/<int:pk>/', views.PositionDetail.as_view(), name='position_detail'),
     
+    # http://127.0.0.1:8000/alcon_payroll/users/privileges/ 
+    path('privileges/', views.PrivilegeList.as_view(), name='privilege_list'),
+    path('privileges/<int:pk>/', views.PrivilegeDetail.as_view(), name='privilege_detail'),
+    
     # http://127.0.0.1:8000/alcon_payroll/users/register/
     path('register/', views.Register.as_view(), name='register'),
 ]

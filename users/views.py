@@ -1,6 +1,6 @@
 from users.models import User
 from users.serializers import *
-from rest_framework import generics, permissions
+from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 
@@ -90,3 +90,12 @@ class AdminCreateUser(AdminPermissionMixin, generics.CreateAPIView):
         user.set_password(password)
         user.save()
         return user
+
+# Privilege
+class PrivilegeList(AdminPermissionMixin, generics.ListAPIView):
+    queryset = Privilege.objects.all()
+    serializer_class = PrivilegeList_Serializer
+    
+class PrivilegeDetail(AdminPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
+    queryset = Privilege.objects.all()
+    serializer_class = PrivilegeDetail_Serializer

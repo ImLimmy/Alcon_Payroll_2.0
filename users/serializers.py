@@ -1,4 +1,4 @@
-from .models import User
+from .models import User, Privilege
 from rest_framework import serializers
 
 # User
@@ -100,3 +100,14 @@ class Register_Serializer(serializers.ModelSerializer):
         account.set_password(password)
         account.save()
         return account
+  
+# Privilege  
+class PrivilegeList_Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = Privilege
+        fields = '__all__'
+        
+class PrivilegeDetail_Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = Privilege
+        fields = '__all__'
