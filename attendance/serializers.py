@@ -1,4 +1,8 @@
-from .models import TimeIn, TimeOut, Attendance
+from .models import (
+    TimeIn, 
+    TimeOut, 
+    Attendance,
+    )
 from rest_framework import serializers
 
 class TimeInSerializer(serializers.ModelSerializer):

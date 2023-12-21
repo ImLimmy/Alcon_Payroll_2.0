@@ -8,12 +8,12 @@ from users.departments.models import Department
 from users.departments.serializers import DepartmentList_Serializer, DepartmentDetail_Serializer
 from users.positions.models import Position
 from users.positions.serializers import PositionList_Serializer, PositionDetail_Serializer
+from api.mixins import UserPermissionMixin, AdminPermissionMixin
 
 # Register
-class Register(generics.CreateAPIView):
+class Register(AdminPermissionMixin, generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = Register_Serializer
-    permission_classes = [permissions.IsAdminUser]
     
     def data(self):
         data = {}
@@ -29,51 +29,60 @@ class Register(generics.CreateAPIView):
         return Response(data)
     
 # Logout
-class Logout(generics.GenericAPIView):
-    permission_classes = [permissions.IsAuthenticated]
+class Logout(UserPermissionMixin, generics.GenericAPIView):
     
     def post(self, request):
         request.user.auth_token.delete()
         return Response({'response': 'Successfully logged out'})
 
 # Departments
-class DepartmentList(generics.ListCreateAPIView):
+class DepartmentList(UserPermissionMixin, generics.ListCreateAPIView):
     queryset = Department.objects.all()
     serializer_class = DepartmentList_Serializer
-    permission_classes = [permissions.IsAuthenticated]
     
-class DepartmentDetail(generics.RetrieveUpdateDestroyAPIView):
+    def get_serializer_class(self):
+        if self.request.method == 'POST' and self.request.user.is_staff:
+            return DepartmentDetail_Serializer
+        return super().get_serializer_class()
+    
+class DepartmentDetail(UserPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = Department.objects.all()
     serializer_class = DepartmentDetail_Serializer
-    permission_classes = [permissions.IsAuthenticated]
 
 # Positions
-class PositionList(generics.ListCreateAPIView):
+class PositionList(UserPermissionMixin, generics.ListCreateAPIView):
     queryset = Position.objects.all()
     serializer_class = PositionList_Serializer
-    permission_classes = [permissions.IsAuthenticated]
+    
+    def get_serializer_class(self):
+        if self.request.method == 'POST' and self.request.user.is_staff:
+            return PositionDetail_Serializer
+        return super().get_serializer_class()
 
-class PositionDetail(generics.RetrieveUpdateDestroyAPIView):
+class PositionDetail(UserPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = Position.objects.all()
     serializer_class = PositionDetail_Serializer
-    permission_classes = [permissions.IsAuthenticated]
 
 # User
-class UserList(generics.ListCreateAPIView):
+class UserList(UserPermissionMixin, generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserListSerializer
-    permission_classes = [permissions.IsAuthenticated]
     
-class UserDetail(generics.RetrieveUpdateDestroyAPIView):
+class UserDetail(UserPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserDetailSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    
+    def get_serializer_class(self):
+        if self.request.method == 'PUT' and self.request.user.is_staff:
+            return UserDetailSerializer
+        if self.request.method == 'DELETE' and self.request.user.is_staff:
+            return UserDetailSerializer
+        return super().get_serializer_class()
     
 # Admin
-class AdminCreateUser(generics.CreateAPIView):
+class AdminCreateUser(AdminPermissionMixin, generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = AdminCreateUserSerializer
-    permission_classes = [permissions.IsAdminUser]
     
     def perform_create(self, serializer):
         password = serializer.validated_data.pop('password')

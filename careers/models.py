@@ -1,6 +1,6 @@
 from django.db import models 
 
-from users.choices import Career
+from api.choices import Career
 
 class Careers(models.Model):
     career_status = models.CharField(max_length=100, choices=Career)

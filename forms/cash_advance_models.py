@@ -1,7 +1,7 @@
 from django.db import models
 
 from users.models import User
-from users.choices import Status
+from api.choices import Status
 
 class PaymentTerm(models.Model):
     term = models.IntegerField(default=0, null=False, blank=False)

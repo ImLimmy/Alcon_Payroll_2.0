@@ -1,7 +1,7 @@
 from django.db import models
 
 from users.models import User
-from users.choices import Status
+from api.choices import Status
 
 class HalfDayForm(models.Model):
     half_day_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='half_day_users')

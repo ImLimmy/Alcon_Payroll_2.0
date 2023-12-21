@@ -4,7 +4,7 @@ from django.db import models
 from .departments.models import Department
 from .positions.models import Position
 from careers.models import Careers
-from .choices import Gender, CivilStatus, Suffix, EducationalAttainment
+from api.choices import Gender, CivilStatus, Suffix, EducationalAttainment
 from shift.models import Shift
 
 from django.contrib.auth.models import AbstractUser, UserManager

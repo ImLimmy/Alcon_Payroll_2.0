@@ -1,7 +1,7 @@
 from django.db import models
 
 from users.models import User
-from users.choices import Status
+from api.choices import Status
 from shift.models import BreakTemplate
 
 class TemporaryShiftForm(models.Model):

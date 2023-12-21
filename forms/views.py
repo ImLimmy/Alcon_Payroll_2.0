@@ -1,27 +1,42 @@
 from rest_framework import generics, permissions
 
-from .serializers import *
+from .serializers import (
+    CashAdvanceListSerializer,
+    CashAdvanceDetailSerializer,
+    CashAdvanceCreateSerializer,
+    HalfDayListSerializer,
+    HalfDayDetailSerializer,
+    HalfDayCreateSerializer,
+    LeaveListSerializer,
+    LeaveDetailSerializer,
+    LeaveCreateSerializer,
+    OverTimeListSerializer,
+    OverTimeDetailSerializer,
+    OverTimeCreateSerializer,
+    TemporaryShiftListSerializer,
+    TemporaryShiftDetailSerializer,
+    TemporaryShiftCreateSerializer,
+)
 from .cash_advance_models import CashAdvanceForm
 from .half_day_models import HalfDayForm
 from .leave_models import LeaveForm
 from .overtime_models import OverTimeForm
 from .tempshift_models import TemporaryShiftForm
+from api.mixins import UserPermissionMixin, AdminPermissionMixin
 
 # Cash Advance Form
-class CashAdvanceList(generics.ListCreateAPIView):
+class CashAdvanceList(UserPermissionMixin, generics.ListCreateAPIView):
     queryset = CashAdvanceForm.objects.all()
     serializer_class = CashAdvanceListSerializer
-    permission_classes = [permissions.IsAuthenticated]
     
     def get_serializer_class(self):
         if self.request.method == "POST":
             return CashAdvanceCreateSerializer
         return super().get_serializer_class()
     
-class CashAdvanceDetail(generics.RetrieveUpdateDestroyAPIView):
+class CashAdvanceDetail(UserPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = CashAdvanceForm.objects.all()
     serializer_class = CashAdvanceDetailSerializer
-    permission_classes = [permissions.IsAuthenticated]
     
     def get_serializer_class(self):
         if self.request.method == "PUT":
@@ -29,20 +44,18 @@ class CashAdvanceDetail(generics.RetrieveUpdateDestroyAPIView):
         return super().get_serializer_class()
     
 # Half-Day Form
-class HalfDayList(generics.ListCreateAPIView):
+class HalfDayList(UserPermissionMixin, generics.ListCreateAPIView):
     queryset = HalfDayForm.objects.all()
     serializer_class = HalfDayListSerializer
-    permission_classes = [permissions.IsAuthenticated]
     
     def get_serializer_class(self):
         if self.request.method == "POST":
             return HalfDayCreateSerializer
         return super().get_serializer_class()
     
-class HalfDayDetail(generics.RetrieveUpdateDestroyAPIView):
+class HalfDayDetail(UserPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = HalfDayForm.objects.all()
     serializer_class = HalfDayDetailSerializer
-    permission_classes = [permissions.IsAuthenticated]
     
     def get_serializer_class(self):
         if self.request.method == "PUT":
@@ -50,20 +63,18 @@ class HalfDayDetail(generics.RetrieveUpdateDestroyAPIView):
         return super().get_serializer_class()
     
 # Leave Form
-class LeaveList(generics.ListCreateAPIView):
+class LeaveList(UserPermissionMixin, generics.ListCreateAPIView):
     queryset = LeaveForm.objects.all()
     serializer_class = LeaveListSerializer
-    permission_classes = [permissions.IsAuthenticated]
     
     def get_serializer_class(self):
         if self.request.method == "POST":
             return LeaveCreateSerializer
         return super().get_serializer_class()
     
-class LeaveDetail(generics.RetrieveUpdateDestroyAPIView):
+class LeaveDetail(UserPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = LeaveForm.objects.all()
     serializer_class = LeaveDetailSerializer
-    permission_classes = [permissions.IsAuthenticated]
     
     def get_serializer_class(self):
         if self.request.method == "PUT":
@@ -71,20 +82,18 @@ class LeaveDetail(generics.RetrieveUpdateDestroyAPIView):
         return super().get_serializer_class()
     
 # OverTime Form
-class OverTimeList(generics.ListCreateAPIView):
+class OverTimeList(UserPermissionMixin, generics.ListCreateAPIView):
     queryset = OverTimeForm.objects.all()
     serializer_class = OverTimeListSerializer
-    permission_classes = [permissions.IsAuthenticated]
     
     def get_serializer_class(self):
         if self.request.method == "POST":
             return OverTimeCreateSerializer
         return super().get_serializer_class()
     
-class OverTimeDetail(generics.RetrieveUpdateDestroyAPIView):
+class OverTimeDetail(UserPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = OverTimeForm.objects.all()
     serializer_class = OverTimeDetailSerializer
-    permission_classes = [permissions.IsAuthenticated]
     
     def get_serializer_class(self):
         if self.request.method == "PUT":
@@ -92,20 +101,18 @@ class OverTimeDetail(generics.RetrieveUpdateDestroyAPIView):
         return super().get_serializer_class()
     
 # Temporary Shift Form
-class TemporaryShiftList(generics.ListCreateAPIView):
+class TemporaryShiftList(UserPermissionMixin, generics.ListCreateAPIView):
     queryset = TemporaryShiftForm.objects.all()
     serializer_class = TemporaryShiftListSerializer
-    permission_classes = [permissions.IsAuthenticated]
     
     def get_serializer_class(self):
         if self.request.method == "POST":
             return TemporaryShiftCreateSerializer
         return super().get_serializer_class()
     
-class TemporaryShiftDetail(generics.RetrieveUpdateDestroyAPIView):
+class TemporaryShiftDetail(UserPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = TemporaryShiftForm.objects.all()
     serializer_class = TemporaryShiftDetailSerializer
-    permission_classes = [permissions.IsAuthenticated]
     
     def get_serializer_class(self):
         if self.request.method == "PUT":

@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-from users.choices import LogStatus
+from api.choices import LogStatus
 
 from users.models import User
 

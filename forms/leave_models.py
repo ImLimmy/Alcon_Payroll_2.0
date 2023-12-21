@@ -1,7 +1,7 @@
 from django.db import models
 
 from users.models import User
-from users.choices import Leave, Status
+from api.choices import Leave, Status
 
 class LeaveForm(models.Model):
     leave_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='leave_users')

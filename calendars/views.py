@@ -1,18 +1,20 @@
-from .serializers import *
+from .serializers import (
+    EventList_Serializer,
+    EventDetail_Serializer,
+    EventCreate_Serializer,
+    )
 from .models import CalendarEvent
+from api.mixins import UserPermissionMixin, AdminPermissionMixin
 from rest_framework import generics, permissions
 
-class EventList(generics.ListAPIView):
+class EventList(UserPermissionMixin, generics.ListAPIView):
     queryset = CalendarEvent.objects.all()
     serializer_class = EventList_Serializer
-    permission_classes = [permissions.IsAuthenticated]
     
-class EventDetail(generics.RetrieveUpdateDestroyAPIView):
+class EventDetail(UserPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = CalendarEvent.objects.all()
     serializer_class = EventDetail_Serializer
-    permission_classes = [permissions.IsAuthenticated]
     
-class EventCreate(generics.CreateAPIView):
+class EventCreate(AdminPermissionMixin, generics.CreateAPIView):
     queryset = CalendarEvent.objects.all()
     serializer_class = EventCreate_Serializer
-    permission_classes = [permissions.IsAdminUser]
