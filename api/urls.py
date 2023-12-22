@@ -10,6 +10,9 @@ urlpatterns = [
     # careers app
     path('careers/', include('careers.urls'), name='careers'),
     
+    # contributions app
+    path('contributions/', include('contributions.urls'), name='contributions'),
+    
     # forms app
     path('forms/', include('forms.urls'), name='forms'),
     

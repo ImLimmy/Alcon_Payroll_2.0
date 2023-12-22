@@ -6,6 +6,11 @@ from .positions.models import Position
 from careers.models import Careers
 from api.choices import Gender, CivilStatus, Suffix, EducationalAttainment
 from shift.models import Shift
+from contributions.models import (
+    PagIbig,
+    PhilHealth,
+    SSS,
+)
 
 from django.contrib.auth.models import AbstractUser, UserManager, Group
 
@@ -70,12 +75,27 @@ class User(AbstractUser):
     educational_attainment = models.CharField(max_length=30, choices=EducationalAttainment)
     civil_status = models.CharField(max_length=10, choices=CivilStatus)
     
+    # Work Information
     employee_id = models.IntegerField(unique=True, null=True, blank=True)
     shift = models.ForeignKey(Shift, on_delete=models.SET_NULL, null=True)
     career = models.ForeignKey(Careers, on_delete=models.SET_NULL, null=True)
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
     position = models.ForeignKey(Position, on_delete=models.SET_NULL, null=True)
     privilege = models.ForeignKey(Privilege, on_delete=models.SET_NULL, null=True)
+    
+    # Salary Information
+    salary_per_day = models.FloatField(null=False, blank=False, default=0.0)
+    number_of_days = models.IntegerField(null=False, blank=False, default=0)
+    
+    # Contributions
+    pag_ibig_number = models.IntegerField(unique=True, null=True, blank=False, default=0)
+    pag_ibig_contribution = models.ForeignKey(PagIbig, on_delete=models.CASCADE, null=True, blank=True)
+    
+    philhealth_number = models.IntegerField(unique=True, null=True, blank=False, default=0)
+    philhealth_contribution = models.ForeignKey(PhilHealth, on_delete=models.CASCADE, null=True, blank=True)
+        
+    sss_number = models.IntegerField(unique=True, null=True, blank=False, default=0)
+    sss_contribution = models.ForeignKey(SSS, on_delete=models.CASCADE, null=True, blank=True)
     
     # Permissions
     created_at = models.DateTimeField(auto_now_add=True)
@@ -105,3 +125,44 @@ class User(AbstractUser):
             return f'{self.first_name} {self.last_name} {self.suffix}'
         return f'{self.employee_id} | {self.username}'
     
+    # Salary Computation
+    @property
+    def basic_salary_per_month(self) -> float:
+        return round((self.salary_per_day * self.number_of_days), 2)
+    
+    @property
+    def basic_pay(self) -> float:
+        return round((self.basic_salary_per_month / 2), 2)
+    
+    # PagIbig Contribution Computation
+    @property
+    def pag_ibig_contributions(self) -> float:
+        max_value = 0.0
+        if self.basic_pay > 1500:
+            pag_ibig_account = PagIbig.objects.filter(higher_end__gte=self.basic_pay).first()
+            if self.basic_pay < pag_ibig_account.higher_end:
+                max_value = self.basic_pay
+            else:
+                max_value = pag_ibig_account.higher_end
+        else:
+            pag_ibig_account = PagIbig.objects.all()[0]
+            max_value = pag_ibig_account.higher_end
+        return round((max_value * pag_ibig_account.employee_share), 2)
+    
+    # PhilHealth Contribution Computation
+    @property
+    def phil_health_contributions(self) -> float:
+        rate = self.philhealth_contribution.rate
+        if self.basic_pay < self.philhealth_contribution.minimum_salary:
+            return 0
+        if self.basic_pay > self.philhealth_contribution.maximum_salary:
+            self.basic_pay = self.philhealth_contribution.maximum_salary
+        return round((self.basic_pay * rate) / 100, 2)
+            
+    # SSS Contribution Computation
+    @property
+    def sss_contributions(self) -> float:
+        sss_account = SSS.objects.filter(minimum_salary__lte=self.basic_pay, maximum_salary__gte=self.basic_pay).first()
+        if sss_account is None:
+            return 0
+        return sss_account.aoc_total_employee
