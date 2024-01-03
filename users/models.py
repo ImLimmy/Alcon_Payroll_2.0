@@ -11,6 +11,7 @@ from contributions.models import (
     PhilHealth,
     SSS,
 )
+from payroll_extras.models import Incentives, Deductions
 
 from django.contrib.auth.models import AbstractUser, UserManager, Group
 
@@ -86,6 +87,9 @@ class User(AbstractUser):
     # Salary Information
     salary_per_day = models.FloatField(null=False, blank=False, default=0.0)
     number_of_days = models.IntegerField(null=False, blank=False, default=0)
+    
+    incentives = models.ManyToManyField(Incentives)
+    deductions = models.ManyToManyField(Deductions)
     
     # Contributions
     pag_ibig_number = models.IntegerField(unique=True, null=True, blank=False, default=0)

@@ -13,7 +13,7 @@ class TemporaryShiftForm(models.Model):
     description = models.TextField(null=False, blank=False)
     
     # Admin can only view this
-    status = models.CharField(max_length=10, choices=Status)
+    status = models.CharField(max_length=10, choices=Status, default='Pending')
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)

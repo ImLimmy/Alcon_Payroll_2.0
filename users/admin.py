@@ -44,6 +44,8 @@ class CustomUserAdmin(UserAdmin):
                                                  )}),
                 ('Salary Information', {'fields': ('salary_per_day',
                                                    'number_of_days',
+                                                   'incentives',
+                                                   'deductions',
                                                    )}),
                 ('Contributions', {'fields': ('pag_ibig_number',
                                               'pag_ibig_contribution',

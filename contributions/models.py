@@ -5,14 +5,14 @@ from datetime import datetime
 
 # PagIbig Account
 class PagIbig(models.Model):
-    year = models.IntegerField(default=datetime.now().year, unique=True)
+    pagibig_year = models.IntegerField(default=datetime.now().year, unique=True)
     employer_share = models.FloatField(default=0.0)
     employee_share = models.FloatField(default=0.0)
     higher_end = models.FloatField(default=5000)
     lower_end = models.FloatField(default=0.0)
     
     def __str__(self):
-        return f'Year: {self.year} | PagIbig Contribution: ER = {self.employer_share}% , EE = {self.employee_share}%'
+        return f'Year: {self.pagibig_year} | PagIbig Contribution: ER = {self.employer_share}% , EE = {self.employee_share}%'
     
     class Meta:
         verbose_name = 'PagIbig'
@@ -20,13 +20,13 @@ class PagIbig(models.Model):
 
 # PhilHealth
 class PhilHealth(models.Model):
-    year = models.IntegerField(default=datetime.now().year, unique=True)
+    philhealth_year = models.IntegerField(default=datetime.now().year, unique=True)
     minimum_salary = models.FloatField(validators=[MinValueValidator(10_000), MaxValueValidator(100_000)], default=10000, null=False, blank=False)
     maximum_salary = models.FloatField(validators=[MinValueValidator(10_000), MaxValueValidator(100_000)], default=100000, null=False, blank=False)
     rate = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(100)], default=0, null=False, blank=False)
     
     def __str__(self) -> str:
-        return f'Year: {self.year} | Monthly Basic Salary: {self.minimum_salary} - {self.maximum_salary}'
+        return f'Year: {self.philhealth_year} | Monthly Basic Salary: {self.minimum_salary} - {self.maximum_salary}'
     
     class Meta:
         verbose_name = 'PhilHealth'
@@ -34,15 +34,19 @@ class PhilHealth(models.Model):
   
 # SSS
 class RangeOfCompensation(models.Model):
-    year = models.IntegerField(default=datetime.now().year, unique=True)
+    roc_year = models.IntegerField(default=datetime.now().year, unique=True)
     employer = models.FloatField(default=9.5)
     employee = models.FloatField(default=4.5)
     
     def __str__(self):
-        return f'SSS Range of Compensation: ER = {self.employer} , EE = {self.employee}'
+        return f'{self.roc_year}'
+    
+    class Meta:
+        verbose_name = 'Range of Compensation'
+        verbose_name_plural = 'Range of Compensation'
    
 class SSS(models.Model):
-    employer_employee = models.ForeignKey(RangeOfCompensation, on_delete=models.CASCADE, null=True, blank=True, related_name='sss_range')
+    sss_year = models.ForeignKey(RangeOfCompensation, on_delete=models.CASCADE, null=True, blank=True, related_name='sss_range')
     minimum_salary = models.FloatField()
     maximum_salary = models.FloatField()
     
@@ -52,7 +56,7 @@ class SSS(models.Model):
         
     def __str__(self) -> str:
         # return f'SSS Range: {self.minimum_salary} - {self.maximum_salary}'
-        return f'Year: {self.employer_employee.year} | {self.employer_employee.__str__()}'
+        return f'Year: {self.sss_year.roc_year} | {self.sss_year.employer} - {self.sss_year.employee}'
     
     # MSC
     # msc = Monthly Salary Contribution
@@ -80,11 +84,11 @@ class SSS(models.Model):
     # aoc = Amount of Contribution
     @property
     def aoc_regular_ss_employer(self):
-        return round((self.employer_employee.employer * self.msc_ec) / 100, 2)
+        return round((self.sss_year.employer * self.msc_ec) / 100, 2)
     
     @property
     def aoc_regular_ss_employee(self):
-        return round((self.employer_employee.employee * self.msc_ec) / 100, 2)
+        return round((self.sss_year.employee * self.msc_ec) / 100, 2)
     
     @property
     def aoc_regular_ss_total(self):
@@ -108,13 +112,13 @@ class SSS(models.Model):
     def aoc_wisp_employer(self):
         if self.msc_total <= 20000:
             return 0
-        return round((self.msc_wisp * self.employer_employee.employer) / 100, 2)
+        return round((self.msc_wisp * self.sss_year.employer) / 100, 2)
 
     @property
     def aoc_wisp_employee(self):
         if self.msc_total <= 20000:
             return 0
-        return round((self.msc_wisp * self.employer_employee.employee) / 100, 2)
+        return round((self.msc_wisp * self.sss_year.employee) / 100, 2)
     
     @property
     def aoc_wisp_total(self):

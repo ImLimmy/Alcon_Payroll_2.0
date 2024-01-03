@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'careers',
     'contributions',
     'forms',
+    'payroll_extras',
     'shift',
     'users',
 ]

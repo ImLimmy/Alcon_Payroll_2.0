@@ -10,7 +10,7 @@ class LeaveForm(models.Model):
     description = models.TextField(null=False, blank=False)
     
     # Admin can only view this
-    status = models.CharField(max_length=10, choices=Status)
+    status = models.CharField(max_length=10, choices=Status, default='Pending')
     leave_type = models.CharField(max_length=50, choices=Leave)
     
     created_at = models.DateTimeField(auto_now_add=True)

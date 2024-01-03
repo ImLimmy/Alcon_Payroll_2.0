@@ -66,3 +66,7 @@ class Career(models.TextChoices):
     TERMINATED = 'Terminated', 'Terminated'
     ABSENT_WITHOUT_LEAVE = 'Absent without Leave', 'Absent without Leave'
     
+class Extras(models.TextChoices):
+    ACTIVE = 'Active_On', 'ON'
+    INACTIVE = 'Inactive_Off', 'OFF'
+    

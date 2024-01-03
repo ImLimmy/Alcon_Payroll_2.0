@@ -8,16 +8,16 @@ from .models import (
 
 @admin.register(PagIbig)
 class PagIbigAdmin(admin.ModelAdmin):
-    list_display = ('year', 'employer_share', 'employee_share', 'higher_end', 'lower_end')
+    list_display = ('pagibig_year', 'employer_share', 'employee_share', 'higher_end', 'lower_end')
 
 @admin.register(PhilHealth)
 class PhilHealthAdmin(admin.ModelAdmin):
-    list_display = ('minimum_salary', 'maximum_salary', 'rate')
+    list_display = ('philhealth_year', 'minimum_salary', 'maximum_salary', 'rate')
     
 @admin.register(SSS)
 class SSSAdmin(admin.ModelAdmin):
     list_display = (
-        'employer_employee', 
+        'sss_year', 
         'minimum_salary', 
         'maximum_salary',
         'msc_ec',
