@@ -46,6 +46,7 @@ class CustomUserAdmin(UserAdmin):
                                                    'number_of_days',
                                                    'incentives',
                                                    'deductions',
+                                                   'kpi',
                                                    )}),
                 ('Contributions', {'fields': ('pag_ibig_number',
                                               'pag_ibig_contribution',

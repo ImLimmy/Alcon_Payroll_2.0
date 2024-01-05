@@ -4,6 +4,7 @@ from .cash_advance_models import CashAdvanceForm
 from .half_day_models import HalfDayForm
 from .leave_models import LeaveForm
 from .overtime_models import OverTimeForm
+from .kpi_models import Kpi
 from .tempshift_models import TemporaryShiftForm
 
 # Cash Advance Form
@@ -56,6 +57,29 @@ class HalfDayDetailSerializer(serializers.ModelSerializer):
         model = HalfDayForm
         fields = '__all__'
         
+# kpi Form
+
+class KpiCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Kpi
+        exclude = [
+            'created_at',
+            'updated_at',
+        ]
+        
+class KpiListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Kpi
+        fields = [
+            'id',
+            'kpi_user',
+        ]
+        
+class KpiDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Kpi
+        fields = '__all__'
+    
 # Leave Form
 class LeaveCreateSerializer(serializers.ModelSerializer):
     

@@ -31,6 +31,13 @@ urlpatterns = [
     # http://127.0.0.1:8000/alcon_payroll/forms/overtime/create/
     path('create/', views.OverTimeList.as_view(), name='overtime_create'),
     
+    # http://127.0.0.1:8000/alcon_payroll/forms/kpi/
+    path('kpi/', views.KpiList.as_view(), name='kpi_list'),
+    path('kpi/<int:pk>/', views.KpiDetail.as_view(), name='kpi_detail'),
+    
+    # http://127.0.0.1:8000/alcon_payroll/forms/kpi/create/
+    path('create/', views.KpiList.as_view(), name='kpi_create'),
+    
     # http://127.0.0.1:8000/alcon_payroll/forms/temporary_shift/
     path('', views.TemporaryShiftList.as_view(), name='temporary_shift_list'),
     path('<int:pk>/', views.TemporaryShiftDetail.as_view(), name='temporary_shift_detail'),

@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .cash_advance_models import CashAdvanceForm, PaymentTerm
 from .half_day_models import HalfDayForm
+from .kpi_models import Kpi
 from .leave_models import LeaveForm
 from .overtime_models import OverTimeForm
 from .tempshift_models import TemporaryShiftForm
@@ -14,6 +15,10 @@ class CashAdvanceAdmin(admin.ModelAdmin):
 class HalfDayAdmin(admin.ModelAdmin):
     list_display = ('half_day_user', 'date', 'time_out', 'status')
     list_filter = ('half_day_user', 'date', 'status')
+
+@admin.register(Kpi)
+class KpiAdmin(admin.ModelAdmin):
+    list_display = ('category', 'metrics', 'min_score', 'max_score', 'remarks', 'comments')
 
 @admin.register(LeaveForm)
 class LeaveAdmin(admin.ModelAdmin):

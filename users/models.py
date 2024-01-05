@@ -12,6 +12,7 @@ from contributions.models import (
     SSS,
 )
 from payroll_extras.models import Incentives, Deductions
+from forms.kpi_models import Kpi
 
 from django.contrib.auth.models import AbstractUser, UserManager, Group
 
@@ -91,14 +92,16 @@ class User(AbstractUser):
     incentives = models.ManyToManyField(Incentives)
     deductions = models.ManyToManyField(Deductions)
     
+    kpi = models.OneToOneField(Kpi, on_delete=models.SET_NULL, null=True, blank=True)
+    
     # Contributions
-    pag_ibig_number = models.IntegerField(unique=True, null=True, blank=False, default=0)
+    pag_ibig_number = models.IntegerField(unique=True, null=True, blank=False)
     pag_ibig_contribution = models.ForeignKey(PagIbig, on_delete=models.CASCADE, null=True, blank=True)
     
-    philhealth_number = models.IntegerField(unique=True, null=True, blank=False, default=0)
+    philhealth_number = models.IntegerField(unique=True, null=True, blank=False)
     philhealth_contribution = models.ForeignKey(PhilHealth, on_delete=models.CASCADE, null=True, blank=True)
         
-    sss_number = models.IntegerField(unique=True, null=True, blank=False, default=0)
+    sss_number = models.IntegerField(unique=True, null=True, blank=False)
     sss_contribution = models.ForeignKey(SSS, on_delete=models.CASCADE, null=True, blank=True)
     
     # Permissions

@@ -13,6 +13,9 @@ from .serializers import (
     OverTimeListSerializer,
     OverTimeDetailSerializer,
     OverTimeCreateSerializer,
+    KpiListSerializer,
+    KpiDetailSerializer,
+    KpiCreateSerializer,
     TemporaryShiftListSerializer,
     TemporaryShiftDetailSerializer,
     TemporaryShiftCreateSerializer,
@@ -21,6 +24,7 @@ from .cash_advance_models import CashAdvanceForm
 from .half_day_models import HalfDayForm
 from .leave_models import LeaveForm
 from .overtime_models import OverTimeForm
+from .kpi_models import Kpi
 from .tempshift_models import TemporaryShiftForm
 from api.mixins import UserPermissionMixin, AdminPermissionMixin
 
@@ -100,6 +104,24 @@ class OverTimeDetail(UserPermissionMixin, generics.RetrieveUpdateDestroyAPIView)
             return OverTimeCreateSerializer
         return super().get_serializer_class()
     
+# Kpi Form
+class KpiList(AdminPermissionMixin, generics.ListCreateAPIView):
+    queryset = Kpi.objects.all()
+    serializer_class = KpiListSerializer
+    
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            return KpiCreateSerializer
+        return super().get_serializer_class()
+    
+class KpiDetail(AdminPermissionMixin, generics.RetrieveDestroyAPIView):
+    queryset = Kpi.objects.all()
+    serializer_class = KpiDetailSerializer
+    
+class KpiUpdate(AdminPermissionMixin, generics.UpdateAPIView):
+    queryset = Kpi.objects.all()
+    serializer_class = KpiCreateSerializer
+
 # Temporary Shift Form
 class TemporaryShiftList(UserPermissionMixin, generics.ListCreateAPIView):
     queryset = TemporaryShiftForm.objects.all()
