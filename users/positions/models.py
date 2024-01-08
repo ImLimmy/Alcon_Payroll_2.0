@@ -5,6 +5,7 @@ from django.db import models
 class Position(models.Model):
     
     position = models.CharField(max_length=100, unique=True)
+    description = models.TextField(null=True, blank=True)
     
     class Meta:
         ordering = ['position']
