@@ -19,9 +19,9 @@ class CustomUserAdmin(UserAdmin):
                     'salary_per_day',
                     'basic_pay',
                     'basic_salary_per_month',
-                    'pag_ibig_contribution',
-                    'philhealth_contribution',
-                    'sss_contribution',
+                    'pag_ibig_contributions',
+                    'phil_health_contributions',
+                    'sss_contributions',
                     )
     fieldsets = (
                 ('Login', {'fields': ('username',

@@ -145,25 +145,34 @@ class User(AbstractUser):
     @property
     def pag_ibig_contributions(self) -> float:
         max_value = 0.0
-        if self.basic_pay > 1500:
-            pag_ibig_account = PagIbig.objects.filter(higher_end__gte=self.basic_pay).first()
-            if self.basic_pay < pag_ibig_account.higher_end:
-                max_value = self.basic_pay
+        if self.pag_ibig_contribution is not None:
+            if self.basic_pay > 1500:
+                print(self.pag_ibig_contribution.higher_end)
+                if self.basic_pay < self.pag_ibig_contribution.higher_end:
+                    max_value = self.basic_pay
+                else:
+                    max_value = self.pag_ibig_contribution.higher_end
             else:
-                max_value = pag_ibig_account.higher_end
-        else:
-            pag_ibig_account = PagIbig.objects.all()[0]
-            max_value = pag_ibig_account.higher_end
-        return round((max_value * pag_ibig_account.employee_share), 2)
+                # pag_ibig_account = PagIbig.objects.all().first()
+                max_value = self.pag_ibig_contribution.higher_end
+            return round((max_value * self.pag_ibig_contribution.employee_share), 2)
+        return 0
     
     # PhilHealth Contribution Computation
     @property
     def phil_health_contributions(self) -> float:
-        rate = self.philhealth_contribution.rate
-        if self.basic_pay < self.philhealth_contribution.minimum_salary:
+        if self.philhealth_contribution is None:
             return 0
-        if self.basic_pay > self.philhealth_contribution.maximum_salary:
-            self.basic_pay = self.philhealth_contribution.maximum_salary
+        
+        rate = self.philhealth_contribution.rate
+        minimum_salary = self.philhealth_contribution.minimum_salary
+        maximum_salary = self.philhealth_contribution.maximum_salary
+        
+        if self.basic_pay < minimum_salary:
+            return 0
+        if self.basic_pay > maximum_salary:
+            self.basic_pay = maximum_salary
+        
         return round((self.basic_pay * rate) / 100, 2)
             
     # SSS Contribution Computation
