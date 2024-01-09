@@ -1,6 +1,6 @@
 from users.models import User
 from users.serializers import *
-from rest_framework import generics
+from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 
@@ -29,7 +29,8 @@ class Register(AdminPermissionMixin, generics.CreateAPIView):
         return Response(data)
     
 # Logout
-class Logout(UserPermissionMixin, generics.GenericAPIView):
+class Logout(generics.GenericAPIView):
+    permission_classes = (permissions.IsAuthenticated, )
     
     def post(self, request):
         request.user.auth_token.delete()

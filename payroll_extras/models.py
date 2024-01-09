@@ -11,7 +11,7 @@ class Incentives(models.Model):
     incentive_status = models.CharField(max_length=50, choices=Extras)
     
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     
     class Meta:
         verbose_name = 'Incentive'
@@ -29,7 +29,7 @@ class Deductions(models.Model):
     deduction_status = models.CharField(max_length=50, choices=Extras)
     
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     
     class Meta:
         verbose_name = 'Deduction'

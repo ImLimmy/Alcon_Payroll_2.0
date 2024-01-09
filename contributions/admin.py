@@ -8,7 +8,7 @@ from .models import (
 
 @admin.register(PagIbig)
 class PagIbigAdmin(admin.ModelAdmin):
-    list_display = ('pagibig_year', 'employer_share', 'employee_share', 'higher_end', 'lower_end')
+    list_display = ('pagibig_year', 'employer_share', 'employee_share_lower_bracket', 'employee_share_higher_bracket', 'higher_end', 'lower_end')
 
 @admin.register(PhilHealth)
 class PhilHealthAdmin(admin.ModelAdmin):

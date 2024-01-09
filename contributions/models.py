@@ -7,12 +7,13 @@ from datetime import datetime
 class PagIbig(models.Model):
     pagibig_year = models.IntegerField(default=datetime.now().year, unique=True)
     employer_share = models.FloatField(default=0.0)
-    employee_share = models.FloatField(default=0.0)
+    employee_share_lower_bracket = models.FloatField(default=0.0)
+    employee_share_higher_bracket = models.FloatField(default=0.0)
     higher_end = models.FloatField(default=5000)
-    lower_end = models.FloatField(default=0.0)
+    lower_end = models.FloatField(default=1500)
     
     def __str__(self):
-        return f'Year: {self.pagibig_year} | PagIbig Contribution: ER = {self.employer_share}% , EE = {self.employee_share}%'
+        return f'Year: {self.pagibig_year} | PagIbig Contribution: ER = {self.employer_share}% , EE = {self.employee_share_lower_bracket} | {self.employee_share_higher_bracket}%'
     
     class Meta:
         verbose_name = 'PagIbig'

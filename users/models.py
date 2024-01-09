@@ -146,16 +146,15 @@ class User(AbstractUser):
     def pag_ibig_contributions(self) -> float:
         max_value = 0.0
         if self.pag_ibig_contribution is not None:
-            if self.basic_pay > 1500:
-                print(self.pag_ibig_contribution.higher_end)
-                if self.basic_pay < self.pag_ibig_contribution.higher_end:
-                    max_value = self.basic_pay
+            if self.basic_salary_per_month > self.pag_ibig_contribution.lower_end:
+                if self.basic_salary_per_month < self.pag_ibig_contribution.higher_end:
+                    max_value = self.basic_salary_per_month       
                 else:
                     max_value = self.pag_ibig_contribution.higher_end
+                return round((max_value * self.pag_ibig_contribution.employee_share_higher_bracket) / 100, 2)
             else:
-                # pag_ibig_account = PagIbig.objects.all().first()
-                max_value = self.pag_ibig_contribution.higher_end
-            return round((max_value * self.pag_ibig_contribution.employee_share), 2)
+                max_value = self.basic_salary_per_month
+            return round((max_value * self.pag_ibig_contribution.employee_share_lower_bracket) / 100, 2)
         return 0
     
     # PhilHealth Contribution Computation

@@ -12,8 +12,12 @@ class Kpi(models.Model):
     comments = models.TextField()
     
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     
+    class Meta:
+        verbose_name = 'KPI'
+        verbose_name_plural = 'KPI'
+        
     @property
     def checker(self):
         if self.min_score == self.max_score:
