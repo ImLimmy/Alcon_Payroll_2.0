@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import F
 
 # Create your models here.
 
@@ -8,8 +9,14 @@ class Department(models.Model):
     description = models.TextField(null=True, blank=True)
     
     class Meta:
-        ordering = ['department']
+        # Either of the 2 can be used
+        
+        # ordering = ["-id"]
+        ordering = ["id"]
+        
+        # ordering = [F('id').desc(nulls_last=True)]
+        # ordering = [F('id').asc(nulls_last=True)]
     
     def __str__(self):
-        return self.department
-    
+        return f"{self.department}" #self.department
+   
