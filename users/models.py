@@ -163,12 +163,22 @@ class User(AbstractUser):
         if self.philhealth_contribution is None:
             return 0
         
+        if self.philhealth_contribution is None:
+            return 0
+        
         rate = self.philhealth_contribution.rate
         minimum_salary = self.philhealth_contribution.minimum_salary
         maximum_salary = self.philhealth_contribution.maximum_salary
         
         if self.basic_pay < minimum_salary:
+        minimum_salary = self.philhealth_contribution.minimum_salary
+        maximum_salary = self.philhealth_contribution.maximum_salary
+        
+        if self.basic_pay < minimum_salary:
             return 0
+        if self.basic_pay > maximum_salary:
+            self.basic_pay = maximum_salary
+        
         if self.basic_pay > maximum_salary:
             self.basic_pay = maximum_salary
         

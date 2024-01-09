@@ -67,6 +67,6 @@ class Career(models.TextChoices):
     ABSENT_WITHOUT_LEAVE = 'Absent without Leave', 'Absent without Leave'
     
 class Extras(models.TextChoices):
-    ACTIVE = 'Active_On', 'ON'
-    INACTIVE = 'Inactive_Off', 'OFF'
+    ACTIVE = 'Active', 'Active'
+    INACTIVE = 'Inactive', 'Inactive'
     

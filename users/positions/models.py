@@ -8,7 +8,7 @@ class Position(models.Model):
     description = models.TextField(null=True, blank=True)
     
     class Meta:
-        ordering = ['position']
+        ordering = ["id"]
     
     def __str__(self):
-        return self.position
+        return f"{self.position}"
