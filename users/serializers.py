@@ -3,14 +3,8 @@ from rest_framework import serializers
 
 # User
 class UserListSerializer(serializers.ModelSerializer):
-    department = serializers.SlugRelatedField(
-        slug_field='department',
-        read_only=True
-    )
-    position = serializers.SlugRelatedField(
-        slug_field='position',
-        read_only=True
-    )
+    department = serializers.SlugRelatedField(slug_field='department', read_only=True)
+    position = serializers.SlugRelatedField(slug_field='position', read_only=True)
     
     class Meta:
         model = User
@@ -23,32 +17,23 @@ class UserListSerializer(serializers.ModelSerializer):
         ]
         
 class UserDetailSerializer(serializers.ModelSerializer):
-    department = serializers.SlugRelatedField(
-        slug_field='department',
-        read_only=True
-    )
-    position = serializers.SlugRelatedField(
-        slug_field='position',
-        read_only=True
-    )
-    shift = serializers.SlugRelatedField(
-        slug_field='shift_name',
-        read_only=True
-    )
-    career = serializers.SlugRelatedField(
-        slug_field='career_status',
-        read_only=True
-    )
-    incentives = serializers.SlugRelatedField(
-        slug_field='incentive_name',
-        many=True,
-        read_only=True
-    )
-    deductions = serializers.SlugRelatedField(
-        slug_field='deduction_name',
-        many=True,
-        read_only=True
-    )
+    department = serializers.SlugRelatedField(slug_field='department', read_only=True)
+    position = serializers.SlugRelatedField(slug_field='position', read_only=True)
+    shift = serializers.SlugRelatedField(slug_field='shift_name', read_only=True)
+    career = serializers.SlugRelatedField(slug_field='career_status', read_only=True)
+    incentives = serializers.SlugRelatedField(slug_field='incentive_name', many=True, read_only=True)
+    deductions = serializers.SlugRelatedField(slug_field='deduction_name', many=True, read_only=True)
+    privilege = serializers.StringRelatedField()
+    
+    
+    pag_ibig_contribution = serializers.StringRelatedField()
+    philhealth_contribution = serializers.StringRelatedField()
+    sss_contribution = serializers.StringRelatedField()
+    
+    pag_ibig_contributions = serializers.ReadOnlyField()
+    phil_health_contributions = serializers.ReadOnlyField()
+    sss_contributions = serializers.ReadOnlyField()
+    
     class Meta:
         model = User
         exclude = [
