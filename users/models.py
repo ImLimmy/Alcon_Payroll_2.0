@@ -129,7 +129,7 @@ class User(AbstractUser):
     
     def get_full_name(self) -> str:
         if self.first_name and self.last_name:
-            return f'{self.first_name} {self.last_name} {self.suffix}'
+            return f'{self.first_name} {self.last_name}'
         return f'{self.employee_id} | {self.username}'
     
     # Salary Computation
@@ -171,8 +171,8 @@ class User(AbstractUser):
         maximum_salary = self.philhealth_contribution.maximum_salary
         
         if self.basic_pay < minimum_salary:
-        minimum_salary = self.philhealth_contribution.minimum_salary
-        maximum_salary = self.philhealth_contribution.maximum_salary
+            minimum_salary = self.philhealth_contribution.minimum_salary
+            maximum_salary = self.philhealth_contribution.maximum_salary
         
         if self.basic_pay < minimum_salary:
             return 0

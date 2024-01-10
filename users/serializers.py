@@ -3,25 +3,47 @@ from rest_framework import serializers
 
 # User
 class UserListSerializer(serializers.ModelSerializer):
+    department = serializers.SlugRelatedField(
+        slug_field='department',
+        read_only=True
+    )
+    position = serializers.SlugRelatedField(
+        slug_field='position',
+        read_only=True
+    )
+    
+    class Meta:
+        model = User
+        fields = [
+            'id',
+            'employee_id',
+            'get_full_name',
+            'department',
+            'position',
+        ]
+        
+class UserDetailSerializer(serializers.ModelSerializer):
+    department = serializers.SlugRelatedField(
+        slug_field='department',
+        read_only=True
+    )
+    position = serializers.SlugRelatedField(
+        slug_field='position',
+        read_only=True
+    )
+    shift = serializers.SlugRelatedField(
+        slug_field='shift_name',
+        read_only=True
+    )
+    career = serializers.SlugRelatedField(
+        slug_field='career_status',
+        read_only=True
+    )
     class Meta:
         model = User
         exclude = [
             'password',
-            'created_at',
-            'updated_at',
-            'last_login',
-            'is_superuser',
-            'is_staff',
-            'is_active',
-            'date_joined',
-            'groups',
-            'user_permissions',
-        ]
-        
-class UserDetailSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        exclude = [
+            
             'is_superuser',
             'is_staff',
             'is_active',

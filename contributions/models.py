@@ -5,7 +5,7 @@ from datetime import datetime
 
 # PagIbig Account
 class PagIbig(models.Model):
-    pagibig_year = models.IntegerField(default=datetime.now().year, unique=True)
+    pagibig_year = models.IntegerField(default=datetime.now().year, unique=False)
     employer_share = models.FloatField(default=0.0)
     employee_share_lower_bracket = models.FloatField(default=0.0)
     employee_share_higher_bracket = models.FloatField(default=0.0)
@@ -21,7 +21,7 @@ class PagIbig(models.Model):
 
 # PhilHealth
 class PhilHealth(models.Model):
-    philhealth_year = models.IntegerField(default=datetime.now().year, unique=True)
+    philhealth_year = models.IntegerField(default=datetime.now().year, unique=False)
     minimum_salary = models.FloatField(validators=[MinValueValidator(10_000), MaxValueValidator(100_000)], default=10000, null=False, blank=False)
     maximum_salary = models.FloatField(validators=[MinValueValidator(10_000), MaxValueValidator(100_000)], default=100000, null=False, blank=False)
     rate = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(100)], default=0, null=False, blank=False)
@@ -35,7 +35,7 @@ class PhilHealth(models.Model):
   
 # SSS
 class RangeOfCompensation(models.Model):
-    roc_year = models.IntegerField(default=datetime.now().year, unique=True)
+    roc_year = models.IntegerField(default=datetime.now().year, unique=False)
     employer = models.FloatField(default=9.5)
     employee = models.FloatField(default=4.5)
     
