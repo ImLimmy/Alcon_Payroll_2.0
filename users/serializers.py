@@ -39,6 +39,16 @@ class UserDetailSerializer(serializers.ModelSerializer):
         slug_field='career_status',
         read_only=True
     )
+    incentives = serializers.SlugRelatedField(
+        slug_field='incentive_name',
+        many=True,
+        read_only=True
+    )
+    deductions = serializers.SlugRelatedField(
+        slug_field='deduction_name',
+        many=True,
+        read_only=True
+    )
     class Meta:
         model = User
         exclude = [
