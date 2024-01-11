@@ -28,4 +28,7 @@ urlpatterns = [
     
     # http://127.0.0.1:8000/alcon_payroll/users/register/
     path('register/', views.Register.as_view(), name='register'),
+    
+    # http://127.0.0.1:8000/alcon_payroll/users/upload/
+    path('upload/', views.uploadimage, name='upload'),
 ]

@@ -1,6 +1,7 @@
 from users.models import User
 from users.serializers import *
 from rest_framework import generics, permissions, status
+from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
@@ -29,10 +30,6 @@ class Login(APIView):
             return Response(data)
         else:
             return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
-        
-        
-        
-        
 
 # Register
 class Register(AdminPermissionMixin, generics.CreateAPIView):
@@ -124,3 +121,15 @@ class PrivilegeList(AdminPermissionMixin, generics.ListAPIView):
 class PrivilegeDetail(AdminPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = Privilege.objects.all()
     serializer_class = PrivilegeDetail_Serializer
+    
+# Upload Image
+@api_view(['POST'])
+def uploadimage(request):
+    data = request.data
+    
+    obj_id = data['obj_id']
+    obj = User.objects.get(id=obj_id)
+    obj.image = request.FILES.get('image')
+    obj.save()
+    
+    return Response({'image': obj.image.url})

@@ -69,6 +69,7 @@ class User(AbstractUser):
     password = models.CharField(max_length=128, unique=True)
     
     # Profile   
+    image = models.ImageField(null=True, blank=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     middle_name = models.CharField(max_length=50)
