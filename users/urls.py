@@ -13,7 +13,7 @@ urlpatterns = [
     path('departments/<int:pk>/', views.DepartmentDetail.as_view(), name='department_detail'),
     
     # http://127.0.0.1:8000/alcon_payroll/users/login/
-    path('login/', obtain_auth_token, name='login'),
+    path('login/', views.Login.as_view(), name='login'),
 
     # http://127.0.0.1:8000/alcon_payroll/users/logout/
     path('logout/', views.Logout.as_view(), name='logout'),

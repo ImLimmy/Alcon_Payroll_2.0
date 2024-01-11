@@ -2,6 +2,31 @@ from .models import User, Privilege
 from rest_framework import serializers
 
 # User
+class UserSerializer(serializers.ModelSerializer):
+    department = serializers.SlugRelatedField(slug_field='department', read_only=True)
+    position = serializers.SlugRelatedField(slug_field='position', read_only=True)
+    shift = serializers.SlugRelatedField(slug_field='shift_name', read_only=True)
+    career = serializers.SlugRelatedField(slug_field='career_status', read_only=True)
+    incentives = serializers.SlugRelatedField(slug_field='incentive_name', many=True, read_only=True)
+    deductions = serializers.SlugRelatedField(slug_field='deduction_name', many=True, read_only=True)
+    privilege = serializers.StringRelatedField()
+    
+    class Meta:
+        model = User
+        exclude = [
+            'password',
+            
+            'last_login',
+            'created_at',
+            'updated_at',
+            'is_superuser',
+            'is_staff',
+            'is_active',
+            'date_joined',
+            'groups',
+            'user_permissions',
+        ]
+
 class UserListSerializer(serializers.ModelSerializer):
     department = serializers.SlugRelatedField(slug_field='department', read_only=True)
     position = serializers.SlugRelatedField(slug_field='position', read_only=True)

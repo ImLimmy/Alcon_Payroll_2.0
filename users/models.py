@@ -74,11 +74,19 @@ class User(AbstractUser):
     middle_name = models.CharField(max_length=50)
     suffix = models.CharField(max_length=10, choices=Suffix, null=True, blank=True)
     gender = models.CharField(max_length=10, choices=Gender)
+    contact_number = models.CharField(max_length=20, null=True, blank=True, unique=True)
+    address = models.CharField(null=True, blank=True, max_length=255)
+    birthdate = models.DateField(null=True, blank=True)
+    birth_place = models.CharField(max_length=255)
     educational_attainment = models.CharField(max_length=30, choices=EducationalAttainment)
     civil_status = models.CharField(max_length=10, choices=CivilStatus)
+    mothers_maiden_name = models.CharField(max_length=50)
+    emergency_contact = models.CharField(max_length=50)
+    emergency_contact_number = models.CharField(max_length=20)
     
     # Work Information
     employee_id = models.IntegerField(unique=True, null=True, blank=True)
+    employement_date = models.DateField(null=True, blank=True)
     shift = models.ForeignKey(Shift, on_delete=models.SET_NULL, null=True)
     career = models.ForeignKey(Careers, on_delete=models.SET_NULL, null=True)
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
@@ -103,6 +111,8 @@ class User(AbstractUser):
         
     sss_number = models.IntegerField(unique=True, null=True, blank=False)
     sss_contribution = models.ForeignKey(SSS, on_delete=models.CASCADE, null=True, blank=True)
+    
+    tin_number = models.IntegerField(unique=True, null=True, blank=False)
     
     # Permissions
     created_at = models.DateTimeField(auto_now_add=True)

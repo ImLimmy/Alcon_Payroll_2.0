@@ -1,14 +1,38 @@
 from users.models import User
 from users.serializers import *
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, status
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
+from django.contrib.auth import authenticate
 
 from users.departments.models import Department
 from users.departments.serializers import DepartmentList_Serializer, DepartmentDetail_Serializer
 from users.positions.models import Position
 from users.positions.serializers import PositionList_Serializer, PositionDetail_Serializer
 from api.mixins import UserPermissionMixin, AdminPermissionMixin
+
+# Login
+class Login(APIView):
+    permission_classes = [permissions.AllowAny]
+    def post(self, request):
+        username = request.data.get('username')
+        password = request.data.get('password')
+        user = authenticate(username=username, password=password)
+        data = {}
+        if user:
+            token, _ = Token.objects.get_or_create(user=user)
+            serializer = UserSerializer(user)
+            user_data = serializer.data
+            data['token'] = token.key
+            data['user'] = user_data
+            return Response(data)
+        else:
+            return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        
+        
+        
 
 # Register
 class Register(AdminPermissionMixin, generics.CreateAPIView):
