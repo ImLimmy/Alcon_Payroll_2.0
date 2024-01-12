@@ -24,17 +24,33 @@ class Privilege(models.Model):
         return f'{self.privilege}'
 
 
-class Permission(models.Model):
+class DepartmentPermission(models.Model):
+    department = models.ForeignKey(
+        Department, on_delete=models.CASCADE, related_name='department_permissions')
     permission = models.ForeignKey(Group, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.permission}'
+        return f'{self.permission.name}'
 
     class Meta:
         abstract = True
+        unique_together = ('department', 'permission')
 
 
-class PrivilegesPermission(Permission):
+class PositionPermission(models.Model):
+    position = models.ForeignKey(
+        Position, on_delete=models.CASCADE, related_name='position_permissions')
+    permission = models.ForeignKey(Group, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.permission.name}'
+
+    class Meta:
+        abstract = True
+        unique_together = ('position', 'permission')
+
+
+class PrivilegesPermission(PositionPermission):
     privileges = models.ForeignKey(
         Privilege, on_delete=models.CASCADE, related_name='privilege_permissions')
 
