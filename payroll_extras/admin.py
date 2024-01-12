@@ -2,18 +2,21 @@ from django.contrib import admin
 
 from .models import Incentives, Deductions, Ratings
 
+
 @admin.register(Incentives)
 class IncentivesAdmin(admin.ModelAdmin):
     list_display = ('incentive_name', 'incentive_amount')
-    
+
+
 @admin.register(Deductions)
 class DeductionsAdmin(admin.ModelAdmin):
     list_display = ('deduction_name', 'deduction_amount')
 
+
 @admin.register(Ratings)
 class RatingsAdmin(admin.ModelAdmin):
-    list_display = ('year', 
-                    'ordinary_days', 
+    list_display = ('year',
+                    'ordinary_days',
                     'sunday_or_rest_days',
                     'special_nonworking_days',
                     'special_nonworking_and_rest_days',
@@ -44,4 +47,3 @@ class RatingsAdmin(admin.ModelAdmin):
                     'night_shift_and_double_holidays_and_overtime_days',
                     'night_shift_double_holidays_rest_days_and_overtime_days',
                     )
-    

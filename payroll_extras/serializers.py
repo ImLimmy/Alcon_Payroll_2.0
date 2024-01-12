@@ -2,11 +2,13 @@ from rest_framework import serializers
 
 from .models import Incentives, Deductions, Ratings
 
+
 class IncentivesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Incentives
         fields = '__all__'
-        
+
+
 class IncentivesListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Incentives
@@ -15,17 +17,20 @@ class IncentivesListSerializer(serializers.ModelSerializer):
             'incentive_name',
             'incentive_amount',
         ]
-        
+
+
 class IncentivesDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Incentives
-        fields = '__all__'    
-    
+        fields = '__all__'
+
+
 class DeductionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Deductions
         fields = '__all__'
-        
+
+
 class DeductionsListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Deductions
@@ -34,17 +39,20 @@ class DeductionsListSerializer(serializers.ModelSerializer):
             'deduction_name',
             'deduction_amount',
         ]
-        
+
+
 class DeductionsDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Deductions
         fields = '__all__'
-        
+
+
 class RatingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ratings
         fields = '__all__'
-        
+
+
 class RatingsListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ratings
@@ -57,7 +65,8 @@ class RatingsListSerializer(serializers.ModelSerializer):
             'night_rate',
             'overtime_rate',
         ]
-        
+
+
 class RatingsDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ratings

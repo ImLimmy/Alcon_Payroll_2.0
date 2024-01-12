@@ -6,16 +6,19 @@ from .models import (
     SSS,
 )
 
+
 class PagIbigSerializer(serializers.ModelSerializer):
     class Meta:
         model = PagIbig
         fields = '__all__'
-        
+
+
 class PhilHealthSerializer(serializers.ModelSerializer):
     class Meta:
         model = PhilHealth
         fields = '__all__'
-        
+
+
 class SSSSerializer(serializers.ModelSerializer):
     class Meta:
         model = SSS

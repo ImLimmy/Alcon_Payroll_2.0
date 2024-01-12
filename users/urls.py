@@ -3,32 +3,35 @@ from django.urls import path
 from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
-    
+
     # http://127.0.0.1:8000/alcon_payroll/users/
     path('', views.UserList.as_view(), name='user_list'),
     path('<int:pk>/', views.UserDetail.as_view(), name='user_detail'),
-    
+
     # http://127.0.0.1:8000/alcon_payroll/users/departments/
     path('departments/', views.DepartmentList.as_view(), name='department_list'),
-    path('departments/<int:pk>/', views.DepartmentDetail.as_view(), name='department_detail'),
-    
+    path('departments/<int:pk>/', views.DepartmentDetail.as_view(),
+         name='department_detail'),
+
     # http://127.0.0.1:8000/alcon_payroll/users/login/
     path('login/', views.Login.as_view(), name='login'),
 
     # http://127.0.0.1:8000/alcon_payroll/users/logout/
     path('logout/', views.Logout.as_view(), name='logout'),
-        
+
     # http://127.0.0.1:8000/alcon_payroll/users/positions/
     path('positions/', views.PositionList.as_view(), name='position_list'),
-    path('positions/<int:pk>/', views.PositionDetail.as_view(), name='position_detail'),
-    
-    # http://127.0.0.1:8000/alcon_payroll/users/privileges/ 
+    path('positions/<int:pk>/', views.PositionDetail.as_view(),
+         name='position_detail'),
+
+    # http://127.0.0.1:8000/alcon_payroll/users/privileges/
     path('privileges/', views.PrivilegeList.as_view(), name='privilege_list'),
-    path('privileges/<int:pk>/', views.PrivilegeDetail.as_view(), name='privilege_detail'),
-    
+    path('privileges/<int:pk>/', views.PrivilegeDetail.as_view(),
+         name='privilege_detail'),
+
     # http://127.0.0.1:8000/alcon_payroll/users/register/
     path('register/', views.Register.as_view(), name='register'),
-    
+
     # http://127.0.0.1:8000/alcon_payroll/users/upload/
     path('upload/', views.uploadimage, name='upload'),
 ]
