@@ -11,7 +11,7 @@ from contributions.models import (
     PhilHealth,
     SSS,
 )
-from payroll_extras.models import Incentives, Deductions
+from extras.models import Incentives, Deductions
 from forms.kpi_models import Kpi
 
 from django.contrib.auth.models import AbstractUser, UserManager, Group

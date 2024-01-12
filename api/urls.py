@@ -17,7 +17,7 @@ urlpatterns = [
     path('forms/', include('forms.urls'), name='forms'),
 
     # payroll_extras app
-    path('extras/', include('payroll_extras.urls'), name='extras'),
+    path('extras/', include('extras.urls'), name='extras'),
 
     # shift app
     path('shift/', include('shift.urls'), name='shift'),

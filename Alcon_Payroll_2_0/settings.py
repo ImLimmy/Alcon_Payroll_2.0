@@ -50,19 +50,20 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
-    
+
     'attendance',
     'calendars',
     'careers',
     'contributions',
-    'forms',
-    'payroll_extras',
-    'shift',
+    'extras',
     'users',
+    'forms',
+    'payroll',
+    'shift',
 ]
 
 MIDDLEWARE = [

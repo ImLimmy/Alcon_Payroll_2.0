@@ -1,7 +1,10 @@
 from django.db import models
 
-from users.models import User
+# from users.models import User
 from api.choices import Status
+
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 
 class PaymentTerm(models.Model):
@@ -32,7 +35,7 @@ class CashAdvanceForm(models.Model):
 
     @property
     def deduction(self):
-       return round((self.cash_amount / self.payment_term.term), 2)
+        return round((self.cash_amount / self.payment_term.term), 2)
 
     @property
     def remaining_amount(self):
