@@ -1,20 +1,32 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .models import User, Privilege, PrivilegesPermission
+from .models import User, Privilege, PrivilegesPermission, DepartmentPermission, PositionPermission
 from .departments.models import Department
 from .positions.models import Position
+
+
+class DepartmentPermissionInline(admin.TabularInline):
+    model = DepartmentPermission
+    extra = 0
+
+
+class PositionPermissionInline(admin.TabularInline):
+    model = PositionPermission
+    extra = 0
+
 
 class PrivilegesPermissionInline(admin.TabularInline):
     model = PrivilegesPermission
     extra = 0
 
+
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
     list_display = ('employee_id',
-                    'username', 
-                    'email', 
-                    'first_name', 
+                    'username',
+                    'email',
+                    'first_name',
                     'last_name',
                     'salary_per_day',
                     'basic_pay',
@@ -25,7 +37,7 @@ class CustomUserAdmin(UserAdmin):
                     )
     fieldsets = (
                 ('Login', {'fields': ('username',
-                                      'email', 
+                                      'email',
                                       'password')}),
                 ('Profile', {'fields': ('image',
                                         'first_name',
@@ -70,10 +82,22 @@ class CustomUserAdmin(UserAdmin):
                    'is_active',)
     search_fields = ('username',
                      'email',)
-    
 
-admin.site.register(Department)
-admin.site.register(Position)
+
+@admin.register(Department)
+class DepartmentAdmin(admin.ModelAdmin):
+    inlines = (DepartmentPermissionInline,)
+    list_display = ['department']
+
+
+@admin.register(Position)
+class PositionAdmin(admin.ModelAdmin):
+    inlines = (PositionPermissionInline,)
+    list_display = ['position']
+
+
+# admin.site.register(Department)
+# admin.site.register(Position)
 
 @admin.register(Privilege)
 class RoleAdmin(admin.ModelAdmin):

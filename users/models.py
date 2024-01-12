@@ -33,7 +33,7 @@ class DepartmentPermission(models.Model):
         return f'{self.permission.name}'
 
     class Meta:
-        abstract = True
+        # abstract = True <== Only for Template
         unique_together = ('department', 'permission')
 
 
@@ -46,16 +46,13 @@ class PositionPermission(models.Model):
         return f'{self.permission.name}'
 
     class Meta:
-        abstract = True
+        # abstract = True <== Only for Template
         unique_together = ('position', 'permission')
 
 
 class PrivilegesPermission(PositionPermission):
     privileges = models.ForeignKey(
         Privilege, on_delete=models.CASCADE, related_name='privilege_permissions')
-
-    class Meta:
-        unique_together = ('privileges', 'permission')
 
 
 class Manager(UserManager):
