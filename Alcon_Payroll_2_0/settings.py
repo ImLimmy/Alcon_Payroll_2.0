@@ -35,6 +35,9 @@ STATICFILES_DIRS = [
     BASE_DIR / 'frontend/build/static',
 ]
 
+# Remove non-existent directories from STATICFILES_DIRS
+STATICFILES_DIRS = [dir for dir in STATICFILES_DIRS if dir.exists()]
+
 MEDIA_ROOT = BASE_DIR / 'static/images'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
