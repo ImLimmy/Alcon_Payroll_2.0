@@ -53,7 +53,6 @@ class CustomUserAdmin(UserAdmin):
                                                  'career',
                                                  'department',
                                                  'position',
-                                                 'privilege',
                                                  )}),
                 ('Salary Information', {'fields': ('salary_per_day',
                                                    'number_of_days',

@@ -113,9 +113,9 @@ class User(AbstractUser):
     shift = models.ForeignKey(Shift, on_delete=models.SET_NULL, null=True)
     career = models.ForeignKey(Careers, on_delete=models.SET_NULL, null=True)
     department = models.ForeignKey(
-        Department, on_delete=models.SET_NULL, null=True)
+        Department, on_delete=models.SET_NULL, null=True, related_name='department_users')
     position = models.ForeignKey(
-        Position, on_delete=models.SET_NULL, null=True)
+        Position, on_delete=models.SET_NULL, null=True, related_name='position_users')
     privilege = models.ForeignKey(
         Privilege, on_delete=models.SET_NULL, null=True)
 
