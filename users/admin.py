@@ -5,12 +5,6 @@ from .models import User, Privilege, PrivilegesPermission, DepartmentPermission,
 from .departments.models import Department
 from .positions.models import Position
 
-
-class DepartmentPermissionInline(admin.TabularInline):
-    model = DepartmentPermission
-    extra = 0
-
-
 class PositionPermissionInline(admin.TabularInline):
     model = PositionPermission
     extra = 0
@@ -83,10 +77,7 @@ class CustomUserAdmin(UserAdmin):
                      'email',)
 
 
-@admin.register(Department)
-class DepartmentAdmin(admin.ModelAdmin):
-    inlines = (DepartmentPermissionInline,)
-    list_display = ['department']
+admin.site.register(Department)
 
 
 @admin.register(Position)
