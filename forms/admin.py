@@ -42,7 +42,7 @@ class OverTimeAdmin(admin.ModelAdmin):
 class TemporaryShiftAdmin(admin.ModelAdmin):
     list_display = ('tempshift_user', 'schedule',
                     'shift_time', 'shift_breaks', 'status')
-    list_filter = ['status']
+    list_filter = ('tempshift_user', 'status')
 
 
 admin.site.register(PaymentTerm)
