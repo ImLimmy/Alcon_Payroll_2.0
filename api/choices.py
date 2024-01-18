@@ -41,9 +41,11 @@ class EducationalAttainment(models.TextChoices):
     DOCTORATE = 'Doctorate', 'Doctorate'
 
 
-class LogStatus(models.TextChoices):
+class TimeStatus(models.TextChoices):
     TIME_IN = 'Time In', 'Time In'
     TIME_OUT = 'Time Out', 'Time Out'
+    LATE = 'Late', 'Late'
+    FLEXI = 'Flexi', 'Flexi'
 
 
 class Status(models.TextChoices):

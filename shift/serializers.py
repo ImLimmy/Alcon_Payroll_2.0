@@ -22,6 +22,14 @@ class ShiftListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Shift
         fields = ['id', 'shift_name', 'schedule', 'breaks', 'days', 'on_call']
+        
+        
+    def create(self, validated_data):
+        breaks_data = validated_data.pop('breaks')
+        shift = Shift.objects.create(**validated_data)
+        for break_data in breaks_data:
+            Break.objects.create(shift=shift, **break_data)
+        return shift
 
 
 class ShiftDetailSerializer(serializers.ModelSerializer):
