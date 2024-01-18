@@ -1,9 +1,18 @@
 from django.db import models
 from django.utils import timezone
 from datetime import time
+import pandas as pd
 
 from api.choices import TimeStatus
 from users.models import User
+
+
+class ImportAttendance(models.Model):
+    import_file = models.FileField()
+    
+    def attendance_import(self):
+        df = pd.read_excel(self.import_file, sheet_name='Punch Record', header = None, keep_default_na=False)
+        header = ['Staff Code', 'Name']
 
 
 class TimeLogs(models.Model):

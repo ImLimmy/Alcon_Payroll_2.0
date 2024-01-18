@@ -34,6 +34,9 @@ class ShiftListSerializer(serializers.ModelSerializer):
 
 class ShiftDetailSerializer(serializers.ModelSerializer):
     breaks = BreakSerializer(many=True)
+    
+    def update(self, instance, validated_data):
+        return super().update(instance, validated_data)
 
     class Meta:
         model = Shift
