@@ -21,7 +21,7 @@ class ShiftListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Shift
-        fields = ['id', 'shift_name', 'schedule', 'days', 'on_call']
+        fields = ['id', 'shift_name', 'schedule', 'breaks', 'days', 'on_call']
 
 
 class ShiftDetailSerializer(serializers.ModelSerializer):
