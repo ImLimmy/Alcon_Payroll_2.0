@@ -1,5 +1,7 @@
-from .models import User, Privilege
 from rest_framework import serializers
+
+from .models import User, Privilege
+from timesheets.serializers import TimeSheetSerializer
 
 # User
 
@@ -75,6 +77,8 @@ class UserDetailSerializer(serializers.ModelSerializer):
     pag_ibig_contributions = serializers.ReadOnlyField()
     phil_health_contributions = serializers.ReadOnlyField()
     sss_contributions = serializers.ReadOnlyField()
+
+    time_sheets = TimeSheetSerializer(many=True, read_only=True)
 
     class Meta:
         model = User

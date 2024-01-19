@@ -33,9 +33,16 @@ class ShiftListSerializer(serializers.ModelSerializer):
 
 
 class ShiftDetailSerializer(serializers.ModelSerializer):
-    breaks = BreakSerializer(many=True)
+    breaks = BreakSerializer(many=True, read_only=True)
     
     def update(self, instance, validated_data):
+        breaks_data = validated_data.pop('breaks', [])
+        for break_data in breaks_data:
+            # Update individual break instances
+            break_instance = instance.breaks.get(id=break_data.get('id'))
+            break_instance.start_time = break_data.get('break_start_time')
+            break_instance.end_time = break_data.get('break_end_time')
+            break_instance.save()
         return super().update(instance, validated_data)
 
     class Meta:

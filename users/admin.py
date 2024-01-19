@@ -4,6 +4,7 @@ from django.contrib.auth.admin import UserAdmin
 from .models import User, Privilege, PrivilegesPermission, DepartmentPermission, PositionPermission
 from .departments.models import Department
 from .positions.models import Position
+from timesheets.admin import TimeSheetInline
 
 class PositionPermissionInline(admin.TabularInline):
     model = PositionPermission
@@ -17,6 +18,7 @@ class PrivilegesPermissionInline(admin.TabularInline):
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
+    inlines = [TimeSheetInline]
     list_display = ('employee_id',
                     'username',
                     'email',
@@ -47,6 +49,7 @@ class CustomUserAdmin(UserAdmin):
                                                  'career',
                                                  'department',
                                                  'position',
+                                                 
                                                  )}),
                 ('Salary Information', {'fields': ('salary_per_day',
                                                    'number_of_days',
