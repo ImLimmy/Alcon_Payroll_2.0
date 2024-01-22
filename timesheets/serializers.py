@@ -1,19 +1,17 @@
 from rest_framework import serializers
+from .models import TimeLogs, TimeSheet, TimeInOut
 
-from .models import TimeSheet, TimeInOut
-
-class TimeInOutSerializer(serializers.ModelSerializer):
-
+class TimeLogsSerializer(serializers.ModelSerializer):
     class Meta:
-        model = TimeInOut
-        exclude = ('date',)
+        model = TimeLogs
+        fields = '__all__'
 
 class TimeSheetSerializer(serializers.ModelSerializer):
-    
-    user = serializers.ReadOnlyField()
-    time_in_out = TimeInOutSerializer(many=True)
-    
     class Meta:
         model = TimeSheet
         fields = '__all__'
-        
+
+class TimeInOutSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TimeInOut
+        fields = '__all__'
