@@ -55,7 +55,6 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
 
-    'attendance',
     'calendars',
     'careers',
     'contributions',

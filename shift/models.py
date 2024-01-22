@@ -44,6 +44,14 @@ class Shift(models.Model):
         return f'{self.shift_name}'
 
     @property
+    def formatted_start_time(self):
+        return self.start_time.strftime("%I:%M %p")
+
+    @property
+    def formatted_end_time(self):
+        return self.end_time.strftime("%I:%M %p")
+
+    @property
     def schedule(self):
         return f'{self.start_time.strftime("%I:%M %p")} - {self.end_time.strftime("%I:%M %p")}'
 
