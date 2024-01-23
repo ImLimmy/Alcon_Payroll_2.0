@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import TimeInOut, TimeSheet, TimeLogs
+from .models import TimeInOut, TimeSheet
 
 # Register your models here.
 
@@ -19,5 +19,3 @@ class TimeSheetAdmin(admin.ModelAdmin):
     inlines = [TimeInOutInline]
     list_display = ['user', 'date']
 
-
-admin.site.register(TimeLogs)
