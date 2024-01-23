@@ -99,7 +99,7 @@ class User(AbstractUser):
         max_length=20, null=True, blank=True, unique=True)
     address = models.CharField(null=True, blank=True, max_length=255)
     birthdate = models.DateField(null=True, blank=True)
-    birth_place = models.CharField(max_length=255)
+    birth_place = models.CharField(max_length=255, null=True, blank=True)
     educational_attainment = models.CharField(
         max_length=30, choices=EducationalAttainment)
     civil_status = models.CharField(max_length=10, choices=CivilStatus)
