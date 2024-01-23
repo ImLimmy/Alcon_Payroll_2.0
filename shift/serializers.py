@@ -23,27 +23,28 @@ class ShiftCreateSerializer(serializers.ModelSerializer):
             Break.objects.create(shift=shift, **break_data)
         return shift
 
-
 class ShiftListSerializer(serializers.ModelSerializer):
     breaks = BreakSerializer(many=True)
 
     class Meta:
         model = Shift
+        # fields = ['id', 'shift_name', 'formatted_start_time', 'formatted_end_time', 'breaks', 'days', 'on_call']
         fields = ['id', 'shift_name', 'start_time', 'end_time', 'breaks', 'days', 'on_call']
-
 
 class ShiftDetailSerializer(serializers.ModelSerializer):
     breaks = BreakSerializer(many=True, read_only=True)
-    
+
     def update(self, instance, validated_data):
         breaks_data = validated_data.pop('breaks', [])
+        instance = super().update(instance, validated_data)
         for break_data in breaks_data:
-            # Update individual break instances
-            break_instance = instance.breaks.get(id=break_data.get('id'))
-            break_instance.start_time = break_data.get('break_start_time')
-            break_instance.end_time = break_data.get('break_end_time')
-            break_instance.save()
-        return super().update(instance, validated_data)
+            if break_data.get('id'):
+                break_obj = Break.objects.get(id=break_data.get('id'))
+                break_obj.shift = instance
+                break_obj.save()
+            else:
+                Break.objects.create(shift=instance, **break_data)
+        return instance
 
     class Meta:
         model = Shift
