@@ -115,9 +115,9 @@ WSGI_APPLICATION = 'Alcon_Payroll_2_0.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "Back-End Payroll",
-        "USER": "postgres",
-        "PASSWORD": "sefjo0",
+        "NAME": "Back-End Payroll Experiment",
+        "USER": "Marc - Super Admin",
+        "PASSWORD": "gefpoi!",
         "HOST": "127.0.0.1",
         "PORT": "5432",
     }
