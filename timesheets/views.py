@@ -4,9 +4,10 @@ from rest_framework import status
 import pandas as pd
 from django import forms
 from django.utils import timezone
-from django.contrib.auth import get_user_model
+from rest_framework.decorators import permission_classes
 
-from .models import TimeLogs, TimeSheet, TimeInOut
+from django.contrib.auth import get_user_model
+from .models import TimeSheet, TimeInOut
 from api.mixins import UserPermissionMixin, AdminPermissionMixin
 
 User = get_user_model()
@@ -17,10 +18,9 @@ class UploadFileForm(forms.Form):
 
 
 class ProcessPunchRecord(APIView):
-    permission_classes = [UserPermissionMixin]
 
+    @permission_classes([AdminPermissionMixin])
     def post(self, request, format=None):
-        permission_classes = [AdminPermissionMixin]
         
         upload_form = UploadFileForm(request.POST, request.FILES)
         if upload_form.is_valid():

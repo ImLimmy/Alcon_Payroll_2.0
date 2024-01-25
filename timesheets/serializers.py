@@ -1,10 +1,5 @@
 from rest_framework import serializers
-from .models import TimeLogs, TimeSheet, TimeInOut
-
-class TimeLogsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TimeLogs
-        fields = '__all__'
+from .models import TimeSheet, TimeInOut
         
         
 class TimeInOutSerializer(serializers.ModelSerializer):
