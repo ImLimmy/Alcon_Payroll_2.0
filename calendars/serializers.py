@@ -6,8 +6,10 @@ class EventList_Serializer(serializers.ModelSerializer):
     class Meta:
         model = CalendarEvent
         fields = [
+            'id',
             'event',
-            'date',
+            'date_str',
+            'label',
         ]
 
 
