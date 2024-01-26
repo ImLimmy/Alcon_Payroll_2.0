@@ -16,6 +16,12 @@ class EventList(UserPermissionMixin, generics.ListAPIView):
 class EventDetail(UserPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = CalendarEvent.objects.all()
     serializer_class = EventDetail_Serializer
+    
+    def get_serializer_class(self):
+        
+        if self.request.method == 'PUT' and self.request.user.is_staff:
+            return EventCreate_Serializer
+        return super().get_serializer_class()
 
 
 class EventCreate(AdminPermissionMixin, generics.CreateAPIView):

@@ -18,4 +18,3 @@ class TimeSheetInline(admin.TabularInline):
 class TimeSheetAdmin(admin.ModelAdmin):
     inlines = [TimeInOutInline]
     list_display = ['user', 'date']
-
