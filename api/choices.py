@@ -57,10 +57,8 @@ class Status(models.TextChoices):
 
 
 class Leave(models.TextChoices):
-    SICK_LEAVE = 'Sick Leave', 'Sick Leave'
-    EMERGENCY_LEAVE = 'Emergency Leave', 'Emergency Leave'
-    VACATION_LEAVE_WITHOUT_PAY = 'Vacation Leave without Pay', 'Vacation Leave without Pay'
-    VACATION_LEAVE_WITH_PAY = 'Vacation Leave with Pay', 'Vacation Leave with Pay'
+    SICK_LEAVE = 'Sick Leave', 'Sick Leave',
+    VACATION_LEAVE = 'Vacation Leave', 'Vacation Leave',
     MATERNITY_LEAVE = 'Maternity Leave', 'Maternity Leave'
     PATERNITY_LEAVE = 'Paternity Leave', 'Paternity Leave'
     OTHER = 'Other', 'Other'

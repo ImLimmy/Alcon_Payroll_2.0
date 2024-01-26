@@ -227,3 +227,8 @@ class Ratings(models.Model):
         night_shift_double_holidays_rest_days_and_overtime_day = self.night_shift_double_holidays_and_rest_days * \
             (self.overtime_rate + 0.05)
         return round(night_shift_double_holidays_rest_days_and_overtime_day, 3)
+
+
+class LeaveCounter(models.Model):
+    vacation_leave = models.IntegerField(default=5)
+    sick_leave = models.IntegerField(default=5)

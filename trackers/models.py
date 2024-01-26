@@ -1,6 +1,9 @@
 from django.db import models
 from users.models import User
 
+class LeaveCounter(models.Model):
+    vacation_leave = models.IntegerField(default=5)
+
 
 class LeaveTracker(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -18,10 +21,10 @@ class LeaveTracker(models.Model):
 
     @property
     def list_of_users(self):
-        return f'{self.user} - {self.range_of_leave}'
+        return f'{self.user} - {self.date_covered}'
 
     @property
-    def range_of_leave(self):
+    def date_covered(self):
         return f'{self.date_of_leave} - {self.to_date}'
 
     @property

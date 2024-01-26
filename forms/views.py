@@ -22,7 +22,7 @@ from .serializers import (
 )
 from .cash_advance_models import CashAdvanceForm
 from .half_day_models import HalfDayForm
-from .leave_models import LeaveForm
+from .leave_models import LeaveRequestForm
 from .overtime_models import OverTimeForm
 from .kpi_models import Kpi
 from .tempshift_models import TemporaryShiftForm
@@ -76,7 +76,7 @@ class HalfDayDetail(UserPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
 
 
 class LeaveList(UserPermissionMixin, generics.ListCreateAPIView):
-    queryset = LeaveForm.objects.all()
+    queryset = LeaveRequestForm.objects.all()
     serializer_class = LeaveListSerializer
 
     def get_serializer_class(self):
@@ -86,7 +86,7 @@ class LeaveList(UserPermissionMixin, generics.ListCreateAPIView):
 
 
 class LeaveDetail(UserPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
-    queryset = LeaveForm.objects.all()
+    queryset = LeaveRequestForm.objects.all()
     serializer_class = LeaveDetailSerializer
 
     def get_serializer_class(self):

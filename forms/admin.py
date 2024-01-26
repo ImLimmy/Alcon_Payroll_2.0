@@ -2,7 +2,7 @@ from django.contrib import admin
 from .cash_advance_models import CashAdvanceForm, PaymentTerm
 from .half_day_models import HalfDayForm
 from .kpi_models import Kpi
-from .leave_models import LeaveForm
+from .leave_models import LeaveForm, LeaveRequestForm
 from .overtime_models import OverTimeForm
 from .tempshift_models import TemporaryShiftForm
 
@@ -26,9 +26,14 @@ class KpiAdmin(admin.ModelAdmin):
                     'max_score', 'remarks', 'comments')
 
 
-@admin.register(LeaveForm)
-class LeaveAdmin(admin.ModelAdmin):
-    list_display = ('leave_user', 'days', 'leave_type', 'status')
+# @admin.register(LeaveForm)
+# class LeaveAdmin(admin.ModelAdmin):
+#     list_display = ('leave_user', 'days', 'leave_type', 'status')
+#     list_filter = ('leave_user', 'status')
+
+@admin.register(LeaveRequestForm)
+class LeaveRequestAdmin(admin.ModelAdmin):
+    list_display = ('leave_user', 'start_date', 'end_date', 'description', 'status')
     list_filter = ('leave_user', 'status')
 
 
