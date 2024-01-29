@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from .cash_advance_models import CashAdvanceForm
 from .half_day_models import HalfDayForm
-from .leave_models import LeaveForm
+from .leave_models import LeaveRequestForm
 from .overtime_models import OverTimeForm
 from .kpi_models import Kpi
 from .tempshift_models import TemporaryShiftForm
@@ -17,7 +17,7 @@ class CashAdvanceCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CashAdvanceForm
         fields = ['id', 'cash_advance_user', 'date',
-                  'cash_amount', 'term', 'description', 'status']
+                  'cash_amount', 'payment_term', 'description', 'status']
 
 
 class CashAdvanceListSerializer(serializers.ModelSerializer):
@@ -84,7 +84,6 @@ class KpiListSerializer(serializers.ModelSerializer):
         model = Kpi
         fields = [
             'id',
-            'kpi_user',
         ]
 
 
@@ -101,7 +100,7 @@ class LeaveCreateSerializer(serializers.ModelSerializer):
     leave_user = serializers.StringRelatedField(read_only=True)
 
     class Meta:
-        model = LeaveForm
+        model = LeaveRequestForm
         fields = ['id', 'leave_user', 'start_date',
                   'end_date', 'description', 'status', 'leave_type']
 
@@ -111,7 +110,7 @@ class LeaveListSerializer(serializers.ModelSerializer):
     leave_user = serializers.StringRelatedField(read_only=True)
 
     class Meta:
-        model = LeaveForm
+        model = LeaveRequestForm
         exclude = ['description', 'created_at', 'updated_at']
 
 
@@ -120,7 +119,7 @@ class LeaveDetailSerializer(serializers.ModelSerializer):
     leave_user = serializers.StringRelatedField(read_only=True)
 
     class Meta:
-        model = LeaveForm
+        model = LeaveRequestForm
         fields = '__all__'
 
 # Overtime Form

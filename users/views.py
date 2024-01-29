@@ -57,7 +57,7 @@ class Register(AdminPermissionMixin, generics.CreateAPIView):
 # Logout
 
 
-class Logout(generics.GenericAPIView):
+class Logout(APIView):
     permission_classes = (permissions.IsAuthenticated, )
 
     def post(self, request):
