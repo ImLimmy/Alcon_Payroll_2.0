@@ -160,18 +160,23 @@ class User(AbstractUser):
     objects = Manager()
 
     def __str__(self) -> str:
-        return f'{self.get_full_name()}'
+        return f'{self.get_full_name}'
 
     def has_module_perms(self, app_label: str) -> bool:
         return self.is_superuser
 
     def has_perms(self, perm_list: Collection[str]) -> bool:
         return self.is_superuser
-
+    
+    @property
     def get_full_name(self) -> str:
         if self.first_name and self.last_name:
             return f'{self.first_name} {self.last_name}'
         return f'{self.username}'
+
+    @property
+    def get_id_and_username(self) -> str:
+        return f'{self.employee_id} - {self.get_full_name}'
 
     # Salary Computation
     @property

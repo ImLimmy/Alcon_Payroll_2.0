@@ -8,7 +8,7 @@ class EventList_Serializer(serializers.ModelSerializer):
         fields = [
             'id',
             'event',
-            'date_str',
+            'unformatted_date',
             'label',
         ]
 

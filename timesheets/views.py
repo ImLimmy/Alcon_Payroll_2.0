@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import generics, status
 import pandas as pd
 from django import forms
 from django.utils import timezone
@@ -8,6 +8,7 @@ from rest_framework.decorators import permission_classes
 
 from django.contrib.auth import get_user_model
 from .models import TimeSheet, TimeInOut
+from .serializers import TimeSheetSerializer, TimeInOutSerializer, TimeSheetListSerializer
 from api.mixins import UserPermissionMixin, AdminPermissionMixin
 
 User = get_user_model()
@@ -17,11 +18,16 @@ class UploadFileForm(forms.Form):
     file_upload = forms.FileField()
 
 
+class TimeSheetList(UserPermissionMixin, generics.ListAPIView):
+    queryset = TimeSheet.objects.all()
+    serializer_class = TimeSheetListSerializer
+
+
 class ProcessPunchRecord(APIView):
 
     @permission_classes([AdminPermissionMixin])
     def post(self, request, format=None):
-        
+
         upload_form = UploadFileForm(request.POST, request.FILES)
         if upload_form.is_valid():
             uploaded_file = upload_form.cleaned_data['file_upload']
