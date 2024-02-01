@@ -22,6 +22,9 @@ urlpatterns = [
 
     # users app
     path('users/', include('users.urls'), name='users'),
+    
+    # trackers app
+    path('trackers/', include('trackers.urls'), name='trackers'),
 
     # timesheets app
     path('timesheets/', include('timesheets.urls'), name='timesheets'),

@@ -67,6 +67,7 @@ class ProcessPunchRecord(APIView):
                                 'Time In': punch_times[0], 'Time Out': punch_times[-1]}
                     user = User.objects.get(
                         employee_id=employee_id)
+                    flexi_counter = 3  # must reset after every month or cutoff?
 
                     for date, time in time_log.items():
                         time_sheet = TimeSheet.objects.create(
@@ -88,8 +89,7 @@ class ProcessPunchRecord(APIView):
                             )
 
                         for time_in_out in time_sheet.time_in_out.all():
-                            flexi_counter = 3 # must reset after every month or cutoff?
-                            
+
                             d = time_in_out.time_in
                             if d > dtime(8, 30):
                                 if d > dtime(10, 30):
@@ -97,13 +97,13 @@ class ProcessPunchRecord(APIView):
                                         time_in_out.category = "Flexi + Late"
                                         flexi_counter -= 1
                                     else:
-                                        time_in_out.category = "Late" and "Number of Flexi is " + flexi_counter 
+                                        time_in_out.category = f"Late and Number of Flexi is {flexi_counter}"
                                 elif d > dtime(9, 0):
                                     if flexi_counter > 0:
                                         time_in_out.category = "Flexi"
                                         flexi_counter -= 1
                                     else:
-                                        time_in_out.category = "Flexi" and "Number of Flexi is " + flexi_counter
+                                        time_in_out.category = f"Late and Number of Flexi is {flexi_counter}"
                                 else:
                                     time_in_out.category = "Late"
                             else:

@@ -1,6 +1,6 @@
 from rest_framework import generics
 
-from .models import Incentives, Deductions
+from .models import Incentives, Deductions, Ratings
 from .serializers import *
 from api.mixins import UserPermissionMixin, AdminPermissionMixin
 
@@ -33,3 +33,12 @@ class DeductionsList(UserPermissionMixin, generics.ListCreateAPIView):
 class DeductionsDetail(AdminPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = Deductions.objects.all()
     serializer_class = DeductionsDetailSerializer
+
+
+class RatingsList(AdminPermissionMixin, generics.ListCreateAPIView):
+    queryset = Ratings.objects.all()
+    serializer_class = RatingsListSerializer
+    
+class RatingsDetail(AdminPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
+    queryset = Ratings.objects.all()
+    serializer_class = RatingsDetailSerializer

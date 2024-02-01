@@ -1,9 +1,12 @@
-from django.db import models
+from django.db import models    
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # from users.models import User
 from api.choices import Leave, Status
 from django.contrib.auth import get_user_model
 from extras.models import LeaveCounter
+from trackers.models import LeaveTracker
 
 User = get_user_model()
 
@@ -62,3 +65,21 @@ class LeaveRequestForm(LeaveForm):
     @property
     def remaining_leaves(self):
         return int(self.number_of_leaves - self.number_of_days)
+
+@receiver(post_save, sender=LeaveRequestForm)
+def update_leave_tracker(sender, instance, created, **kwargs):
+    if created:
+        # Update LeaveCounter
+        leave_counter = LeaveCounter.objects.first()
+        leave_counter.vacation_leave -= instance.number_of_days
+        leave_counter.save()
+
+        # Update LeaveTracker
+        LeaveTracker.objects.create(
+            user=instance.leave_user,
+            date_of_leave=instance.start_date,
+            to_date=instance.end_date,
+            reason=instance.description,
+            total_vacation=leave_counter.vacation_leave,
+            vacation_leave=True
+        )
