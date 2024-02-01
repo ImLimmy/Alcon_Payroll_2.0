@@ -26,7 +26,7 @@ class Login(APIView):
         data = {}
         if user:
             token, _ = Token.objects.get_or_create(user=user)
-            serializer = UserSerializer(user)
+            serializer = UserDetailSerializer(user)
             user_data = serializer.data
             data['token'] = token.key
             data['user'] = user_data
