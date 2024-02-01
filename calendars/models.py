@@ -1,6 +1,5 @@
 from django.db import models
 
-
 class CalendarEvent(models.Model):
     event = models.CharField(max_length=100)
     unformat_date = models.FloatField()

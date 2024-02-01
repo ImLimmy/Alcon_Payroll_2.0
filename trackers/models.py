@@ -22,7 +22,7 @@ class LeaveTracker(models.Model):
     @property
     def list_of_users(self):
         return f'{self.user} - {self.date_covered}'
-
+      
     @property
     def date_covered(self):
         return f'{self.date_of_leave} - {self.to_date}'

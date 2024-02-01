@@ -8,14 +8,25 @@ from rest_framework.decorators import permission_classes
 
 from django.contrib.auth import get_user_model
 from .models import TimeSheet, TimeInOut
-from .serializers import TimeSheetSerializer, TimeInOutSerializer, TimeSheetListSerializer
+from .serializers import TimeSheetSerializer, TimeInOutSerializer, TimeSheetListSerializer, TimeSheetUserSerializer
 from api.mixins import UserPermissionMixin, AdminPermissionMixin
+from datetime import time as dtime
 
 User = get_user_model()
 
 
 class UploadFileForm(forms.Form):
     file_upload = forms.FileField()
+
+
+class TimeInOutList(UserPermissionMixin, generics.ListAPIView):
+    queryset = TimeInOut.objects.all()
+    serializer_class = TimeInOutSerializer
+
+
+class TimeSheetUserList(UserPermissionMixin, generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = TimeSheetUserSerializer
 
 
 class TimeSheetList(UserPermissionMixin, generics.ListAPIView):
@@ -62,6 +73,7 @@ class ProcessPunchRecord(APIView):
                             user=user,
                             date=f"{timezone.now().year}-{date}"
                         )
+                        category = "on-time" if time['Time In'] is not None and time['Time Out'] is not None else "late"
                         if time['Time In'] is not None and time['Time Out'] is not None:
                             TimeInOut.objects.create(
                                 date=time_sheet, time_in=time['Time In'], time_out=time['Time Out']
@@ -74,6 +86,30 @@ class ProcessPunchRecord(APIView):
                             TimeInOut.objects.create(
                                 date=time_sheet, time_out=time['Time Out']
                             )
+
+                        for time_in_out in time_sheet.time_in_out.all():
+                            flexi_counter = 3 # must reset after every month or cutoff?
+                            
+                            d = time_in_out.time_in
+                            if d > dtime(8, 30):
+                                if d > dtime(10, 30):
+                                    if flexi_counter > 0:
+                                        time_in_out.category = "Flexi + Late"
+                                        flexi_counter -= 1
+                                    else:
+                                        time_in_out.category = "Late" and "Number of Flexi is " + flexi_counter 
+                                elif d > dtime(9, 0):
+                                    if flexi_counter > 0:
+                                        time_in_out.category = "Flexi"
+                                        flexi_counter -= 1
+                                    else:
+                                        time_in_out.category = "Flexi" and "Number of Flexi is " + flexi_counter
+                                else:
+                                    time_in_out.category = "Late"
+                            else:
+                                time_in_out.category = "On-Time"
+
+                            time_in_out.save()
 
             return Response("Data processed and saved to database", status=status.HTTP_200_OK)
         return Response(upload_form.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -11,6 +11,10 @@ class TimeSheet(models.Model):
     class Meta:
         ordering = ['date']
         verbose_name_plural = 'Time Sheets'
+        unique_together = ('user', 'date')
+
+    def __str__(self):
+        return f'{self.date}'
 
 
 class TimeInOut(models.Model):
@@ -18,11 +22,11 @@ class TimeInOut(models.Model):
         TimeSheet, on_delete=models.CASCADE, related_name='time_in_out')
     time_in = models.TimeField(blank=True, null=True)  # first in
     time_out = models.TimeField(blank=True, null=True)  # last out
-    
+    category = models.CharField(max_length=20, blank=True, null=True)
 
     class Meta:
         ordering = ['-date']
         verbose_name_plural = 'Time In Out'
 
     def __str__(self):
-        return f'{self.time_in} - {self.time_out}'
+        return f'{self.date}'
