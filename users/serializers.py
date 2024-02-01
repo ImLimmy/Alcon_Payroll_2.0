@@ -56,6 +56,7 @@ class UserListSerializer(serializers.ModelSerializer):
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
+    basic_salary_per_month = serializers.ReadOnlyField()
     full_name = serializers.CharField(read_only=True)
     department = serializers.SlugRelatedField(
         slug_field='department', read_only=True)
