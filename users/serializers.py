@@ -7,6 +7,7 @@ from timesheets.serializers import TimeSheetSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
+    basic_salary_per_month = serializers.ReadOnlyField()
     department = serializers.SlugRelatedField(
         slug_field='department', read_only=True)
     position = serializers.SlugRelatedField(

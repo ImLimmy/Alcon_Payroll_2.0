@@ -2,7 +2,7 @@ from django.db import models
 from users.models import User
 
 class LeaveCounter(models.Model):
-    vacation_leave = models.IntegerField(default=5)
+    vacation_leave = models.IntegerField(default=5, null=False, blank=False)
 
 
 class LeaveTracker(models.Model):
@@ -10,6 +10,11 @@ class LeaveTracker(models.Model):
     date_of_leave = models.DateField()
     to_date = models.DateField(null=True, blank=True)
     reason = models.TextField(null=True, blank=True)
+    
+    approved_by = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='user_approved', null=True, blank=True
+    )
+    approved_date = models.DateField(null=True, blank=True)
 
     # Renamed from 'vacation' to 'total_vacation'
     total_vacation = models.SmallIntegerField(default=5)

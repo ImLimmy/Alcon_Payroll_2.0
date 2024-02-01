@@ -59,11 +59,6 @@ class RatingsListSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'year',
-            'regular_rate',
-            'holiday_rate',
-            'rest_day',
-            'night_rate',
-            'overtime_rate',
         ]
 
 

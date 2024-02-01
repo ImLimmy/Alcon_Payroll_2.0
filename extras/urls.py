@@ -12,4 +12,8 @@ urlpatterns = [
     path('deductions/', views.DeductionsList.as_view(), name='deductions_list'),
     path('deductions/<int:pk>/', views.DeductionsDetail.as_view(),
          name='deductions_detail'),
+
+    # http://127.0.0.1:8000/alcon_payroll/extras/ratings/
+    path('ratings/', views.RatingsList.as_view(), name='ratings_list'),
+    path('ratings/<int:pk>/', views.RatingsDetail.as_view(), name='ratings_detail'),
 ]

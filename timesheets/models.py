@@ -22,7 +22,7 @@ class TimeInOut(models.Model):
         TimeSheet, on_delete=models.CASCADE, related_name='time_in_out')
     time_in = models.TimeField(blank=True, null=True)  # first in
     time_out = models.TimeField(blank=True, null=True)  # last out
-    category = models.CharField(max_length=20, blank=True, null=True)
+    category = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         ordering = ['-date']
