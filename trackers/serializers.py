@@ -19,11 +19,9 @@ class LeaveTrackerList_Serializer(serializers.ModelSerializer):
         model = LeaveTracker
         fields = [
             'id',
-            'leave_user',
-            'leave_type',
-            'start_date',
-            'end_date',
-            'status',
+            'user',
+            'date_of_leave',
+            'to_date',
             'approved_by',
             'approved_date',
         ]

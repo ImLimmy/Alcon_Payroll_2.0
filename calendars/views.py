@@ -5,7 +5,10 @@ from .serializers import (
 )
 from .models import CalendarEvent
 from api.mixins import UserPermissionMixin, AdminPermissionMixin
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, status
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from datetime import datetime
 
 
 class EventList(UserPermissionMixin, generics.ListAPIView):
@@ -27,3 +30,9 @@ class EventDetail(UserPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
 class EventCreate(AdminPermissionMixin, generics.CreateAPIView):
     queryset = CalendarEvent.objects.all()
     serializer_class = EventCreate_Serializer
+    
+
+class PopulateCalendarEvents(APIView):
+    def post(self, request, format=None):
+        CalendarEvent.populate_calendar_events()
+        return Response(status=status.HTTP_200_OK)
