@@ -49,13 +49,14 @@ class UserListSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'employee_id',
-            'get_full_name',
+            'full_name',
             'department',
             'position',
         ]
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
+    full_name = serializers.CharField(read_only=True)
     department = serializers.SlugRelatedField(
         slug_field='department', read_only=True)
     position = serializers.SlugRelatedField(

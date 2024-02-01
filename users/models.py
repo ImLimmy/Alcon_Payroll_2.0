@@ -93,7 +93,7 @@ class User(AbstractUser):
     last_name = models.CharField(max_length=50)
     middle_name = models.CharField(max_length=50)
     suffix = models.CharField(
-        max_length=10, choices=Suffix, null=True, blank=True)
+        max_length=10, choices=Suffix, null=True, blank=True, default='')
     gender = models.CharField(max_length=10, choices=Gender)
     contact_number = models.CharField(
         max_length=20, null=True, blank=True, unique=True)
@@ -160,7 +160,7 @@ class User(AbstractUser):
     objects = Manager()
 
     def __str__(self) -> str:
-        return f'{self.get_full_name}'
+        return f'{self.full_name}'
 
     def has_module_perms(self, app_label: str) -> bool:
         return self.is_superuser
@@ -169,14 +169,18 @@ class User(AbstractUser):
         return self.is_superuser
     
     @property
-    def get_full_name(self) -> str:
+    def full_name(self):
         if self.first_name and self.last_name:
-            return f'{self.first_name} {self.last_name}'
-        return f'{self.username}'
+            if self.suffix:
+                return f'{self.last_name} {self.suffix}, {self.first_name} {self.middle_name}'
+            else:
+                return f'{self.last_name}, {self.first_name} {self.middle_name}'
+        else:
+            return self.username
 
     @property
     def get_id_and_username(self) -> str:
-        return f'{self.employee_id} - {self.get_full_name}'
+        return f'{self.employee_id} - {self.full_name}'
 
     # Salary Computation
     @property

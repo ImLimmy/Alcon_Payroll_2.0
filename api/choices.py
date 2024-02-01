@@ -17,6 +17,7 @@ class CivilStatus(models.TextChoices):
 
 
 class Suffix(models.TextChoices):
+    NONE = '', ''
     JR = 'Jr.', 'Jr.'
     SR = 'Sr.', 'Sr.'
     I = 'I', 'I'
