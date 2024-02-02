@@ -6,7 +6,7 @@ import holidays
 class CalendarEvent(models.Model):
     event = models.CharField(max_length=100)
     unformat_date = models.FloatField()
-    label = models.CharField(null=True, default='', max_length=100)
+    label = models.CharField(null=True, default='blue', max_length=100)
     description = models.TextField(null=True, default='')
 
     is_regular_holiday = models.BooleanField(default=True)
