@@ -35,9 +35,8 @@ class EventCreate(AdminPermissionMixin, generics.CreateAPIView):
 
 class PopulateCalendarEvents(APIView):
     def post(self, request, format=None):
-        # CalendarEvent.populate_calendar_events()
         ph_holidays = holidays.PH(years=[datetime.now().year])
         for date, name in sorted(ph_holidays.items()):
             CalendarEvent.objects.create(
-                event=name, unformat_date=date, is_regular_holiday=True, label="red")
+                event=name, this_date=date, is_regular_holiday=True, label="red")
         return Response(f'{'Holidays has been populated'}', status=status.HTTP_200_OK)

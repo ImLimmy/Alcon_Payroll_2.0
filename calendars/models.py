@@ -5,8 +5,8 @@ import holidays
 
 class CalendarEvent(models.Model):
     event = models.CharField(max_length=100)
-    unformat_date = models.DateField()
-    label = models.CharField(null=True, default='', max_length=100)
+    this_date = models.DateTimeField()
+    label = models.CharField(null=True, default='blue', max_length=100)
     description = models.TextField(null=True, default='')
 
     is_regular_holiday = models.BooleanField(default=True)
@@ -21,7 +21,6 @@ class CalendarEvent(models.Model):
     def __str__(self):
         return f'{self.event}'
 
-    @property
-    def unformatted_date(self):
-        # print(self.unformat_date, type(self.unformat_date))
-        return datetime.strptime(str(self.unformat_date), "%Y-%m-%d").timestamp()
+    # @property
+    # def unformatted_date(self):
+    #     return int(self.this_date.timestamp())
