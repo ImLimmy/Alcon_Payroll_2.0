@@ -6,6 +6,7 @@ from .departments.models import Department
 from .positions.models import Position
 from timesheets.admin import TimeSheetInline
 
+
 class PositionPermissionInline(admin.TabularInline):
     model = PositionPermission
     extra = 0
@@ -30,6 +31,7 @@ class CustomUserAdmin(UserAdmin):
                     'pag_ibig_contributions',
                     'phil_health_contributions',
                     'sss_contributions',
+                    'get_total_shift_hours',
                     )
     fieldsets = (
                 ('Login', {'fields': ('username',

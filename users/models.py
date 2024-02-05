@@ -1,6 +1,7 @@
 from collections.abc import Collection
 from typing import Any
 from django.db import models
+from datetime import datetime
 from .departments.models import Department
 from .positions.models import Position
 from careers.models import Careers
@@ -167,14 +168,21 @@ class User(AbstractUser):
 
     def has_perms(self, perm_list: Collection[str]) -> bool:
         return self.is_superuser
-    
+
+    @property
+    def get_total_shift_hours(self):
+        try:
+            return self.shift.final_hours
+        except:
+            return None
+
     @property
     def full_name(self):
         if self.first_name and self.last_name:
             if self.suffix:
-                return f'{self.last_name} {self.suffix}, {self.first_name} {self.middle_name}'
+                return f'{self.last_name} {self.suffix}, {self.first_name} {self.middle_name}'.title()
             else:
-                return f'{self.last_name}, {self.first_name} {self.middle_name}'
+                return f'{self.last_name}, {self.first_name} {self.middle_name}'.title()
         else:
             return self.username
 

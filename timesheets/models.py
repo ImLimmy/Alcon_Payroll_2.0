@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from datetime import datetime
 from users.models import User
 
 
@@ -30,3 +31,10 @@ class TimeInOut(models.Model):
 
     def __str__(self):
         return f'{self.date}'
+
+    @property
+    def total_hours(self):
+        t1 = datetime.strptime(str(self.time_in), '%H:%M:%S')
+        t2 = datetime.strptime(str(self.time_out), '%H:%M:%S')
+        hours = t2 - t1
+        return hours

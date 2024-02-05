@@ -1,11 +1,11 @@
 from django.db import models
-from datetime import datetime
+from datetime import datetime, timedelta
 import holidays
 
 
 class CalendarEvent(models.Model):
     event = models.CharField(max_length=100)
-    unformat_date = models.FloatField()
+    unformat_date = models.DateField()
     label = models.CharField(null=True, default='', max_length=100)
     description = models.TextField(null=True, default='')
 
@@ -23,14 +23,5 @@ class CalendarEvent(models.Model):
 
     @property
     def unformatted_date(self):
-        return self.unformat_date
-
-    @staticmethod
-    def populate_calendar_events():
-        ph_holidays = holidays.PH(years=[datetime.now().year])
-        for date, name in sorted(ph_holidays.items()):
-            date = str(date).split('-')
-            unformat_date = float("".join(date))
-
-            CalendarEvent.objects.create(
-                event=name, unformat_date=unformat_date, is_regular_holiday=True)
+        # print(self.unformat_date, type(self.unformat_date))
+        return datetime.strptime(str(self.unformat_date), "%Y-%m-%d").timestamp()

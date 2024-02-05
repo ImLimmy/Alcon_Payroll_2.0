@@ -1,4 +1,6 @@
 from django.db import models
+from datetime import datetime
+
 
 
 class BreakTemplate(models.Model):
@@ -21,7 +23,7 @@ class Shift(models.Model):
     # optional field
     # buffer_time = models.PositiveIntegerField(null=True, blank=True)
     # cross_days = models.PositiviveIntegerField(null=True, blank=True)
-
+ 
     # Work day
     monday = models.BooleanField(default=False)
     tuesday = models.BooleanField(default=False)
@@ -40,6 +42,9 @@ class Shift(models.Model):
     saturday_on_call = models.BooleanField(default=False)
     sunday_on_call = models.BooleanField(default=False)
 
+    class Meta:
+        ordering = ['shift_name']
+    
     def __str__(self) -> str:
         return f'{self.shift_name}'
 
@@ -60,6 +65,26 @@ class Shift(models.Model):
         return [f'{break_obj.break_start_time.strftime("%I:%M %p")} - {break_obj.break_end_time.strftime("%I:%M %p")}' for break_obj in Break.objects.filter(shift=self)]
 
     @property
+    def break_time(self):
+        duration = 0
+        for i in self.breaks.all():
+            return i.break_duration
+
+    @property
+    def total_hours(self):
+        t1 = datetime.strptime(str(self.start_time), '%H:%M:%S')
+        t2 = datetime.strptime(str(self.end_time), '%H:%M:%S')
+        hours = t2 - t1
+        return hours
+    
+    @property
+    def final_hours(self):
+        t1 = self.total_hours
+        t2 = self.break_time
+        total_time = t1 - t2
+        return total_time
+
+    @property
     def days(self):
         days_of_week = ['Monday', 'Tuesday', 'Wednesday',
                         'Thursday', 'Friday', 'Saturday', 'Sunday']
@@ -75,3 +100,12 @@ class Shift(models.Model):
 class Break(BreakTemplate):
     shift = models.ForeignKey(
         Shift, on_delete=models.CASCADE, related_name='breaks')
+
+    @property
+    def break_duration(self):
+        t1 = datetime.strptime(str(self.break_start_time), '%H:%M:%S')
+        t2 = datetime.strptime(str(self.break_end_time), '%H:%M:%S')
+        duration = t2 - t1
+        return duration
+    
+    
