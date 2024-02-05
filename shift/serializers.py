@@ -7,6 +7,9 @@ class BreakSerializer(serializers.ModelSerializer):
         model = Break
         exclude = ['shift']
         # fields = '__all__'
+        
+    def delete(self, instance):
+        instance.delete()
 
 
 class ShiftCreateSerializer(serializers.ModelSerializer):
@@ -32,7 +35,7 @@ class ShiftListSerializer(serializers.ModelSerializer):
         fields = ['id', 'shift_name', 'start_time', 'end_time', 'breaks', 'days', 'on_call']
 
 class ShiftDetailSerializer(serializers.ModelSerializer):
-    breaks = BreakSerializer(many=True, read_only=True)
+    breaks = BreakSerializer(many=True)
 
     def update(self, instance, validated_data):
         breaks_data = validated_data.pop('breaks', [])
@@ -46,6 +49,14 @@ class ShiftDetailSerializer(serializers.ModelSerializer):
                 Break.objects.create(shift=instance, **break_data)
         return instance
 
+    def delete_breaks(self, instance, break_ids):
+        for break_id in break_ids:
+            try:
+                break_obj = Break.objects.get(id=break_id, shift=instance)
+                break_obj.delete()
+            except Break.DoesNotExist:
+                pass
+    
     class Meta:
         model = Shift
         fields = '__all__'
