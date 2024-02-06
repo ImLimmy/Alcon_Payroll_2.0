@@ -21,4 +21,4 @@ class TimeSheetAdmin(admin.ModelAdmin):
     
 @admin.register(TimeInOut)
 class TimeInOutAdmin(admin.ModelAdmin):
-    list_display = ['date', 'time_in', 'time_out', 'category']
+    list_display = ['date', 'time_in', 'time_out', 'category', 'total_hours']

@@ -29,6 +29,11 @@ class TimeSheetUserList(UserPermissionMixin, generics.ListAPIView):
     serializer_class = TimeSheetUserSerializer
 
 
+class TimeSheetUserDetail(UserPermissionMixin, generics.RetrieveUpdateAPIView):
+    queryset = User.objects.all()
+    serializer_class = TimeSheetUserSerializer
+
+
 class TimeSheetList(UserPermissionMixin, generics.ListAPIView):
     queryset = TimeSheet.objects.all()
     serializer_class = TimeSheetListSerializer
@@ -97,13 +102,15 @@ class ProcessPunchRecord(APIView):
                                         time_in_out.category = "Flexi + Late"
                                         flexi_counter -= 1
                                     else:
-                                        time_in_out.category = f"Late and Number of Flexi is {flexi_counter}"
+                                        time_in_out.category = f"Late and Number of Flexi is {
+                                            flexi_counter}"
                                 elif d > dtime(9, 0):
                                     if flexi_counter > 0:
                                         time_in_out.category = "Flexi"
                                         flexi_counter -= 1
                                     else:
-                                        time_in_out.category = f"Late and Number of Flexi is {flexi_counter}"
+                                        time_in_out.category = f"Late and Number of Flexi is {
+                                            flexi_counter}"
                                 else:
                                     time_in_out.category = "Late"
                             else:

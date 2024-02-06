@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from datetime import datetime
 from users.models import User
+from datetime import time as dtime
 
 
 class TimeSheet(models.Model):
@@ -34,7 +35,15 @@ class TimeInOut(models.Model):
 
     @property
     def total_hours(self):
-        t1 = datetime.strptime(str(self.time_in), '%H:%M:%S')
-        t2 = datetime.strptime(str(self.time_out), '%H:%M:%S')
+        if (self.time_in is None and self.time_out) or (self.time_out is None and self.time_in):
+            return "Half day"
+        else:
+            if self.category == "On-Time":
+                t1 = datetime.strptime(str(dtime(8, 30)), '%H:%M:%S')
+            else:
+                t1 = datetime.strptime(str(self.time_in), '%H:%M:%S')
+
+            t2 = datetime.strptime(str(self.time_out), '%H:%M:%S')
+
         hours = t2 - t1
         return hours

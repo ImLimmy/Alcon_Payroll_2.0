@@ -5,7 +5,7 @@ import holidays
 
 class CalendarEvent(models.Model):
     event = models.CharField(max_length=100)
-    this_date = models.DateTimeField()
+    this_date = models.DateField()
     label = models.CharField(null=True, default='blue', max_length=100)
     description = models.TextField(null=True, default='')
 
