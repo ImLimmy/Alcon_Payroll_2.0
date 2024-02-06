@@ -48,11 +48,13 @@ class Deductions(models.Model):
 
 class Ratings(models.Model):
     year = models.IntegerField(default=datetime.now().year, unique=False)
-    regular_rate = models.FloatField(null=False, blank=False, default=1.0)
+    regular_rate = models.FloatField(null=False, blank=False, default=1.0) # remove, automatic 1
     holiday_rate = models.FloatField(null=False, blank=False, default=2.0)
     rest_day = models.FloatField(null=False, blank=False, default=1.3)
     night_rate = models.FloatField(null=False, blank=False, default=1.1)
     overtime_rate = models.FloatField(null=False, blank=False, default=1.25)
+
+# night_shift_and_double_special_nonworking_days 
 
     # Admin can only view this
     created_at = models.DateTimeField(auto_now_add=True)
@@ -108,7 +110,7 @@ class Ratings(models.Model):
 
     @property
     def double_holidays(self):
-        double_holiday = self.regular_rate * \
+        double_holiday = self.regular_rate + \
             self.holiday_rate * (self.holiday_rate / 2)
         return round(double_holiday, 3)
 
@@ -122,6 +124,16 @@ class Ratings(models.Model):
     def night_shifts(self):
         night_shift = self.regular_rate * self.night_rate
         return round(night_shift, 3)
+    
+    @property
+    def night_shift_and_overtime(self):
+        night_shift_and_overtime = self.overtime_rate * self.night_shifts
+        return round(night_shift_and_overtime, 3)
+
+    @property
+    def night_shift_and_rest_days(self):
+        night_shift_and_rest_day = self.rest_day * self.night_rate
+        return round(night_shift_and_rest_day, 3)
 
     @property
     def night_shift_and_special_nonworking_days(self):
@@ -134,7 +146,7 @@ class Ratings(models.Model):
         return round(night_shift_and_special_nonworking_and_rest_day, 3)
 
     @property
-    def night_shift_and_double_special_nonworking_days(self):
+    def night_shift_double_special_nonworking_days_and_rest_days(self):
         night_shift_and_double_special_nonworking_day = self.double_holidays_and_rest_days * self.night_shifts
         return round(night_shift_and_double_special_nonworking_day, 3)
 
@@ -183,7 +195,7 @@ class Ratings(models.Model):
     @property
     def double_special_nonworking_rest_day_and_overtime_days(self):
         double_special_nonworking_rest_day_and_overtime_day = self.double_special_nonworking_days * \
-            (self.overtime_rate + 0.05)
+            (self.overtime_rate + 0.05) * self.rest_day
         return round(double_special_nonworking_rest_day_and_overtime_day, 3)
 
     @property
@@ -193,10 +205,34 @@ class Ratings(models.Model):
         return round(regular_holiday_and_overtime_day, 3)
 
     @property
+    def regular_holiday_rest_day_and_overtime_days(self):
+        regular_holiday_rest_day_and_overtime_day = self.regular_holiday_and_rest_days * \
+            (self.overtime_rate + 0.05)
+        return round(regular_holiday_rest_day_and_overtime_day, 3)
+
+    @property
+    def double_holidays_and_overtime_days(self):
+        double_holidays_and_overtime_day = self.double_holidays * \
+            (self.overtime_rate + 0.05)
+        return round(double_holidays_and_overtime_day, 3)
+    
+    @property
+    def double_holidays_rest_day_and_overtime_days(self):
+        double_holidays_rest_day_and_overtime_day = self.double_holidays_and_rest_days * \
+            (self.overtime_rate + 0.05)
+        return round(double_holidays_rest_day_and_overtime_day, 3)
+
+    @property
     def rest_day_night_shift_and_overtime_days(self):
         rest_day_night_shift_and_overtime_day = self.rest_day * \
             self.night_rate * (self.overtime_rate + 0.05)
         return round(rest_day_night_shift_and_overtime_day, 3)
+
+    @property
+    def special_nonworking_day_night_shift_and_overtime_days(self):
+        special_nonworking_day_night_shift_and_overtime_day = self.special_nonworking_days * \
+            self.night_rate * (self.overtime_rate + 0.05)
+        return round(special_nonworking_day_night_shift_and_overtime_day, 3)
 
     @property
     def special_nonworking_day_rest_day_night_shift_and_overtime_days(self):
@@ -209,6 +245,12 @@ class Ratings(models.Model):
         double_special_nonworking_rest_days_night_shift_and_overtime_day = self.double_special_nonworking_and_rest_days * \
             self.night_rate * (self.overtime_rate + 0.05)
         return round(double_special_nonworking_rest_days_night_shift_and_overtime_day, 4)
+
+    @property
+    def regular_holiday_night_shift_and_overtime_days(self):
+        regular_holiday_night_shift_and_overtime_day = self.regular_holidays * \
+            self.night_rate * (self.overtime_rate + 0.05)
+        return round(regular_holiday_night_shift_and_overtime_day, 3)
 
     @property
     def regular_holiday_rest_day_night_shift_and_overtime_days(self):
@@ -232,3 +274,5 @@ class Ratings(models.Model):
 class LeaveCounter(models.Model):
     vacation_leave = models.IntegerField(default=5)
     sick_leave = models.IntegerField(default=5)
+    
+    pass

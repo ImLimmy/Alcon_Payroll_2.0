@@ -7,8 +7,8 @@ class BreakSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Break
-        # exclude = ['shift']
-        fields = '__all__'
+        exclude = ['shift']
+        # fields = '__all__'
 
 
 class ShiftCreateSerializer(serializers.ModelSerializer):
@@ -25,7 +25,7 @@ class ShiftCreateSerializer(serializers.ModelSerializer):
             Break.objects.create(shift=shift, **break_data)
         return shift
 
-
+ 
 class ShiftListSerializer(serializers.ModelSerializer):
     breaks = BreakSerializer(many=True)
 

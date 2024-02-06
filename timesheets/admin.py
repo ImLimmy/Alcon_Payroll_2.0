@@ -18,7 +18,8 @@ class TimeSheetInline(admin.TabularInline):
 class TimeSheetAdmin(admin.ModelAdmin):
     inlines = [TimeInOutInline]
     list_display = ['user', 'date']
-    
+
+
 @admin.register(TimeInOut)
 class TimeInOutAdmin(admin.ModelAdmin):
-    list_display = ['date', 'time_in', 'time_out', 'category']
+    list_display = ['date', 'time_in', 'time_out', 'category', 'total_hours']

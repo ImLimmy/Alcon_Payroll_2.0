@@ -36,7 +36,28 @@ class EventCreate(AdminPermissionMixin, generics.CreateAPIView):
 class PopulateCalendarEvents(APIView):
     def post(self, request, format=None):
         ph_holidays = holidays.PH(years=[datetime.now().year])
+        existing_events = CalendarEvent.objects.filter(this_date__in=ph_holidays.keys())
+        
+        new_events_created = []
         for date, name in sorted(ph_holidays.items()):
-            CalendarEvent.objects.create(
-                event=name, this_date=date, is_regular_holiday=True, label="red")
-        return Response(f'{'Holidays has been populated'}', status=status.HTTP_200_OK)
+            if date not in existing_events.values_list('this_date', flat=True):
+                new_event = CalendarEvent.objects.create(
+                    event=name, this_date=date, is_regular_holiday=True, label="red"
+                )
+                new_events_created.append(name)
+
+        if new_events_created:
+            response_msg = f"Events have been added: {', '.join(new_events_created)}"
+        else:
+            response_msg = "No new events were added, existing events were already present"
+
+        return Response(response_msg, status=status.HTTP_200_OK)
+    
+
+# class PopulateCalendarEvents(APIView):
+#     def post(self, request, format=None):
+#         ph_holidays = holidays.PH(years=[datetime.now().year])
+#         for date, name in sorted(ph_holidays.items()):
+#             CalendarEvent.objects.create(
+#                 event=name, this_date=date, is_regular_holiday=True, label="red")
+#         return Response(f'{'Holidays has been populated'}', status=status.HTTP_200_OK)
