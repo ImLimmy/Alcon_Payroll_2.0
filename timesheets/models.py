@@ -46,4 +46,4 @@ class TimeInOut(models.Model):
             t2 = datetime.strptime(str(self.time_out), '%H:%M:%S')
 
         hours = t2 - t1
-        return hours
+        return (hours / 3600)

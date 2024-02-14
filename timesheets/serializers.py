@@ -16,6 +16,7 @@ class TimeSheetListSerializer(serializers.ModelSerializer):
 class TimeInOutSerializer(serializers.ModelSerializer):
     total_hours = serializers.ReadOnlyField()
     date = serializers.ReadOnlyField(source='date.date')
+    user = serializers.ReadOnlyField(source='date.user.full_name')
 
     class Meta:
         model = TimeInOut
