@@ -13,7 +13,7 @@ from contributions.models import (
     SSS,
 )
 from extras.models import Incentives, Deductions
-from forms.kpi_models import Kpi
+# from forms.kpi_models import Kpi
 
 from django.contrib.auth.models import AbstractUser, UserManager, Group
 
@@ -127,8 +127,8 @@ class User(AbstractUser):
     incentives = models.ManyToManyField(Incentives)
     deductions = models.ManyToManyField(Deductions)
 
-    kpi = models.OneToOneField(
-        Kpi, on_delete=models.SET_NULL, null=True, blank=True)
+    # kpi = models.OneToOneField(
+    #     Kpi, on_delete=models.SET_NULL, null=True, blank=True)
 
     # Contributions
     pag_ibig_number = models.IntegerField(unique=True, null=True, blank=False)

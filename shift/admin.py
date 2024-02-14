@@ -12,7 +12,7 @@ class BreakInline(admin.TabularInline):
 @admin.register(Shift)
 class ShiftAdmin(admin.ModelAdmin):
     list_display = ('shift_name', 'schedule',
-                    'shift_breaks', 'days', 'on_call', 'break_time')
+                    'shift_breaks', 'days', 'on_call', 'break_time', 'final_hours')
     fieldsets = (
         ('Shift', {'fields': ('shift_name',
                               'start_time',

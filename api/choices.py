@@ -62,6 +62,8 @@ class Leave(models.TextChoices):
     VACATION_LEAVE = 'Vacation Leave', 'Vacation Leave',
     MATERNITY_LEAVE = 'Maternity Leave', 'Maternity Leave'
     PATERNITY_LEAVE = 'Paternity Leave', 'Paternity Leave'
+    HALF_DAY_LEAVE = 'Half Day Leave', 'Half Day Leave'
+    UNDERTIME = 'Undertime', 'Undertime'
     OTHER = 'Other', 'Other'
 
 

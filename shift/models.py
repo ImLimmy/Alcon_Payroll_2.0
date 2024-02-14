@@ -1,7 +1,14 @@
 from django.db import models
 from datetime import datetime
 
-
+# class LaterC(models.Model):
+#     if Temp_Shift_Form.exists():
+#                 if Temp_Shift_Form.exists():
+#                     pass
+#                 pass
+#             else:
+#                 pass # make it Call Approval
+            
 
 class BreakTemplate(models.Model):
     break_start_time = models.TimeField()
@@ -81,8 +88,8 @@ class Shift(models.Model):
     def final_hours(self):
         t1 = self.total_hours
         t2 = self.break_time
-        total_time = t1 - t2
-        return total_time
+        # total_time = t1 - t2
+        # return total_time.seconds/3600
 
     @property
     def days(self):
@@ -106,6 +113,6 @@ class Break(BreakTemplate):
         t1 = datetime.strptime(str(self.break_start_time), '%H:%M:%S')
         t2 = datetime.strptime(str(self.break_end_time), '%H:%M:%S')
         duration = t2 - t1
-        return duration
+        return duration.seconds / 3600
     
     

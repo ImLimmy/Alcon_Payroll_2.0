@@ -1,10 +1,7 @@
 from django.contrib import admin
-from .cash_advance_models import CashAdvanceForm, PaymentTerm
-from .half_day_models import HalfDayForm
 from .kpi_models import Kpi
-from .leave_models import LeaveForm, LeaveRequestForm
-from .overtime_models import OverTimeForm
-from .tempshift_models import TemporaryShiftForm
+from .leave_models import LeaveRequestForm, HalfDayRequestForm, UnderTimeRequestForm
+from .call_approval_forms import CashAdvanceForm, From_to, TemporaryShiftForm, OverTimeForm
 
 
 @admin.register(CashAdvanceForm)
@@ -14,11 +11,16 @@ class CashAdvanceAdmin(admin.ModelAdmin):
     list_filter = ('cash_advance_user', 'date', 'payment_term', 'status')
 
 
-@admin.register(HalfDayForm)
+@admin.register(HalfDayRequestForm)
 class HalfDayAdmin(admin.ModelAdmin):
-    list_display = ('half_day_user', 'date', 'time_out', 'status')
-    list_filter = ('half_day_user', 'date', 'status')
+    list_display = ('half_day_user', 'start_date', 'end_date', 'status')
+    list_filter = ('half_day_user', 'start_date', 'end_date', 'status')
 
+
+@admin.register(UnderTimeRequestForm)
+class UnderTimeAdmin(admin.ModelAdmin):
+    list_display = ('under_time_user', 'start_date', 'end_date', 'status')
+    list_filter = ('under_time_user', 'start_date', 'end_date', 'status')
 
 @admin.register(Kpi)
 class KpiAdmin(admin.ModelAdmin):
@@ -37,17 +39,19 @@ class LeaveRequestAdmin(admin.ModelAdmin):
     list_filter = ('leave_user', 'status')
 
 
+class OTInline(admin.TabularInline):
+    model = From_to
+    extra = 1
+
 @admin.register(OverTimeForm)
 class OverTimeAdmin(admin.ModelAdmin):
-    list_display = ('overtime_user', 'date', 'overtime_hours', 'status')
+    list_display = ('overtime_user', 'date', 'status')
     list_filter = ('overtime_user', 'date', 'status')
+    inlines = [OTInline]
 
 
 @admin.register(TemporaryShiftForm)
 class TemporaryShiftAdmin(admin.ModelAdmin):
-    list_display = ('tempshift_user', 'schedule',
+    list_display = ('temporary_shift_user', 'schedule',
                     'shift_time', 'shift_breaks', 'status')
-    list_filter = ('tempshift_user', 'status')
-
-
-admin.site.register(PaymentTerm)
+    list_filter = ('temporary_shift_user', 'status')
