@@ -9,33 +9,34 @@ from extras.models import LeaveCounter
 class LeaveForm(models.Model):
     leave_user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='leave_form')
-    
+
     class Meta:
         abstract = True
-        
+
 
 class LeaveRequestForm(LeaveForm):
     start_date = models.DateTimeField(null=False, blank=False)
     end_date = models.DateTimeField(null=False, blank=False)
     description = models.TextField(null=False, blank=False)
-    
+
     leave_type = models.CharField(max_length=255, choices=Leave)
-    
-    status = models.CharField(max_length=255, choices=Status, default='Pending')
+
+    status = models.CharField(
+        max_length=255, choices=Status, default='Pending')
     approved_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='approved_leaves', null=True, blank=True)  # Admin can only view this
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='approved_leaves', null=True, blank=True)
     approved_date = models.DateField(null=True, blank=True)
-    
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
     def __str__(self):
         return f'{self.leave_user}'
-    
+
     @property
     def total_hours(self):
         return int((self.end_date - self.start_date).seconds / 3600)
-    
+
     @property
     def vacation(self):
         if self.leave_type == 'Vacation Leave':
@@ -43,7 +44,7 @@ class LeaveRequestForm(LeaveForm):
             remaining_vacation = vacation_leave - self.total_hours
             self.save()
             return int(remaining_vacation)
-    
+
     @property
     def sick(self):
         if self.leave_type == 'Sick Leave':
@@ -52,30 +53,35 @@ class LeaveRequestForm(LeaveForm):
             self.save()
             return f'remaining leave: {int(remaining_sick)}'
 
+
 class HalfDayForm(models.Model):
     half_day_user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='half_days')
-    
+
     class Meta:
         abstract = True
-        
+
+
 class HalfDayRequestForm(HalfDayForm):
-    form = models.CharField(max_length=255, choices=Leave, default='Half Day Leave')
+    form = models.CharField(
+        max_length=255, choices=Leave, default='Half Day Leave')
     start_date = models.DateTimeField(null=False, blank=False)
     end_date = models.DateTimeField(null=False, blank=False)
     description = models.TextField(null=False, blank=False)
-    
-    status = models.CharField(max_length=255, choices=Status, default='Pending')
+
+    status = models.CharField(
+        max_length=255, choices=Status, default='Pending')
     approved_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='approved_half_days', null=True, blank=True)  # Admin can only view this
+        # Admin can only view this
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='approved_half_days', null=True, blank=True)
     approved_date = models.DateField(null=True, blank=True)
-    
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
     def __str__(self):
         return f'{self.half_day_user}'
-    
+
     @property
     def half_day(self):
         if self.form == 'Half Day Leave':
@@ -83,7 +89,7 @@ class HalfDayRequestForm(HalfDayForm):
             remaining_half_day = half_day - self.total_hours
             self.save()
             return f'remaining leave: {int(remaining_half_day)}'
-    
+
     @property
     def total_hours(self):
         return int((self.end_date - self.start_date).seconds / 3600)
@@ -92,27 +98,30 @@ class HalfDayRequestForm(HalfDayForm):
 class UnderTimeForm(models.Model):
     under_time_user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='under_times')
-    
+
     class Meta:
         abstract = True
-        
+
+
 class UnderTimeRequestForm(UnderTimeForm):
     form = models.CharField(max_length=255, choices=Leave, default='Undertime')
     start_date = models.DateTimeField(null=False, blank=False)
     end_date = models.DateTimeField(null=False, blank=False)
     description = models.TextField(null=False, blank=False)
-    
-    status = models.CharField(max_length=255, choices=Status, default='Pending')
+
+    status = models.CharField(
+        max_length=255, choices=Status, default='Pending')
     approved_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='approved_under_times', null=True, blank=True)  # Admin can only view this
+        # Admin can only view this
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='approved_under_times', null=True, blank=True)
     approved_date = models.DateField(null=True, blank=True)
-    
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
     def __str__(self):
         return f'{self.under_time_user}'
-    
+
     @property
     def under_time(self):
         if self.form == 'Undertime':
@@ -120,7 +129,7 @@ class UnderTimeRequestForm(UnderTimeForm):
             remaining_under_time = under_time - self.total_hours
             self.save()
             return f'remaining leave: {int(remaining_under_time)}'
-    
+
     @property
     def total_hours(self):
         return int((self.end_date - self.start_date).seconds / 3600)

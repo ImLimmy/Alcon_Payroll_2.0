@@ -88,8 +88,8 @@ class Shift(models.Model):
     def final_hours(self):
         t1 = self.total_hours
         t2 = self.break_time
-        # total_time = t1 - t2
-        # return total_time.seconds/3600
+        total_time = t1 - t2
+        return total_time.seconds/3600
 
     @property
     def days(self):

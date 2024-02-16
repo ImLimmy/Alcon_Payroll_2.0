@@ -40,6 +40,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserListSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(max_length=None, use_url=True)
     department = serializers.SlugRelatedField(
         slug_field='department', read_only=True)
     position = serializers.SlugRelatedField(
@@ -49,6 +50,7 @@ class UserListSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             'id',
+            'image',
             'employee_id',
             'full_name',
             'department',

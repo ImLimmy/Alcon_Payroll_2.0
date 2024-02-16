@@ -16,10 +16,10 @@ class Adjustment(models.Model):
 class PaymentTerm(models.Model):
     term = models.IntegerField(default=0, null=False, blank=False)
     name = models.CharField(max_length=50, null=False, blank=False)
-    
+
     def __str__(self):
         return self.name
-    
+
 
 class CashAdvanceForm(models.Model):
     cash_advance_user = models.ForeignKey(
@@ -50,13 +50,14 @@ class CashAdvanceForm(models.Model):
             return round((self.cash_amount - self.deduction), 2)
         else:
             return 0.0
-        
-        
+
+
 class OverTimeForm(models.Model):
+
     overtime_user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='overtime_users')
     date = models.DateField(auto_now_add=True)
-    
+
     # Admin can only view this
     status = models.CharField(max_length=10, choices=Status, default='Pending')
 
@@ -65,25 +66,26 @@ class OverTimeForm(models.Model):
 
     def __str__(self):
         return f'{self.overtime_user}'
-    
+
+
 class From_to(models.Model):
     ot_form = models.ForeignKey(
         OverTimeForm, on_delete=models.CASCADE, related_name='ot_forms')
     from_time = models.TimeField()
-    to_time =   models.TimeField()
+    to_time = models.TimeField()
     description = models.TextField()
-    
+
     def __str__(self):
         return f'{self.from_time} - {self.to_time}'
-    
+
     @property
     def total_hours(self):
         t1 = dtime.strptime(str(self.from_time), '%H:%M:%S')
         t2 = dtime.strptime(str(self.to_time), '%H:%M:%S')
-        
+
         duration = t2 - t1
         return round((duration.seconds / 3600), 2)
-    
+
 
 class TemporaryShiftForm(models.Model):
     temporary_shift_user = models.ForeignKey(
@@ -91,12 +93,12 @@ class TemporaryShiftForm(models.Model):
     start_date = models.DateTimeField(null=False, blank=False)
     end_date = models.DateTimeField(null=False, blank=False)
     description = models.TextField(null=False, blank=False)
-    
+
     status = models.CharField(max_length=10, choices=Status, default='Pending')
-    
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
     def __str__(self):
         return f'{self.tempshift_user}'
 
