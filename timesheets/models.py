@@ -58,6 +58,9 @@ class TimeSheet(models.Model):
         pay_per_hour = round((self.user.salary_per_day) /
                              (self.user.shift.final_hours), 2)
         ratings = Ratings.objects.get(year=self.date.year)
+
+        total_hours_of_leave = self.user.number_of_leaves()  # hours
+
         is_holiday = CalendarEvent.objects.filter(
             this_date=self.date).exists()
 
@@ -83,15 +86,9 @@ class TimeSheet(models.Model):
                 print(regular_day_and_overtime)
 
             if F_Leave_Form.exists():
-
-                # Temporary code before the line, for testing only
-
-                total_hours_of_leave = 40  # hours
-
-                # -------------------------------------------
-
                 compute_leave = F_Leave_Form.aggregate(
                     Sum(LeaveRequestForm.total_hours))
+
                 if compute_leave['total_hours__sum'] <= total_hours_of_leave:
                     regular_day_and_leave = ((regular_rate) * self.user.salary_per_day) - (
                         compute_leave['total_hours__sum'] * pay_per_hour)
@@ -221,15 +218,18 @@ class TimeInOut(models.Model):
             return "Half Day"
         else:
             if self.category == "On-Time":
-                t1 = datetime.strptime(str(dtime(8, 30)), '%H:%M:%S')
+                t1 = 8.5
             else:
-                t1 = datetime.strptime(str(self.time_in), '%H:%M:%S')
+                t_in_hours = self.time_in.hour
+                t_in_minutes = self.time_in.minute
+                t1 = t_in_hours + (t_in_minutes/60)
 
-            t2 = datetime.strptime(str(self.time_out), '%H:%M:%S')
+        t2_in_hours = self.time_out.hour
+        t2_in_minutes = self.time_out.minute
+        t2 = t2_in_hours + (t2_in_minutes/60)
         hours = t2 - t1
         hours2 = hours - self.date.user.shift.break_time
-        print(hours2.seconds / 3600)
-        return round((hours2.seconds / 3600), 2)
+        return round(hours2, 2)
 
 
 class OTFormV2(models.Model):

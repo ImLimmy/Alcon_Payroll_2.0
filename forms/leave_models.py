@@ -86,7 +86,7 @@ class HalfDayRequestForm(HalfDayForm):
     def half_day(self):
         if self.form == 'Half Day Leave':
             half_day = LeaveCounter.vacation_leave
-            remaining_half_day = half_day - self.total_hours
+            remaining_half_day = half_day - self.shift.total_hours
             self.save()
             return f'remaining leave: {int(remaining_half_day)}'
 

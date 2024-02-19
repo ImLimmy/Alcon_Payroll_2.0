@@ -4,6 +4,17 @@ from datetime import datetime
 from api.choices import Extras
 
 
+class Number_of_Leaves(models.Model):
+    total_leaves_in_hours = models.FloatField(null=False, blank=False, default=0.0)
+    
+    def __str__(self):
+        return f'{self.total_leaves_in_hours}'
+    
+    class Meta:
+        verbose_name = 'Number of Leaves'
+        verbose_name_plural = 'Number of Leaves'
+
+
 class Incentives(models.Model):
     incentive_name = models.CharField(
         max_length=50, unique=True, null=False, blank=False)

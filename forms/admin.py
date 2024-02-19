@@ -1,8 +1,13 @@
 from django.contrib import admin
 from .kpi_models import Kpi
 from .leave_models import LeaveRequestForm, HalfDayRequestForm, UnderTimeRequestForm
-from .call_approval_forms import CashAdvanceForm, From_to, TemporaryShiftForm, OverTimeForm
+from .call_approval_forms import CashAdvanceForm, From_to, TemporaryShiftForm, OverTimeForm, PaymentTerm
 
+
+@admin.register(PaymentTerm)
+class PaymentTermAdmin(admin.ModelAdmin):
+    list_display = ('term', 'name')
+    list_filter = ('term', 'name')
 
 @admin.register(CashAdvanceForm)
 class CashAdvanceAdmin(admin.ModelAdmin):

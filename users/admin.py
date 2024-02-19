@@ -55,6 +55,7 @@ class CustomUserAdmin(UserAdmin):
                                         )}),
                 ('Work Information', {'fields': ('employee_id',
                                                  'employement_date',
+                                                 'number_of_leaves',
                                                  'shift',
                                                  'career',
                                                  'department',

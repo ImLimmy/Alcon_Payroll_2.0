@@ -59,7 +59,10 @@ class HalfDayList(UserPermissionMixin, generics.ListCreateAPIView):
             return HalfDayCreateSerializer
         return super().get_serializer_class()
 
-
+    def perform_create(self, serializer):
+        serializer.save(half_day_user=self.request.user)
+        
+        
 class HalfDayDetail(UserPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = HalfDayRequestForm.objects.all()
     serializer_class = HalfDayDetailSerializer
@@ -80,6 +83,7 @@ class UnderTimeList(UserPermissionMixin, generics.ListCreateAPIView):
         if self.request.method == "POST":
             return LeaveCreateSerializer
         return super().get_serializer_class()
+    
     
 class UnderTimeDetail(UserPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = LeaveRequestForm.objects.all()

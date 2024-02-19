@@ -1,6 +1,10 @@
 from django.contrib import admin
 
-from .models import Incentives, Deductions, Ratings
+from .models import Incentives, Deductions, Ratings, Number_of_Leaves
+
+@admin.register(Number_of_Leaves)
+class Number_of_LeavesAdmin(admin.ModelAdmin):
+    list_display = ('total_leaves_in_hours',)
 
 
 @admin.register(Incentives)

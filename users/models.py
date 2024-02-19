@@ -2,6 +2,8 @@ from collections.abc import Collection
 from typing import Any
 from django.db import models
 from datetime import datetime
+
+from extras.models import Number_of_Leaves
 from .departments.models import Department
 from .positions.models import Position
 from careers.models import Careers
@@ -111,6 +113,8 @@ class User(AbstractUser):
     # Work Information
     employee_id = models.IntegerField(unique=True, null=True, blank=True)
     employement_date = models.DateField(null=True, blank=True)
+    number_of_leaves = models.ForeignKey(
+        Number_of_Leaves, on_delete=models.SET_NULL, null=True)
     shift = models.ForeignKey(Shift, on_delete=models.SET_NULL, null=True)
     career = models.ForeignKey(Careers, on_delete=models.SET_NULL, null=True)
     department = models.ForeignKey(

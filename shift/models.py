@@ -8,7 +8,7 @@ from datetime import datetime
 #                 pass
 #             else:
 #                 pass # make it Call Approval
-            
+
 
 class BreakTemplate(models.Model):
     break_start_time = models.TimeField()
@@ -30,7 +30,7 @@ class Shift(models.Model):
     # optional field
     # buffer_time = models.PositiveIntegerField(null=True, blank=True)
     # cross_days = models.PositiviveIntegerField(null=True, blank=True)
- 
+
     # Work day
     monday = models.BooleanField(default=False)
     tuesday = models.BooleanField(default=False)
@@ -51,7 +51,7 @@ class Shift(models.Model):
 
     class Meta:
         ordering = ['shift_name']
-    
+
     def __str__(self) -> str:
         return f'{self.shift_name}'
 
@@ -83,7 +83,7 @@ class Shift(models.Model):
         t2 = datetime.strptime(str(self.end_time), '%H:%M:%S')
         hours = t2 - t1
         return hours
-    
+
     @property
     def final_hours(self):
         t1 = self.total_hours
@@ -114,5 +114,3 @@ class Break(BreakTemplate):
         t2 = datetime.strptime(str(self.break_end_time), '%H:%M:%S')
         duration = t2 - t1
         return duration.seconds / 3600
-    
-    
