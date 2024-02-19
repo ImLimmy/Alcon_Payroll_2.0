@@ -79,8 +79,10 @@ class Shift(models.Model):
 
     @property
     def total_hours(self):
-        t1 = datetime.strptime(str(self.start_time), '%H:%M:%S')
-        t2 = datetime.strptime(str(self.end_time), '%H:%M:%S')
+        # t1 = datetime.strptime(str(self.start_time), '%H:%M:%S')
+        # t2 = datetime.strptime(str(self.end_time), '%H:%M:%S')
+        t1 = self.start_time.hour + self.start_time.minute / 60
+        t2 = self.end_time.hour + self.end_time.minute / 60
         hours = t2 - t1
         return hours
 
@@ -89,7 +91,7 @@ class Shift(models.Model):
         t1 = self.total_hours
         t2 = self.break_time
         total_time = t1 - t2
-        return total_time.seconds/3600
+        return total_time
 
     @property
     def days(self):
