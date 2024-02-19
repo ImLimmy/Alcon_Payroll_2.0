@@ -24,7 +24,7 @@ class CashAdvanceListSerializer(serializers.ModelSerializer):
     class Meta:
         model = CashAdvanceForm
         fields = ['id', 'cash_advance_user', 'date',
-                  'cash_amount', 'payment_term']
+                  'cash_amount', 'payment_term', 'status']
 
 
 class CashAdvanceDetailSerializer(serializers.ModelSerializer):
@@ -84,7 +84,7 @@ class KpiListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Kpi
         fields = [
-            'id',
+            'id', 'status'
         ]
 
 
@@ -107,7 +107,7 @@ class LeaveCreateSerializer(serializers.ModelSerializer):
 
 
 class LeaveListSerializer(serializers.ModelSerializer):
-
+    status = serializers.CharField(read_only=True) 
     leave_user = serializers.StringRelatedField()
 
     class Meta:
@@ -143,7 +143,7 @@ class UnderTimeListSerializer(serializers.ModelSerializer):
     class Meta:
         model = UnderTimeRequestForm
         fields = ['id', 'under_time_user', 'start_date', 'end_date',
-                  'description', 'under_time', 'total_hours']
+                  'description', 'under_time', 'total_hours', 'status']
 
 
 class UnderTimeDetailSerializer(serializers.ModelSerializer):
@@ -177,7 +177,7 @@ class OverTimeCreateSerializer(serializers.ModelSerializer):
 
 
 class OverTimeListSerializer(serializers.ModelSerializer):
-
+    status = serializers.CharField(read_only=True)  
     overtime_user = serializers.StringRelatedField()
 
     class Meta:
@@ -212,7 +212,7 @@ class TemporaryShiftCreateSerializer(serializers.ModelSerializer):
 
 
 class TemporaryShiftListSerializer(serializers.ModelSerializer):
-
+    status = serializers.CharField(read_only=True)
     tempshift_user = serializers.StringRelatedField()
 
     class Meta:

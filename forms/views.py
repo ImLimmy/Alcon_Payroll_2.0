@@ -36,6 +36,9 @@ class CashAdvanceList(UserPermissionMixin, generics.ListCreateAPIView):
         if self.request.method == "POST":
             return CashAdvanceCreateSerializer
         return super().get_serializer_class()
+    
+    def perform_create(self, serializer):
+        serializer.save(cash_advance_user=self.request.user)
 
 
 class CashAdvanceDetail(UserPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
@@ -84,6 +87,9 @@ class UnderTimeList(UserPermissionMixin, generics.ListCreateAPIView):
             return LeaveCreateSerializer
         return super().get_serializer_class()
     
+    def perform_create(self, serializer):
+        serializer.save(under_time_user=self.request.user)
+    
     
 class UnderTimeDetail(UserPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = LeaveRequestForm.objects.all()
@@ -106,6 +112,9 @@ class LeaveList(UserPermissionMixin, generics.ListCreateAPIView):
         if self.request.method == "POST":
             return LeaveCreateSerializer
         return super().get_serializer_class()
+    
+    def perform_create(self, serializer):
+        serializer.save(leave_user=self.request.user)
 
 
 class LeaveDetail(UserPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
@@ -128,6 +137,9 @@ class OverTimeList(UserPermissionMixin, generics.ListCreateAPIView):
         if self.request.method == "POST":
             return OverTimeCreateSerializer
         return super().get_serializer_class()
+    
+    def perform_create(self, serializer):
+        serializer.save(overtime_user=self.request.user)
 
 
 class OverTimeDetail(UserPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
@@ -173,6 +185,8 @@ class TemporaryShiftList(UserPermissionMixin, generics.ListCreateAPIView):
             return TemporaryShiftCreateSerializer
         return super().get_serializer_class()
 
+    def perform_create(self, serializer):
+        serializer.save(temporary_shift_user=self.request.user)
 
 class TemporaryShiftDetail(UserPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
     queryset = TemporaryShiftForm.objects.all()
