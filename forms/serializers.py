@@ -108,7 +108,7 @@ class LeaveCreateSerializer(serializers.ModelSerializer):
 
 class LeaveListSerializer(serializers.ModelSerializer):
     status = serializers.CharField(read_only=True) 
-    leave_user = serializers.StringRelatedField()
+    leave_user = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = LeaveRequestForm
@@ -138,7 +138,7 @@ class UnderTimeCreateSerializer(serializers.ModelSerializer):
 
 class UnderTimeListSerializer(serializers.ModelSerializer):
 
-    under_time_user = serializers.StringRelatedField()
+    under_time_user = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = UnderTimeRequestForm
@@ -178,7 +178,7 @@ class OverTimeCreateSerializer(serializers.ModelSerializer):
 
 class OverTimeListSerializer(serializers.ModelSerializer):
     status = serializers.CharField(read_only=True)  
-    overtime_user = serializers.StringRelatedField()
+    overtime_user = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = OverTimeForm
@@ -213,7 +213,7 @@ class TemporaryShiftCreateSerializer(serializers.ModelSerializer):
 
 class TemporaryShiftListSerializer(serializers.ModelSerializer):
     status = serializers.CharField(read_only=True)
-    tempshift_user = serializers.StringRelatedField()
+    tempshift_user = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = TemporaryShiftForm

@@ -74,6 +74,10 @@ class From_to(models.Model):
     from_time = models.TimeField()
     to_time = models.TimeField()
     description = models.TextField()
+    status = models.CharField(max_length=10, choices=Status, default='Pending')
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f'{self.from_time} - {self.to_time}'
