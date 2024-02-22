@@ -14,7 +14,7 @@ class CashAdvanceCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CashAdvanceForm
         fields = ['id', 'cash_advance_user', 'date',
-                  'cash_amount', 'payment_term', 'description']
+                  'cash_amount', 'payment_term', 'description', 'status']
 
 
 class CashAdvanceListSerializer(serializers.ModelSerializer):
@@ -41,31 +41,31 @@ class CashAdvanceDetailSerializer(serializers.ModelSerializer):
 
 class HalfDayCreateSerializer(serializers.ModelSerializer):
 
-    half_day_user = serializers.StringRelatedField()
+    user = serializers.StringRelatedField()
 
     class Meta:
         model = HalfDayRequestForm
-        fields = ['id', 'half_day_user', 'start_date',
+        fields = ['id', 'user', 'start_date',
                   'end_date', 'description']
 
 
 class HalfDayListSerializer(serializers.ModelSerializer):
 
-    half_day_user = serializers.StringRelatedField(read_only=True)
+    user = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = HalfDayRequestForm
-        fields = ['id', 'half_day_user', 'start_date',
+        fields = ['id', 'user', 'start_date',
                   'end_date', 'description', 'status']
 
 
 class HalfDayDetailSerializer(serializers.ModelSerializer):
 
-    half_day_user = serializers.StringRelatedField(read_only=True)
+    user = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = HalfDayRequestForm
-        fields = ['id', 'half_day_user', 'start_date',
+        fields = ['id', 'user', 'start_date',
                   'end_date', 'description', 'half_day', 'total_hours', 'approved_by', 'approved_date', 'status']
 
 # kpi Form
@@ -84,7 +84,7 @@ class KpiListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Kpi
         fields = [
-            'id', 'status'
+            'id'
         ]
 
 
@@ -98,17 +98,17 @@ class KpiDetailSerializer(serializers.ModelSerializer):
 
 class LeaveCreateSerializer(serializers.ModelSerializer):
 
-    leave_user = serializers.StringRelatedField()
+    user = serializers.StringRelatedField()
 
     class Meta:
         model = LeaveRequestForm
-        fields = ['id', 'leave_user', 'start_date',
+        fields = ['id', 'user', 'start_date',
                   'end_date', 'description', 'status', 'leave_type']
 
 
 class LeaveListSerializer(serializers.ModelSerializer):
     status = serializers.CharField(read_only=True) 
-    leave_user = serializers.StringRelatedField(read_only=True)
+    user = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = LeaveRequestForm
@@ -117,7 +117,7 @@ class LeaveListSerializer(serializers.ModelSerializer):
 
 class LeaveDetailSerializer(serializers.ModelSerializer):
 
-    leave_user = serializers.StringRelatedField()
+    user = serializers.StringRelatedField()
 
     class Meta:
         model = LeaveRequestForm
@@ -128,57 +128,56 @@ class LeaveDetailSerializer(serializers.ModelSerializer):
 
 class UnderTimeCreateSerializer(serializers.ModelSerializer):
 
-    under_time_user = serializers.StringRelatedField()
+    user = serializers.StringRelatedField()
 
     class Meta:
         model = UnderTimeRequestForm
-        fields = ['id', 'under_time_user', 'start_date',
+        fields = ['id', 'user', 'start_date',
                   'end_date', 'description', 'status']
 
 
 class UnderTimeListSerializer(serializers.ModelSerializer):
 
-    under_time_user = serializers.StringRelatedField(read_only=True)
+    user = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = UnderTimeRequestForm
-        fields = ['id', 'under_time_user', 'start_date', 'end_date',
+        fields = ['id', 'user', 'start_date', 'end_date',
                   'description', 'under_time', 'total_hours', 'status']
 
 
 class UnderTimeDetailSerializer(serializers.ModelSerializer):
 
-    under_time_user = serializers.StringRelatedField()
+    user = serializers.StringRelatedField()
 
     class Meta:
         model = UnderTimeRequestForm
-        fields = ['id', 'under_time_user', 'start_date', 'end_date',
+        fields = ['id', 'user', 'start_date', 'end_date',
                   'description', 'under_time', 'total_hours', 'approved_by', 'approved_date', 'status']
 
 # Overtime Form
 
-
-class OTForm(serializers.ModelSerializer):
-    date = serializers.DateTimeField(read_only=True)
-
-    class Meta:
-        model = OverTimeForm
-        exclude = ['overtime_user', 'created_at', 'updated_at']
-
-
 class OverTimeCreateSerializer(serializers.ModelSerializer):
     date = serializers.DateTimeField(read_only=True)
-    overtime_users = OTForm(many=True)
 
     class Meta:
         model = From_to
-        fields = ['id', 'overtime_users', 'date', 'from_time', 'to_time',
+        fields = ['id', 'user', 'date', 'from_time', 'to_time',
                   'total_hours', 'description']
+
+
+class OTForm(serializers.ModelSerializer):
+    date = serializers.DateTimeField(read_only=True)
+    ot_forms = OverTimeCreateSerializer(many=True)
+
+    class Meta:
+        model = OverTimeForm
+        exclude = ['user', 'created_at', 'updated_at']
 
 
 class OverTimeListSerializer(serializers.ModelSerializer):
     status = serializers.CharField(read_only=True)  
-    overtime_user = serializers.StringRelatedField(read_only=True)
+    user = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = OverTimeForm
@@ -186,17 +185,10 @@ class OverTimeListSerializer(serializers.ModelSerializer):
 
 
 class OverTimeDetailSerializer(serializers.ModelSerializer):
-    from_time = OTForm(many=True)
-    to_time = OTForm(many=True)
-    overtime_user = serializers.StringRelatedField()
-    date = serializers.ReadOnlyField(source='ot_form.date.date')
-    total_hours = OverTimeCreateSerializer(many=True)
-    description = OverTimeCreateSerializer(many=True)
 
     class Meta:
         model = OverTimeForm
-        fields = ['id', 'overtime_user', 'date', 'from_time',
-                  'to_time', 'total_hours', 'description']
+        fields = '__all__'
 
 # Temporary Shift Form
 

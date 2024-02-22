@@ -1,6 +1,6 @@
 from rest_framework import generics, permissions
 
-from .call_approval_forms import CashAdvanceForm, From_to, TemporaryShiftForm
+from .call_approval_forms import CashAdvanceForm, From_to, TemporaryShiftForm, OverTimeForm
 from .leave_models import  LeaveRequestForm, HalfDayRequestForm
 from .serializers import (
     CashAdvanceListSerializer,
@@ -24,6 +24,7 @@ from .serializers import (
 )
 from .kpi_models import Kpi
 from api.mixins import UserPermissionMixin, AdminPermissionMixin
+
 
 # Cash Advance Form
 
@@ -63,7 +64,7 @@ class HalfDayList(UserPermissionMixin, generics.ListCreateAPIView):
         return super().get_serializer_class()
 
     def perform_create(self, serializer):
-        serializer.save(half_day_user=self.request.user)
+        serializer.save(user=self.request.user)
         
         
 class HalfDayDetail(UserPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
@@ -88,7 +89,7 @@ class UnderTimeList(UserPermissionMixin, generics.ListCreateAPIView):
         return super().get_serializer_class()
     
     def perform_create(self, serializer):
-        serializer.save(under_time_user=self.request.user)
+        serializer.save(user=self.request.user)
     
     
 class UnderTimeDetail(UserPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
@@ -130,7 +131,7 @@ class LeaveDetail(UserPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
 
 
 class OverTimeList(UserPermissionMixin, generics.ListCreateAPIView):
-    queryset = From_to.objects.all()
+    queryset = OverTimeForm.objects.all()
     serializer_class = OverTimeListSerializer
 
     def get_serializer_class(self):
@@ -139,11 +140,11 @@ class OverTimeList(UserPermissionMixin, generics.ListCreateAPIView):
         return super().get_serializer_class()
     
     def perform_create(self, serializer):
-        serializer.save(overtime_user=self.request.user)
+        serializer.save(user=self.request.user)
 
 
 class OverTimeDetail(UserPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
-    queryset = From_to.objects.all()
+    queryset = OverTimeForm.objects.all()
     serializer_class = OverTimeDetailSerializer
 
     def get_serializer_class(self):

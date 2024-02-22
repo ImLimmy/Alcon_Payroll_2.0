@@ -6,7 +6,7 @@ from django.db.models import Sum
 from datetime import time as dtime
 
 from calendars.models import CalendarEvent
-from extras.models import Ratings
+from extras.models import Ratings, Number_of_Leaves
 from forms.leave_models import LeaveRequestForm, HalfDayRequestForm, UnderTimeRequestForm
 from forms.call_approval_forms import OverTimeForm, From_to, CashAdvanceForm, TemporaryShiftForm
 from shift.models import Shift
@@ -16,8 +16,8 @@ class TimeSheet(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='time_sheets_v2')
     date = models.DateField(null=True, blank=True)
-    time_in = models.TimeField(null=True, blank=True)
-    time_out = models.TimeField(null=True, blank=True)
+    # time_in = models.TimeField(null=True, blank=True)
+    # time_out = models.TimeField(null=True, blank=True)
 
     class Meta:
         ordering = ['-date']
@@ -32,7 +32,6 @@ class TimeSheet(models.Model):
         t1 = datetime.strptime(str(self.time_in), '%H:%M:%S')
         t2 = datetime.strptime(str(self.time_out), '%H:%M:%S')
         duration = t2 - t1
-        print(duration.seconds / 3600)
         return duration.seconds / 3600
 
     @property
@@ -53,151 +52,6 @@ class TimeSheet(models.Model):
         pass
         # return ((self.user.salary_per_day / self.user.shift.final_hours) * self.hours_ot)
 
-    @property
-    def total_pay(self):
-        pay_per_hour = round((self.user.salary_per_day) /
-                             (self.user.shift.final_hours), 2)
-        ratings = Ratings.objects.get(year=self.date.year)
-
-        total_hours_of_leave = self.user.number_of_leaves()  # hours
-
-        is_holiday = CalendarEvent.objects.filter(
-            this_date=self.date).exists()
-
-        if is_holiday == False:
-            regular_rate = ratings.regular_rate
-
-            F_Half_day_Form = HalfDayRequestForm.objects.filter(
-                half_day_user=self.user, status='Approved')
-            F_Leave_Form = LeaveRequestForm.objects.filter(
-                leave_user=self.user, status='Approved')
-            F_OT_Form = OverTimeForm.objects.filter(
-                overtime_user=self.user, status='Approved')
-            F_UT_Form = UnderTimeRequestForm.objects.filter(
-                under_time_user=self.user, status='Approved')
-
-            if F_OT_Form.exists():
-                compute_overtime = F_OT_Form.aggregate(
-                    Sum(From_to.total_hours))
-                overtime_pay = compute_overtime['overtime_hours__sum'] * \
-                    pay_per_hour
-                regular_day_and_overtime = (
-                    (regular_rate) * self.user.salary_per_day) + overtime_pay
-                print(regular_day_and_overtime)
-
-            if F_Leave_Form.exists():
-                compute_leave = F_Leave_Form.aggregate(
-                    Sum(LeaveRequestForm.total_hours))
-
-                if compute_leave['total_hours__sum'] <= total_hours_of_leave:
-                    regular_day_and_leave = ((regular_rate) * self.user.salary_per_day) - (
-                        compute_leave['total_hours__sum'] * pay_per_hour)
-
-                    total_hours_of_leave -= compute_leave['total_hours__sum']
-                    print(total_hours_of_leave)
-
-                    print(regular_day_and_leave)
-                else:
-                    regular_day_and_leave = (
-                        (regular_rate) * self.user.salary_per_day)
-                    print(regular_day_and_leave)
-
-            if F_Half_day_Form.exists() or F_UT_Form.exists():
-
-                if self.hours_work <= 4:
-                    half_day = F_Half_day_Form.aggregate(
-                        Sum(HalfDayRequestForm.total_hours))
-                    regular_day_and_half_day = (
-                        (regular_rate) * self.user.salary_per_day) - (half_day['total_hours__sum'] * pay_per_hour)
-                    print(regular_day_and_half_day)
-
-                else:
-                    under_time = F_UT_Form.aggregate(
-                        Sum(UnderTimeRequestForm.total_hours))
-                    regular_day_and_undertime = (
-                        (regular_rate) * self.user.salary_per_day) - (under_time['total_hours__sum'] * pay_per_hour)
-                    print(regular_day_and_undertime)
-
-            else:
-                number_work_hours = self.time_out.hour - self.time_in.hour
-                regular_day = ((regular_rate) *
-                               (number_work_hours * pay_per_hour))
-                print(regular_day)
-
-        else:
-            holiday_rate = ratings.holiday_rate
-
-            T_Half_day_Form = HalfDayRequestForm.objects.filter(
-                half_day_user=self.user, status='Approved')
-            T_Leave_Form = LeaveRequestForm.objects.filter(
-                leave_user=self.user, status='Approved')
-            T_OT_Form = OverTimeForm.objects.filter(
-                overtime_user=self.user, status='Approved')
-            T_UT_Form = UnderTimeRequestForm.objects.filter(
-                under_time_user=self.user, status='Approved')
-
-            if T_OT_Form.exists():
-                compute_overtime = T_OT_Form.aggregate(
-                    Sum(From_to.total_hours))
-                pay_per_hour = round(
-                    (self.user.salary_per_day)/(self.user.shift.final_hours), 2)
-                overtime_pay = compute_overtime['overtime_hours__sum'] * \
-                    pay_per_hour
-                holiday_and_overtime = (
-                    (holiday_rate) * self.user.salary_per_day) + overtime_pay
-                print(holiday_and_overtime)
-
-            if T_Leave_Form.exists():
-
-                # Temporary code before the line, for testing only
-
-                total_hours_of_leave = 40  # hours
-
-                # -------------------------------------------
-
-                compute_leave = T_Leave_Form.aggregate(
-                    Sum(LeaveRequestForm.total_hours))
-                if compute_leave['total_hours__sum'] <= total_hours_of_leave:
-                    holiday_and_leave = ((holiday_rate) * self.user.salary_per_day) - (
-                        compute_leave['total_hours__sum'] * pay_per_hour)
-
-                    total_hours_of_leave -= compute_leave['total_hours__sum']
-                    print(total_hours_of_leave)
-
-                    print(holiday_and_leave)
-                else:
-                    holiday_and_leave = (
-                        (holiday_rate) * self.user.salary_per_day)
-                    print(holiday_and_leave)
-
-            if T_Half_day_Form.exists() or T_UT_Form.exists():
-
-                if self.hours_work <= 4:
-                    half_day = T_Half_day_Form.aggregate(
-                        Sum(HalfDayRequestForm.total_hours))
-                    holiday_and_half_day = (
-                        (holiday_rate) * self.user.salary_per_day) - (half_day['total_hours__sum'] * pay_per_hour)
-                    print(holiday_and_half_day)
-
-                else:
-                    under_time = T_UT_Form.aggregate(
-                        Sum(UnderTimeRequestForm.total_hours))
-                    holiday_and_undertime = ((holiday_rate) * self.user.salary_per_day) - (
-                        under_time['total_hours__sum'] * pay_per_hour)
-                    print(holiday_and_undertime)
-
-            else:
-                # number_of_work_hours = TimeInOut.total_hours - Shift.final_hours
-                total_hours_worked = 0
-                for i in self.time_in_out.all():
-                    total_hours_worked += i.total_hours
-
-                number_of_work_hours = total_hours_worked
-                holiday = ((holiday_rate) *
-                           (number_of_work_hours * pay_per_hour))
-                print(holiday)
-
-
 class TimeInOut(models.Model):
     date = models.ForeignKey(
         TimeSheet, on_delete=models.CASCADE, related_name='time_in_out')
@@ -215,7 +69,7 @@ class TimeInOut(models.Model):
     @property
     def total_hours(self):
         if (self.time_in is None and self.time_out) or (self.time_out is None and self.time_in):
-            return "Half Day"
+            return 4
         else:
             if self.category == "On-Time":
                 t1 = 8.5
@@ -224,13 +78,82 @@ class TimeInOut(models.Model):
                 t_in_minutes = self.time_in.minute
                 t1 = t_in_hours + (t_in_minutes/60)
 
-        t2_in_hours = self.time_out.hour
-        t2_in_minutes = self.time_out.minute
-        t2 = t2_in_hours + (t2_in_minutes/60)
+        try:
+            t2_in_hours = self.time_out.hour
+            t2_in_minutes = self.time_out.minute
+            t2 = t2_in_hours + (t2_in_minutes/60)
+            
+        except:
+            t2 = 0
         hours = t2 - t1
         hours2 = hours - self.date.user.shift.break_time
         return round(hours2, 2)
 
+    @property
+    def with_ot(self):
+        OT_Form = OverTimeForm.objects.filter(
+                user=self.date.user, status='Approved')
+        is_holiday = CalendarEvent.objects.filter(
+            this_date=self.date.date).exists()
+        ratings = Ratings.objects.get(year=self.date.date.year)
+        holiday_rate = ratings.holiday_rate
+        ot_rate = ratings.overtime_rate
+        pay_per_hour = self.date.user.salary_per_day / self.date.user.shift.final_hours
+        if OT_Form.exists():
+            if is_holiday == True:
+                ot_holiday_pay = (pay_per_hour) * (1 - holiday_rate) 
+                return round((ot_holiday_pay), 2)
+            else:
+                ot_pay = pay_per_hour * ot_rate
+                return round((ot_pay), 2)
+        return 0
+    
+    @property
+    def with_ut_or_hd(self):
+        UT_Form = UnderTimeRequestForm.objects.filter(
+                user=self.date.user, status='Approved')
+        HD_Form = HalfDayRequestForm.objects.filter(
+                user=self.date.user, status='Approved')
+        pay_per_hour = self.date.user.salary_per_day / self.date.user.shift.final_hours
+        if HD_Form.exists() or UT_Form.exists():
+            if self.hours_work <=4:
+                half_day = HD_Form.aggregate(
+                    Sum(HalfDayRequestForm.total_hours))
+                half_day_deduction = (half_day['total_hours__sum'] * pay_per_hour)
+                return f'Half Day Deduction: {round((half_day_deduction), 2)}'
+            else:
+                under_time = UT_Form.aggregate(
+                    Sum(UnderTimeRequestForm.total_hours))
+                under_time_deduction = (under_time['total_hours__sum'] * pay_per_hour)
+                return f'Undertime Deduction: {round((under_time_deduction), 2)}'
+        return 0
+
+    @property
+    def with_leave_form(self):
+        LeaveForm = LeaveRequestForm.objects.filter(
+                user=self.date.user, status='Approved')
+        pay_per_hour = self.date.user.salary_per_day / self.date.user.shift.final_hours
+        is_holiday = CalendarEvent.objects.filter(
+            this_date=self.date.date).exists()
+        ratings = Ratings.objects.get(year=self.date.date.year)
+        holiday_rate = ratings.holiday_rate
+        if LeaveForm.exists():
+            if is_holiday == True:
+                leave_holiday_pay = (pay_per_hour) * (1 - holiday_rate)
+                return round((leave_holiday_pay), 2)
+            return 0
+        return 0
+        
+    @property
+    def payroll_amount(self):
+        pay_per_day = self.date.user.salary_per_day
+        total_hours = self.date.user.shift.final_hours
+        pay_per_hour = pay_per_day / total_hours
+        if self.total_hours < total_hours:
+            return round((pay_per_hour * self.total_hours), 2)
+        else:
+            return round((pay_per_day), 2)
+        
 
 class OTFormV2(models.Model):
     ts_v2 = models.ForeignKey(
@@ -252,5 +175,7 @@ class OTFormV2(models.Model):
         t1 = datetime.strptime(str(self.from_time), '%H:%M:%S')
         t2 = datetime.strptime(str(self.to_time), '%H:%M:%S')
         duration = t2 - t1
-        print(duration.seconds / 3600)
         return duration.seconds / 3600
+
+    
+

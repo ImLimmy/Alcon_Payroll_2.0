@@ -112,7 +112,7 @@ class Break(BreakTemplate):
 
     @property
     def break_duration(self):
-        t1 = datetime.strptime(str(self.break_start_time), '%H:%M:%S')
-        t2 = datetime.strptime(str(self.break_end_time), '%H:%M:%S')
+        t1 = self.break_start_time.hour + self.break_start_time.minute / 60
+        t2 = self.break_end_time.hour + self.break_end_time.minute / 60
         duration = t2 - t1
-        return duration.seconds / 3600
+        return duration     

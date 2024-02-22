@@ -15,13 +15,15 @@ class TimeSheetListSerializer(serializers.ModelSerializer):
 
 class TimeInOutSerializer(serializers.ModelSerializer):
     total_hours = serializers.ReadOnlyField()
-    date = serializers.ReadOnlyField(source='date.date')
-    user = serializers.ReadOnlyField(source='date.user.full_name')
+    payroll_amount = serializers.ReadOnlyField()
+    with_ot = serializers.ReadOnlyField()
+    with_ut_or_hd = serializers.ReadOnlyField()
+    with_leave_form = serializers.ReadOnlyField()
 
     class Meta:
         model = TimeInOut
-        # exclude = ['date']
-        fields = '__all__'
+        exclude = ['date']
+        # fields = '__all__'
 
 
 class TimeSheetSerializer(serializers.ModelSerializer):
@@ -35,7 +37,7 @@ class TimeSheetSerializer(serializers.ModelSerializer):
 
 class TimeSheetUserSerializer(serializers.ModelSerializer):
     
-    time_sheets = TimeSheetSerializer(many=True)
+    time_sheets_v2 = TimeSheetSerializer(many=True)
 
     class Meta:
         model = User
@@ -43,5 +45,6 @@ class TimeSheetUserSerializer(serializers.ModelSerializer):
             'id',
             'employee_id',
             'username',
-            'time_sheets'
+            'salary_per_cutoff',
+            'time_sheets_v2'
         ]

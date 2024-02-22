@@ -22,8 +22,8 @@ class PaymentTerm(models.Model):
 
 
 class CashAdvanceForm(models.Model):
-    cash_advance_user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='cash_advance_users')
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='ca_users')
     date = models.DateField(auto_now=True)
     cash_amount = models.FloatField(default=0.0, null=False, blank=False)
     payment_term = models.ForeignKey(
@@ -37,11 +37,15 @@ class CashAdvanceForm(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.cash_advance_user}'
+        return f'{self.user}'
 
     @property
     def deduction(self):
-        deduction_amount = self.cash_amount / self.payment_term.term
+        try:
+            deduction_amount = self.cash_amount / self.payment_term.term
+            
+        except:
+            deduction_amount = 0.0
         return round(deduction_amount, 2)
 
     @property
@@ -53,9 +57,8 @@ class CashAdvanceForm(models.Model):
 
 
 class OverTimeForm(models.Model):
-
-    overtime_user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='overtime_users')
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='ot_users')
     date = models.DateField(auto_now_add=True)
 
     # Admin can only view this
@@ -65,7 +68,7 @@ class OverTimeForm(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.overtime_user}'
+        return f'{self.user}'
 
 
 class From_to(models.Model):
@@ -92,8 +95,8 @@ class From_to(models.Model):
 
 
 class TemporaryShiftForm(models.Model):
-    temporary_shift_user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='temporary_shift_users')
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='ts_users')
     start_date = models.DateTimeField(null=False, blank=False)
     end_date = models.DateTimeField(null=False, blank=False)
     description = models.TextField(null=False, blank=False)
@@ -104,7 +107,7 @@ class TemporaryShiftForm(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.tempshift_user}'
+        return f'{self.user}'
 
     @property
     def schedule(self):

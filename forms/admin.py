@@ -11,21 +11,21 @@ class PaymentTermAdmin(admin.ModelAdmin):
 
 @admin.register(CashAdvanceForm)
 class CashAdvanceAdmin(admin.ModelAdmin):
-    list_display = ('cash_advance_user', 'date', 'cash_amount',
+    list_display = ('user', 'date', 'cash_amount',
                     'payment_term', 'deduction', 'status')
-    list_filter = ('cash_advance_user', 'date', 'payment_term', 'status')
+    list_filter = ('user', 'date', 'payment_term', 'status')
 
 
 @admin.register(HalfDayRequestForm)
 class HalfDayAdmin(admin.ModelAdmin):
-    list_display = ('half_day_user', 'start_date', 'end_date', 'status')
-    list_filter = ('half_day_user', 'start_date', 'end_date', 'status')
+    list_display = ('user', 'start_date', 'end_date', 'status')
+    list_filter = ('user', 'start_date', 'end_date', 'status')
 
 
 @admin.register(UnderTimeRequestForm)
 class UnderTimeAdmin(admin.ModelAdmin):
-    list_display = ('under_time_user', 'start_date', 'end_date', 'status')
-    list_filter = ('under_time_user', 'start_date', 'end_date', 'status')
+    list_display = ('user', 'start_date', 'end_date', 'status')
+    list_filter = ('user', 'start_date', 'end_date', 'status')
 
 @admin.register(Kpi)
 class KpiAdmin(admin.ModelAdmin):
@@ -40,8 +40,8 @@ class KpiAdmin(admin.ModelAdmin):
 
 @admin.register(LeaveRequestForm)
 class LeaveRequestAdmin(admin.ModelAdmin):
-    list_display = ('leave_user', 'start_date', 'end_date', 'description', 'status')
-    list_filter = ('leave_user', 'status')
+    list_display = ('user', 'start_date', 'end_date', 'description', 'status')
+    list_filter = ('user', 'status')
 
 
 class OTInline(admin.TabularInline):
@@ -50,13 +50,13 @@ class OTInline(admin.TabularInline):
 
 @admin.register(OverTimeForm)
 class OverTimeAdmin(admin.ModelAdmin):
-    list_display = ('overtime_user', 'date', 'status')
-    list_filter = ('overtime_user', 'date', 'status')
+    list_display = ('user', 'date', 'status')
+    list_filter = ('user', 'date', 'status')
     inlines = [OTInline]
 
 
 @admin.register(TemporaryShiftForm)
 class TemporaryShiftAdmin(admin.ModelAdmin):
-    list_display = ('temporary_shift_user', 'schedule',
+    list_display = ('user', 'schedule',
                     'shift_time', 'shift_breaks', 'status')
-    list_filter = ('temporary_shift_user', 'status')
+    list_filter = ('user', 'status')

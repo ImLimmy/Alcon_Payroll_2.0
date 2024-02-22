@@ -6,15 +6,18 @@ from extras.models import LeaveCounter
 # from timesheets_v2.models import TimeSheetV2
 
 
-class LeaveForm(models.Model):
-    leave_user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='leave_form')
+class UserForm(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f'{self.user}'
+    
     class Meta:
         abstract = True
 
 
-class LeaveRequestForm(LeaveForm):
+class LeaveRequestForm(UserForm):
     start_date = models.DateTimeField(null=False, blank=False)
     end_date = models.DateTimeField(null=False, blank=False)
     description = models.TextField(null=False, blank=False)
@@ -30,8 +33,6 @@ class LeaveRequestForm(LeaveForm):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return f'{self.leave_user}'
 
     @property
     def total_hours(self):
@@ -54,15 +55,7 @@ class LeaveRequestForm(LeaveForm):
             return f'remaining leave: {int(remaining_sick)}'
 
 
-class HalfDayForm(models.Model):
-    half_day_user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='half_days')
-
-    class Meta:
-        abstract = True
-
-
-class HalfDayRequestForm(HalfDayForm):
+class HalfDayRequestForm(UserForm):
     form = models.CharField(
         max_length=255, choices=Leave, default='Half Day Leave')
     start_date = models.DateTimeField(null=False, blank=False)
@@ -79,9 +72,6 @@ class HalfDayRequestForm(HalfDayForm):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return f'{self.half_day_user}'
-
     @property
     def half_day(self):
         if self.form == 'Half Day Leave':
@@ -95,15 +85,7 @@ class HalfDayRequestForm(HalfDayForm):
         return int((self.end_date - self.start_date).seconds / 3600)
 
 
-class UnderTimeForm(models.Model):
-    under_time_user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='under_times')
-
-    class Meta:
-        abstract = True
-
-
-class UnderTimeRequestForm(UnderTimeForm):
+class UnderTimeRequestForm(UserForm):
     form = models.CharField(max_length=255, choices=Leave, default='Undertime')
     start_date = models.DateTimeField(null=False, blank=False)
     end_date = models.DateTimeField(null=False, blank=False)
@@ -118,9 +100,6 @@ class UnderTimeRequestForm(UnderTimeForm):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f'{self.under_time_user}'
 
     @property
     def under_time(self):

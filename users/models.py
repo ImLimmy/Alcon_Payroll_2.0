@@ -254,3 +254,12 @@ class User(AbstractUser):
         if sss_account is None:
             return 0
         return sss_account.aoc_total_employee
+
+    @property
+    def salary_per_cutoff(self):
+        salary_pay = 0
+        for i in self.time_sheets_v2.all():
+            for j in i.time_in_out.all():
+                salary_pay += j.payroll_amount
+                
+        return salary_pay
