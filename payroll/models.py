@@ -1,20 +1,23 @@
 from django.db import models
 from timesheets.models import TimeSheet
+from api.choices import Cutoffs
 # Create your models here.
 
 class Payroll(models.Model):
-    # cutoff_name = models.CharField(max_length=255)
+    cutoff_name = models.CharField(max_length=255, choices=Cutoffs, default=Cutoffs.FIRST_CUTOFF)
     get_start_date = models.DateField()
     get_end_date = models.DateField()
 
     def __str__(self):
-        return f'date ranges from {self.get_start_date} to {self.get_end_date}'
+        return f'{self.cutoff_name}'
 
     @property
     def get_period(self):
-        queryset = TimeSheet.objects.filter(date__range=[self.get_start_date, self.get_end_date])
-        print(queryset.values())
-
+        queryset = TimeSheet.objects.filter(date__range=[self.get_start_date, self.get_end_date]).order_by('user')
+        for i in queryset:
+            for j in i.time_in_out.all():
+                print (f'{j = }, {i.date}')
+            
 #     @property
 #     def get_user_id(self):
 #         return self.user.employee_id

@@ -4,7 +4,7 @@ from .models import Payroll
 
 @admin.register(Payroll)
 class PayrollAdmin(admin.ModelAdmin):
-    list_display = ['get_period']
+    list_display = ['cutoff_name', 'get_period']
 
 
 # @admin.register(PayrollPerUser)

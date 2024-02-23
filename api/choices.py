@@ -1,6 +1,11 @@
 from django.db import models
 
 
+class Cutoffs(models.TextChoices):
+    FIRST_CUTOFF = 'First Cutoff', 'First Cutoff'
+    SECOND_CUTOFF = 'Second Cutoff', 'Second Cutoff'
+
+
 class Gender(models.TextChoices):
     MALE = 'Male', 'Male'
     FEMALE = 'Female', 'Female'

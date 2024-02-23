@@ -20,7 +20,7 @@ class TimeSheet(models.Model):
     # time_out = models.TimeField(null=True, blank=True)
 
     class Meta:
-        ordering = ['-date']
+        ordering = ['user_id']
         verbose_name_plural = 'Time Sheets'
         unique_together = ('user', 'date')
 
