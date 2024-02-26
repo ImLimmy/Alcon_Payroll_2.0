@@ -2,6 +2,7 @@ from django.db import models
 from timesheets.models import TimeSheet
 # Create your models here.
 
+
 class Payroll(models.Model):
     # cutoff_name = models.CharField(max_length=255)
     get_start_date = models.DateField()
@@ -12,7 +13,8 @@ class Payroll(models.Model):
 
     @property
     def get_period(self):
-        queryset = TimeSheet.objects.filter(date__range=[self.get_start_date, self.get_end_date])
+        queryset = TimeSheet.objects.filter(
+            date__range=[self.get_start_date, self.get_end_date])
         print(queryset.values())
 
 #     @property
@@ -25,7 +27,7 @@ class Payroll(models.Model):
 
 #     @property
 #     def get_basic_pay(self):
-#         return 
+#         return
 
 #     @property
 #     def get_gross_pay():

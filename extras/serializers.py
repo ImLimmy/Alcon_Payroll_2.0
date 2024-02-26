@@ -96,7 +96,6 @@ class RatingsDetailSerializer(serializers.ModelSerializer):
             'night_shifts',
             'night_shift_and_special_nonworking_days',
             'night_shift_special_nonworking_and_rest_days',
-            # 'night_shift_and_double_special_nonworking_days',
             'night_shift_and_regular_holidays',
             'night_shift_regular_holiday_and_rest_days',
             'night_shift_and_double_holidays',

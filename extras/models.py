@@ -59,11 +59,11 @@ class Deductions(models.Model):
 
 class Ratings(models.Model):
     year = models.IntegerField(default=datetime.now().year, unique=False)
-    regular_rate = models.FloatField(null=False, blank=False, default=1.0) # remove, automatic 1
-    holiday_rate = models.FloatField(null=False, blank=False, default=2.0)
-    rest_day = models.FloatField(null=False, blank=False, default=1.3)
-    night_rate = models.FloatField(null=False, blank=False, default=1.1)
-    overtime_rate = models.FloatField(null=False, blank=False, default=1.25)
+    regular_rate = models.FloatField(null=False, blank=False) # remove, automatic 1
+    holiday_rate = models.FloatField(null=False, blank=False)
+    rest_day = models.FloatField(null=False, blank=False)
+    night_rate = models.FloatField(null=False, blank=False)
+    overtime_rate = models.FloatField(null=False, blank=False)
 
 # night_shift_and_double_special_nonworking_days 
 

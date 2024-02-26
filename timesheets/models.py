@@ -1,15 +1,12 @@
 from django.db import models
 from datetime import datetime
-from django.utils import timezone
 from django.conf import settings
 from django.db.models import Sum
-from datetime import time as dtime
 
 from calendars.models import CalendarEvent
-from extras.models import Ratings, Number_of_Leaves
+from extras.models import Ratings
 from forms.leave_models import LeaveRequestForm, HalfDayRequestForm, UnderTimeRequestForm
-from forms.call_approval_forms import OverTimeForm, From_to, CashAdvanceForm, TemporaryShiftForm
-from shift.models import Shift
+from forms.call_approval_forms import OverTimeForm
 
 
 class TimeSheet(models.Model):
@@ -25,7 +22,7 @@ class TimeSheet(models.Model):
         unique_together = ('user', 'date')
 
     def __str__(self):
-        return f'{self.date}'
+        return f'{self.user}'
 
     @property
     def hours_work(self):

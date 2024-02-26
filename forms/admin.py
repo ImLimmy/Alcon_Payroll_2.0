@@ -50,8 +50,8 @@ class OTInline(admin.TabularInline):
 
 @admin.register(OverTimeForm)
 class OverTimeAdmin(admin.ModelAdmin):
-    list_display = ('user', 'date', 'status')
-    list_filter = ('user', 'date', 'status')
+    list_display = ('date', 'status')
+    list_filter = ('date', 'status')
     inlines = [OTInline]
 
 
