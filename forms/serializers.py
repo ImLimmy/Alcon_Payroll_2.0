@@ -162,7 +162,7 @@ class OverTimeCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = From_to
-        fields = ['id', 'user', 'date', 'from_time', 'to_time',
+        fields = ['id', 'date', 'from_time', 'to_time',
                   'total_hours', 'description']
 
 

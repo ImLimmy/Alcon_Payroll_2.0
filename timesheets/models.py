@@ -99,14 +99,17 @@ class TimeInOut(models.Model):
         holiday_rate = ratings.holiday_rate
         ot_rate = ratings.overtime_rate
         pay_per_hour = self.date.user.salary_per_day / self.date.user.shift.final_hours
+        print('before if')
         if OT_Form.exists():
             if is_holiday == True:
                 ot_holiday_pay = (pay_per_hour) * (1 - holiday_rate) 
+                print('true')
                 return round((ot_holiday_pay), 2)
             else:
                 ot_pay = pay_per_hour * ot_rate
+                print('false')
                 return round((ot_pay), 2)
-        return 0
+        return f'walang OT'
     
     @property
     def with_ut_or_hd(self):
