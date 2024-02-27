@@ -59,7 +59,7 @@ class CashAdvanceForm(models.Model):
 class OverTimeForm(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='ot_users')
-    date = models.DateField(auto_now_add=True)
+    date = models.DateField(auto_now=True)
 
     # Admin can only view this
     status = models.CharField(max_length=10, choices=Status, default='Pending')
@@ -72,12 +72,11 @@ class OverTimeForm(models.Model):
 
 
 class From_to(models.Model):
-    ot_form = models.ForeignKey(
-        OverTimeForm, on_delete=models.CASCADE, related_name='ot_forms')
+    overtime_form = models.ForeignKey(
+        OverTimeForm, on_delete=models.CASCADE, related_name='ot_form')
     from_time = models.TimeField()
     to_time = models.TimeField()
     description = models.TextField()
-    status = models.CharField(max_length=10, choices=Status, default='Pending')
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -93,6 +92,25 @@ class From_to(models.Model):
         duration = t2 - t1
         return round((duration.seconds / 3600), 2)
 
+    @property
+    def total_hours_in_ot(self):
+        t1_hours = self.from_time.hour
+        t1_minutes = self.from_time.minute
+        t1 = t1_hours + (t1_minutes / 60)
+        
+        t2_hours = self.to_time.hour
+        t2_minutes = self.to_time.minute
+        t2 = t2_hours + (t2_minutes / 60)
+        
+        hours = t2 - t1
+        return round(hours, 2)
+    
+    @property
+    def ot_pay(self):
+        time = self.total_hours_in_ot
+        pay_per_hour = self.overtime_form.user.salary_per_day / self.overtime_form.user.shift.final_hours
+        overtime_pay = time * pay_per_hour
+        return round(overtime_pay, 2)
 
 class TemporaryShiftForm(models.Model):
     user = models.ForeignKey(

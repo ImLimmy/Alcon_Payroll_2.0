@@ -9,6 +9,7 @@ class PaymentTermAdmin(admin.ModelAdmin):
     list_display = ('term', 'name')
     list_filter = ('term', 'name')
 
+
 @admin.register(CashAdvanceForm)
 class CashAdvanceAdmin(admin.ModelAdmin):
     list_display = ('user', 'date', 'cash_amount',
@@ -26,6 +27,7 @@ class HalfDayAdmin(admin.ModelAdmin):
 class UnderTimeAdmin(admin.ModelAdmin):
     list_display = ('user', 'start_date', 'end_date', 'status')
     list_filter = ('user', 'start_date', 'end_date', 'status')
+
 
 @admin.register(Kpi)
 class KpiAdmin(admin.ModelAdmin):

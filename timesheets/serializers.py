@@ -44,7 +44,7 @@ class TimeSheetUserSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'employee_id',
-            'username',
+            'full_name',
             'salary_per_cutoff',
             'time_sheets_v2'
         ]
