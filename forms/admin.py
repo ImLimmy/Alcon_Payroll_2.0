@@ -33,12 +33,7 @@ class UnderTimeAdmin(admin.ModelAdmin):
 class KpiAdmin(admin.ModelAdmin):
     list_display = ('category', 'metrics', 'min_score',
                     'max_score', 'remarks', 'comments')
-
-
-# @admin.register(LeaveForm)
-# class LeaveAdmin(admin.ModelAdmin):
-#     list_display = ('leave_user', 'days', 'leave_type', 'status')
-#     list_filter = ('leave_user', 'status')
+    
 
 @admin.register(LeaveRequestForm)
 class LeaveRequestAdmin(admin.ModelAdmin):

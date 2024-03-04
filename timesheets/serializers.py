@@ -22,7 +22,7 @@ class TimeInOutSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TimeInOut
-        exclude = ['date']
+        exclude = ['user_date']
         # fields = '__all__'
 
 

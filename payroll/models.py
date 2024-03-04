@@ -29,17 +29,20 @@ class Payroll(models.Model):
 #     def get_basic_pay(self):
 #         return
 
-#     @property
-#     def get_gross_pay():
-#         pass
+    @property
+    def get_gross_pay():
+        pass
 
-#     @property
-#     def get_deduction():
-#         pass
+    @property
+    def get_deduction():
+        pass
 
-#     @property
-#     def get_net_pay():
-#         pass
+    @property
+    def get_net_pay():
+        
+        net_pay = get_gross_pay - get_deduction
+        return round((net_pay), 2)
+        pass
 
 
 # class PayrollPerUser(models.Model):

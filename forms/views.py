@@ -115,7 +115,7 @@ class LeaveList(UserPermissionMixin, generics.ListCreateAPIView):
         return super().get_serializer_class()
     
     def perform_create(self, serializer):
-        serializer.save(leave_user=self.request.user)
+        serializer.save(user=self.request.user)
 
 
 class LeaveDetail(UserPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
