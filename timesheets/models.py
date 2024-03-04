@@ -40,18 +40,18 @@ class TimeSheet(models.Model):
         # return ((self.user.salary_per_day / self.user.shift.final_hours) * self.hours_ot)
 
 class TimeInOut(models.Model):
-    user_date = models.ForeignKey(
+    date = models.ForeignKey(
         TimeSheet, on_delete=models.CASCADE, related_name='time_in_out')
     time_in = models.TimeField(blank=True, null=True)
     time_out = models.TimeField(blank=True, null=True)
     category = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
-        ordering = ['-user_date']
+        ordering = ['-date']
         verbose_name_plural = 'Time In/Out'
 
     def __str__(self):
-        return f'{self.user_date}'
+        return f'{self.date}'
 
     @property
     def hours_work(self):
@@ -80,7 +80,7 @@ class TimeInOut(models.Model):
         except:
             t2 = 0
         hours = t2 - t1
-        hours2 = hours - self.user_date.user.shift.break_time
+        hours2 = hours - self.date.user.shift.break_time
         return round(hours2, 2)
 
     @property
@@ -119,8 +119,8 @@ class TimeInOut(models.Model):
 
     @property
     def payroll_amount(self):
-        pay_per_day = self.user_date.user.salary_per_day
-        total_hours = self.user_date.user.shift.final_hours
+        pay_per_day = self.date.user.salary_per_day
+        total_hours = self.date.user.shift.final_hours
         pay_per_hour = pay_per_day / total_hours
         if self.total_hours < total_hours:
             return round((pay_per_hour * self.total_hours), 2)
@@ -129,8 +129,8 @@ class TimeInOut(models.Model):
 
     @property
     def with_ut_or_hd(self):
-        pay_per_day = self.user_date.user.salary_per_day
-        total_hours = self.user_date.user.shift.final_hours
+        pay_per_day = self.date.user.salary_per_day
+        total_hours = self.date.user.shift.final_hours
         pay_per_hour = pay_per_day / total_hours
         if self.total_hours < total_hours:
             deduction = pay_per_hour * self.total_hours

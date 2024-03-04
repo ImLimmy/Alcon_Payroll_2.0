@@ -29,20 +29,26 @@ class Payroll(models.Model):
 #     def get_basic_pay(self):
 #         return
 
-    @property
-    def get_gross_pay():
-        pass
-
-    @property
-    def get_deduction():
-        pass
-
-    @property
-    def get_net_pay():
+    # @property
+    # def get_gross_pay(self):
+    #     basic_amount = (TimeSheet.payroll_amount)
+    #     ot_amount = (TimeSheet.ot_pay)
         
-        net_pay = get_gross_pay - get_deduction
-        return round((net_pay), 2)
-        pass
+    #     print(ot_amount)
+    #     if ot_amount == 0:
+    #         return basic_amount
+
+    # @property
+    # def get_deduction(self):
+    #     ot_deduction = (TimeSheet.with_ut_or_hd)
+    #     leave_deduction = (TimeSheet.with_leave_form)
+    #     total_deduction = (ot_deduction + leave_deduction)
+    #     return round((total_deduction), 2)
+
+    # @property
+    # def get_net_pay(self):
+    #     net_pay = self.get_gross_pay - self.get_deduction
+    #     return round((net_pay), 2)
 
 
 # class PayrollPerUser(models.Model):

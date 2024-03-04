@@ -22,4 +22,4 @@ class TimeSheetAdmin(admin.ModelAdmin):
 
 @admin.register(TimeInOut)
 class TimeInOutAdmin(admin.ModelAdmin):
-    list_display = ['user_date', 'time_in', 'time_out', 'category', 'total_hours', 'payroll_amount', 'with_ot', 'with_ut_or_hd', 'with_leave_form']
+    list_display = ['date', 'time_in', 'time_out', 'category', 'total_hours', 'payroll_amount', 'with_ot', 'with_ut_or_hd', 'with_leave_form']
