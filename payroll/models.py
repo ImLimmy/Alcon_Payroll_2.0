@@ -1,5 +1,5 @@
 from django.db import models
-from timesheets.models import TimeSheet
+from timesheets.models import TimeSheet, TimeInOut
 # Create your models here.
 
 
@@ -15,7 +15,7 @@ class Payroll(models.Model):
     def get_period(self):
         queryset = TimeSheet.objects.filter(
             date__range=[self.get_start_date, self.get_end_date])
-        print(queryset.values())
+        # print(queryset.values())
 
 #     @property
 #     def get_user_id(self):
@@ -29,19 +29,22 @@ class Payroll(models.Model):
 #     def get_basic_pay(self):
 #         return
 
-    # @property
-    # def get_gross_pay(self):
-    #     basic_amount = (TimeSheet.payroll_amount)
-    #     ot_amount = (TimeSheet.ot_pay)
+    @property
+    def get_gross_pay(self):
+        basic_amount = (TimeInOut.payroll_amount)
+        ot_amount = (TimeInOut.with_ot)
         
-    #     print(ot_amount)
-    #     if ot_amount == 0:
-    #         return basic_amount
+        print(basic_amount)
+        if ot_amount == 0:
+            return basic_amount
 
+        return 'wassap'
+    
+    
     # @property
     # def get_deduction(self):
-    #     ot_deduction = (TimeSheet.with_ut_or_hd)
-    #     leave_deduction = (TimeSheet.with_leave_form)
+    #     ot_deduction = (TimeInOut.with_ut_or_hd)
+    #     leave_deduction = (TimeInOut.with_leave_form)
     #     total_deduction = (ot_deduction + leave_deduction)
     #     return round((total_deduction), 2)
 

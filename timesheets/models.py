@@ -34,10 +34,6 @@ class TimeSheet(models.Model):
     def regular_pay(self):
         return ((self.user.salary_per_day / self.user.shift.final_hours) * self.hours_work)
 
-    @property
-    def ot_pay(self):
-        pass
-        # return ((self.user.salary_per_day / self.user.shift.final_hours) * self.hours_ot)
 
 class TimeInOut(models.Model):
     date = models.ForeignKey(
@@ -85,38 +81,32 @@ class TimeInOut(models.Model):
 
     @property
     def with_ot(self):
-        # OT_Form = OverTimeForm.objects.get(user=self.date.user, status='Approved')
-        # is_holiday = CalendarEvent.objects.filter(this_date=self.date.date).exists()
-        # ratings = Ratings.objects.get(year=self.date.date.year)
-        # holiday_rate = ratings.holiday_rate
-        # ot_rate = ratings.overtime_rate
-        # pay_per_hour = self.date.user.salary_per_day / self.date.user.shift.final_hours
+        OT_Form = OverTimeForm.objects.get(user=self.date.user, status='Approved')
+        is_holiday = CalendarEvent.objects.filter(this_date=self.date.date).exists()
+        ratings = Ratings.objects.get(year=self.date.date.year)
+        holiday_rate = ratings.holiday_rate
+        ot_rate = ratings.overtime_rate
+        pay_per_hour = self.date.user.salary_per_day / self.date.user.shift.final_hours
 
-        # if OT_Form.exists():
-        #     if is_holiday == True:
-        #         ot_holiday_pay = (pay_per_hour) * (1 - holiday_rate)
-        #         return round((ot_holiday_pay), 2)
-        #     else:
-        #         ot_pay = pay_per_hour * ot_rate
-        #         return round((ot_pay), 2)
+        if OT_Form.exists():
+            if is_holiday == True:
+                ot_holiday_pay = (pay_per_hour) * (1 - holiday_rate)
+                return round((ot_holiday_pay), 2)
+            else:
+                ot_pay = pay_per_hour * ot_rate
+                return round((ot_pay), 2)
         return 0
 
     @property
     def with_leave_form(self):
-        # LeaveForm = LeaveRequestForm.objects.filter(
-        #         user=self.date.user, status='Approved')
-        # pay_per_hour = self.date.user.salary_per_day / self.date.user.shift.final_hours
-        # is_holiday = CalendarEvent.objects.filter(
-        #     this_date=self.date.date).exists()
-        # ratings = Ratings.objects.get(year=self.date.date.year)
-        # holiday_rate = ratings.holiday_rate
-        # if LeaveForm.exists():
-        #     if is_holiday == True:
-        #         leave_holiday_pay = (pay_per_hour) * (1 - holiday_rate)
-        #         return round((leave_holiday_pay), 2)
-        #     return 0
+        
+        leave_form = LeaveRequestForm.objects.filter(
+            user=self.date.user, status='Approved', start_date__gte=self.date.date, end_date__lte=self.date.date
+        )
+        if leave_form.exists():
+            return round((self.date.user.salary_per_day), 2)
         return 0
-
+    
     @property
     def payroll_amount(self):
         pay_per_day = self.date.user.salary_per_day

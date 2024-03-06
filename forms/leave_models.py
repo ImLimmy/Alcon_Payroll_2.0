@@ -26,6 +26,8 @@ class LeaveRequestForm(UserForm):
 
     status = models.CharField(
         max_length=255, choices=Status, default='Pending')
+    is_paid = models.BooleanField(default=False, null=False, blank=False)
+    
     approved_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='approved_leaves', null=True, blank=True)
     approved_date = models.DateField(null=True, blank=True)

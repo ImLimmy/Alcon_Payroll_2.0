@@ -19,7 +19,7 @@ class UploadFileForm(forms.Form):
     file_upload = forms.FileField()
 
 
-class TimeInOutList(UserPermissionMixin, generics.ListAPIView):
+class TimeInOutList(UserPermissionMixin, generics.ListAPIView): 
     queryset = TimeInOut.objects.all()
     serializer_class = TimeInOutSerializer
 
