@@ -16,7 +16,7 @@ class TimeSheet(models.Model):
     date = models.DateField(null=True, blank=True)
 
     class Meta:
-        ordering = ['-date']
+        ordering = ['date']
         verbose_name_plural = 'Time Sheets'
         unique_together = ('user', 'date')
 
@@ -44,7 +44,7 @@ class TimeInOut(models.Model):
     category = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
-        ordering = ['date']
+        ordering = ['-date']
         verbose_name_plural = 'Time In/Out'
 
     def __str__(self):
