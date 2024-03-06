@@ -1,7 +1,8 @@
 from django.db import models
 from datetime import datetime
 from django.conf import settings
-from django.db.models import Sum
+from django.db.models import Sum, Q
+from django.utils import timezone
 
 from calendars.models import CalendarEvent
 from extras.models import Ratings
@@ -43,7 +44,7 @@ class TimeInOut(models.Model):
     category = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
-        ordering = ['-date']
+        ordering = ['date']
         verbose_name_plural = 'Time In/Out'
 
     def __str__(self):
@@ -81,8 +82,10 @@ class TimeInOut(models.Model):
 
     @property
     def with_ot(self):
-        OT_Form = OverTimeForm.objects.get(user=self.date.user, status='Approved')
-        is_holiday = CalendarEvent.objects.filter(this_date=self.date.date).exists()
+        OT_Form = OverTimeForm.objects.get(
+            user=self.date.user, status='Approved')
+        is_holiday = CalendarEvent.objects.filter(
+            this_date=self.date.date).exists()
         ratings = Ratings.objects.get(year=self.date.date.year)
         holiday_rate = ratings.holiday_rate
         ot_rate = ratings.overtime_rate
@@ -99,14 +102,21 @@ class TimeInOut(models.Model):
 
     @property
     def with_leave_form(self):
-        
+
         leave_form = LeaveRequestForm.objects.filter(
-            user=self.date.user, status='Approved', start_date__gte=self.date.date, end_date__lte=self.date.date
-        )
+            # Q(start_date__date=self.date.date) & Q(end_date__date=self.date.date),
+            user=self.date.user, status='Approved'
+        ).filter(Q(start_date__date__lte=self.date.date) & Q(end_date__date__gte=self.date.date))
         if leave_form.exists():
-            return round((self.date.user.salary_per_day), 2)
+            salary_per_day = self.date.user.salary_per_day
+            ut_or_hd = float(self.with_ut_or_hd)
+            leave_salary = salary_per_day + ut_or_hd
+            return round((leave_salary), 2)
         return 0
-    
+
+
+# calculate the leave time in salary(???)
+
     @property
     def payroll_amount(self):
         pay_per_day = self.date.user.salary_per_day
@@ -128,6 +138,7 @@ class TimeInOut(models.Model):
             return f'-{round((total), 2)}'
         else:
             return 0
+
 
 class OTFormV2(models.Model):
     ts_v2 = models.ForeignKey(
