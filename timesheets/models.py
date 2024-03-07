@@ -16,11 +16,7 @@ class TimeSheet(models.Model):
     date = models.DateField(null=True, blank=True)
 
     class Meta:
-<<<<<<< HEAD
-        ordering = ['user_id']
-=======
         ordering = ['date']
->>>>>>> exp_back_end
         verbose_name_plural = 'Time Sheets'
         unique_together = ('user', 'date')
 
@@ -94,46 +90,15 @@ class TimeInOut(models.Model):
         holiday_rate = ratings.holiday_rate
         ot_rate = ratings.overtime_rate
         pay_per_hour = self.date.user.salary_per_day / self.date.user.shift.final_hours
-<<<<<<< HEAD
-        print('before if')
-        if OT_Form.exists():
-            if is_holiday == True:
-                ot_holiday_pay = (pay_per_hour) * (1 - holiday_rate) 
-                print('true')
-=======
 
         if OT_Form.exists():
             if is_holiday == True:
                 ot_holiday_pay = (pay_per_hour) * (1 - holiday_rate)
->>>>>>> exp_back_end
                 return round((ot_holiday_pay), 2)
             else:
                 ot_pay = pay_per_hour * ot_rate
                 print('false')
                 return round((ot_pay), 2)
-<<<<<<< HEAD
-        return f'walang OT'
-    
-    @property
-    def with_ut_or_hd(self):
-        UT_Form = UnderTimeRequestForm.objects.filter(
-                user=self.date.user, status='Approved')
-        HD_Form = HalfDayRequestForm.objects.filter(
-                user=self.date.user, status='Approved')
-        pay_per_hour = self.date.user.salary_per_day / self.date.user.shift.final_hours
-        if HD_Form.exists() or UT_Form.exists():
-            if self.hours_work <=4:
-                half_day = HD_Form.aggregate(
-                    Sum(HalfDayRequestForm.total_hours))
-                half_day_deduction = (half_day['total_hours__sum'] * pay_per_hour)
-                return f'Half Day Deduction: {round((half_day_deduction), 2)}'
-            else:
-                under_time = UT_Form.aggregate(
-                    Sum(UnderTimeRequestForm.total_hours))
-                under_time_deduction = (under_time['total_hours__sum'] * pay_per_hour)
-                return f'Undertime Deduction: {round((under_time_deduction), 2)}'
-=======
->>>>>>> exp_back_end
         return 0
 
     @property

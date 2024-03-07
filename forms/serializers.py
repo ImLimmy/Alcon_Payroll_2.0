@@ -165,12 +165,7 @@ class FromToSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = From_to
-<<<<<<< HEAD
-        fields = ['id', 'date', 'from_time', 'to_time',
-                  'total_hours', 'description']
-=======
         exclude = ['overtime_form']
->>>>>>> exp_back_end
 
 
 class OverTimeCreateSerializer(serializers.ModelSerializer):

@@ -1,10 +1,6 @@
 from django.db import models
-<<<<<<< HEAD
-from timesheets.models import TimeSheet
-from api.choices import Cutoffs
-=======
 from timesheets.models import TimeSheet, TimeInOut
->>>>>>> exp_back_end
+from api.choices import Cutoffs
 # Create your models here.
 
 
@@ -18,18 +14,10 @@ class Payroll(models.Model):
 
     @property
     def get_period(self):
-<<<<<<< HEAD
-        queryset = TimeSheet.objects.filter(date__range=[self.get_start_date, self.get_end_date]).order_by('user')
-        for i in queryset:
-            for j in i.time_in_out.all():
-                print (f'{j = }, {i.date}')
-            
-=======
         queryset = TimeSheet.objects.filter(
             date__range=[self.get_start_date, self.get_end_date])
         # print(queryset.values())
 
->>>>>>> exp_back_end
 #     @property
 #     def get_user_id(self):
 #         return self.user.employee_id
