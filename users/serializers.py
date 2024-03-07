@@ -45,7 +45,8 @@ class UserListSerializer(serializers.ModelSerializer):
         slug_field='department', read_only=True)
     position = serializers.SlugRelatedField(
         slug_field='position', read_only=True)
-
+    employment_date = serializers.StringRelatedField(read_only=True)
+    career = serializers.StringRelatedField(read_only=True)
     class Meta:
         model = User
         fields = [
@@ -55,6 +56,8 @@ class UserListSerializer(serializers.ModelSerializer):
             'full_name',
             'department',
             'position',
+            'employment_date',
+            'career',
         ]
 
 
