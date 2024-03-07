@@ -43,7 +43,7 @@ class CashAdvanceForm(models.Model):
     def deduction(self):
         try:
             deduction_amount = self.cash_amount / self.payment_term.term
-            
+
         except:
             deduction_amount = 0.0
         return round(deduction_amount, 2)
@@ -59,7 +59,7 @@ class CashAdvanceForm(models.Model):
 class OverTimeForm(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='ot_users')
-    date = models.DateField(auto_now=True)
+    date = models.DateField()
 
     # Admin can only view this
     status = models.CharField(max_length=10, choices=Status, default='Pending')
@@ -69,6 +69,14 @@ class OverTimeForm(models.Model):
 
     def __str__(self):
         return f'{self.user}'
+
+    @property
+    def total_ot_pay(self):
+        total_ot_pay = 0
+        for i in self.ot_form.all():
+            total_ot_pay += i.ot_pay
+
+        return round((total_ot_pay), 2)
 
 
 class From_to(models.Model):
@@ -97,20 +105,22 @@ class From_to(models.Model):
         t1_hours = self.from_time.hour
         t1_minutes = self.from_time.minute
         t1 = t1_hours + (t1_minutes / 60)
-        
+
         t2_hours = self.to_time.hour
         t2_minutes = self.to_time.minute
         t2 = t2_hours + (t2_minutes / 60)
-        
+
         hours = t2 - t1
         return round(hours, 2)
-    
+
     @property
     def ot_pay(self):
         time = self.total_hours_in_ot
-        pay_per_hour = self.overtime_form.user.salary_per_day / self.overtime_form.user.shift.final_hours
+        pay_per_hour = self.overtime_form.user.salary_per_day / \
+            self.overtime_form.user.shift.final_hours
         overtime_pay = time * pay_per_hour
-        return round(overtime_pay, 2)
+        return overtime_pay
+
 
 class TemporaryShiftForm(models.Model):
     user = models.ForeignKey(

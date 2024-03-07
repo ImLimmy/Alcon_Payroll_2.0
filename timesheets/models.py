@@ -7,7 +7,7 @@ from django.utils import timezone
 from calendars.models import CalendarEvent
 from extras.models import Ratings
 from forms.leave_models import LeaveRequestForm, HalfDayRequestForm, UnderTimeRequestForm
-from forms.call_approval_forms import OverTimeForm
+from forms.call_approval_forms import OverTimeForm, From_to
 
 
 class TimeSheet(models.Model):
@@ -82,23 +82,15 @@ class TimeInOut(models.Model):
 
     @property
     def with_ot(self):
-        OT_Form = OverTimeForm.objects.get(
-            user=self.date.user, status='Approved')
-        is_holiday = CalendarEvent.objects.filter(
-            this_date=self.date.date).exists()
-        ratings = Ratings.objects.get(year=self.date.date.year)
-        holiday_rate = ratings.holiday_rate
-        ot_rate = ratings.overtime_rate
-        pay_per_hour = self.date.user.salary_per_day / self.date.user.shift.final_hours
 
-        if OT_Form.exists():
-            if is_holiday == True:
-                ot_holiday_pay = (pay_per_hour) * (1 - holiday_rate)
-                return round((ot_holiday_pay), 2)
-            else:
-                ot_pay = pay_per_hour * ot_rate
-                print('false')
-                return round((ot_pay), 2)
+        is_ot = OverTimeForm.objects.filter(
+            user=self.date.user, status="Approved", date=self.date.date)
+
+        if is_ot.exists():
+            total = 0
+            for i in is_ot:
+                total += i.total_ot_pay
+            return round((total), 2)
         return 0
 
     @property
