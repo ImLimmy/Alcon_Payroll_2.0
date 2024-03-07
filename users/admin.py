@@ -74,6 +74,7 @@ class CustomUserAdmin(UserAdmin):
                                               'philhealth_contribution',
                                               'sss_number',
                                               'sss_contribution',
+                                              'tin_number',
                                               )}),
                 ('Important Dates', {'fields': ('last_login',
                                                 'date_joined',)}),

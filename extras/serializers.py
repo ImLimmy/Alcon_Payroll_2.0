@@ -16,6 +16,7 @@ class IncentivesListSerializer(serializers.ModelSerializer):
             'id',
             'incentive_name',
             'incentive_amount',
+            'incentive_status'
         ]
 
 
@@ -38,6 +39,7 @@ class DeductionsListSerializer(serializers.ModelSerializer):
             'id',
             'deduction_name',
             'deduction_amount',
+            'deduction_status'
         ]
 
 
@@ -68,10 +70,10 @@ class RatingsDetailSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'year',
-            'regular_rate', 
-            'holiday_rate', 
-            'rest_day', 
-            'night_rate', 
+            'regular_rate',
+            'holiday_rate',
+            'rest_day',
+            'night_rate',
             'overtime_rate',
             'ordinary_days',
             'ordinary_and_overtime_days',
@@ -96,7 +98,6 @@ class RatingsDetailSerializer(serializers.ModelSerializer):
             'night_shifts',
             'night_shift_and_special_nonworking_days',
             'night_shift_special_nonworking_and_rest_days',
-            # 'night_shift_and_double_special_nonworking_days',
             'night_shift_and_regular_holidays',
             'night_shift_regular_holiday_and_rest_days',
             'night_shift_and_double_holidays',

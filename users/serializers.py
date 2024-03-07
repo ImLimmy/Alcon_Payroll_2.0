@@ -78,6 +78,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
     pag_ibig_contribution = serializers.StringRelatedField()
     philhealth_contribution = serializers.StringRelatedField()
     sss_contribution = serializers.StringRelatedField()
+    
 
     pag_ibig_contributions = serializers.ReadOnlyField()
     phil_health_contributions = serializers.ReadOnlyField()

@@ -9,31 +9,31 @@ from .kpi_models import Kpi
 
 class CashAdvanceCreateSerializer(serializers.ModelSerializer):
 
-    cash_advance_user = serializers.StringRelatedField(read_only=True)
+    user = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = CashAdvanceForm
-        fields = ['id', 'cash_advance_user', 'date',
+        fields = ['id', 'user', 'date',
                   'cash_amount', 'payment_term', 'description', 'status']
 
 
 class CashAdvanceListSerializer(serializers.ModelSerializer):
 
-    cash_advance_user = serializers.StringRelatedField(read_only=True)
+    user = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = CashAdvanceForm
-        fields = ['id', 'cash_advance_user', 'date',
+        fields = ['id', 'user', 'date',
                   'cash_amount', 'payment_term', 'status']
 
 
 class CashAdvanceDetailSerializer(serializers.ModelSerializer):
 
-    cash_advance_user = serializers.StringRelatedField(read_only=True)
+    user = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = CashAdvanceForm
-        fields = ['id', 'cash_advance_user', 'date',
+        fields = ['id', 'user', 'date',
                   'cash_amount', 'payment_term', 'description', 'deduction', 'remaining_amount', 'status']
 
 # Half-Day Form
@@ -46,7 +46,7 @@ class HalfDayCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = HalfDayRequestForm
         fields = ['id', 'user', 'start_date',
-                  'end_date', 'description']
+                  'end_date', 'status', 'description']
 
 
 class HalfDayListSerializer(serializers.ModelSerializer):
@@ -107,7 +107,7 @@ class LeaveCreateSerializer(serializers.ModelSerializer):
 
 
 class LeaveListSerializer(serializers.ModelSerializer):
-    status = serializers.CharField(read_only=True) 
+    status = serializers.CharField(read_only=True)
     user = serializers.StringRelatedField(read_only=True)
 
     class Meta:
@@ -157,26 +157,53 @@ class UnderTimeDetailSerializer(serializers.ModelSerializer):
 
 # Overtime Form
 
-class OverTimeCreateSerializer(serializers.ModelSerializer):
-    date = serializers.DateTimeField(read_only=True)
+
+class FromToSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+    created_at = serializers.DateTimeField(read_only=True, format='%Y-%m-%d %H:%M:%S')
+    updated_at = serializers.DateTimeField(read_only=True, format='%Y-%m-%d %H:%M:%S')
 
     class Meta:
         model = From_to
+<<<<<<< HEAD
         fields = ['id', 'date', 'from_time', 'to_time',
                   'total_hours', 'description']
+=======
+        exclude = ['overtime_form']
+>>>>>>> exp_back_end
 
 
-class OTForm(serializers.ModelSerializer):
-    date = serializers.DateTimeField(read_only=True)
-    ot_forms = OverTimeCreateSerializer(many=True)
-
+class OverTimeCreateSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField(read_only=True)
+    ot_form = FromToSerializer(many=True)
+    created_at = serializers.DateTimeField(read_only=True, format='%Y-%m-%d %H:%M:%S')
+    updated_at = serializers.DateTimeField(read_only=True, format='%Y-%m-%d %H:%M:%S')
+    
     class Meta:
         model = OverTimeForm
-        exclude = ['user', 'created_at', 'updated_at']
+        fields = ['user', 'date', 'ot_form', 'status', 'created_at', 'updated_at']
+
+    def create(self, validated_data):
+        overtime_data = validated_data.pop('ot_form')
+        instance_ot = OverTimeForm.objects.create(**validated_data)
+        for data in overtime_data:
+            From_to.objects.create(overtime_form=instance_ot, **data)
+        return instance_ot
+
+    def update(self, instance, validated_data):
+        overtime_data = validated_data.pop('ot_form')
+        instance = super().update(instance, validated_data)
+        existing_data = From_to.objects.filter(overtime_form=instance)
+        for obj in existing_data:
+            if not any(item.get('id') == obj.id for item in overtime_data):
+                obj.delete()
+        for data in overtime_data:
+            From_to.objects.create(overtime_form=instance, **data)
+        return instance
 
 
 class OverTimeListSerializer(serializers.ModelSerializer):
-    status = serializers.CharField(read_only=True)  
+    status = serializers.CharField(read_only=True)
     user = serializers.StringRelatedField(read_only=True)
 
     class Meta:
@@ -185,27 +212,28 @@ class OverTimeListSerializer(serializers.ModelSerializer):
 
 
 class OverTimeDetailSerializer(serializers.ModelSerializer):
-
+    ot_form = FromToSerializer(many=True)
+    user = serializers.StringRelatedField(read_only=True)
     class Meta:
         model = OverTimeForm
-        fields = '__all__'
+        fields = ['id', 'user', 'date', 'ot_form', 'status', 'created_at', 'updated_at']
 
 # Temporary Shift Form
 
 
 class TemporaryShiftCreateSerializer(serializers.ModelSerializer):
 
-    tempshift_user = serializers.StringRelatedField()
+    user = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = TemporaryShiftForm
-        fields = ['id', 'tempshift_user', 'start_date',
+        fields = ['id', 'user', 'start_date',
                   'end_date', 'description', 'status']
 
 
 class TemporaryShiftListSerializer(serializers.ModelSerializer):
     status = serializers.CharField(read_only=True)
-    tempshift_user = serializers.StringRelatedField(read_only=True)
+    user = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = TemporaryShiftForm
@@ -214,9 +242,9 @@ class TemporaryShiftListSerializer(serializers.ModelSerializer):
 
 class TemporaryShiftDetailSerializer(serializers.ModelSerializer):
 
-    tempshift_user = serializers.StringRelatedField()
+    user = serializers.StringRelatedField()
 
     class Meta:
         model = TemporaryShiftForm
-        fields = ['id', 'tempshift_user', 'start_date', 'end_date',
+        fields = ['id', 'user', 'start_date', 'end_date',
                   'description', 'status', 'schedule', 'shift_breaks']

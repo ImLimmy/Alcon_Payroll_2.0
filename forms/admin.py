@@ -9,6 +9,7 @@ class PaymentTermAdmin(admin.ModelAdmin):
     list_display = ('term', 'name')
     list_filter = ('term', 'name')
 
+
 @admin.register(CashAdvanceForm)
 class CashAdvanceAdmin(admin.ModelAdmin):
     list_display = ('user', 'date', 'cash_amount',
@@ -27,16 +28,12 @@ class UnderTimeAdmin(admin.ModelAdmin):
     list_display = ('user', 'start_date', 'end_date', 'status')
     list_filter = ('user', 'start_date', 'end_date', 'status')
 
+
 @admin.register(Kpi)
 class KpiAdmin(admin.ModelAdmin):
     list_display = ('category', 'metrics', 'min_score',
                     'max_score', 'remarks', 'comments')
-
-
-# @admin.register(LeaveForm)
-# class LeaveAdmin(admin.ModelAdmin):
-#     list_display = ('leave_user', 'days', 'leave_type', 'status')
-#     list_filter = ('leave_user', 'status')
+    
 
 @admin.register(LeaveRequestForm)
 class LeaveRequestAdmin(admin.ModelAdmin):
@@ -50,8 +47,8 @@ class OTInline(admin.TabularInline):
 
 @admin.register(OverTimeForm)
 class OverTimeAdmin(admin.ModelAdmin):
-    list_display = ('user', 'date', 'status')
-    list_filter = ('user', 'date', 'status')
+    list_display = ('date', 'status')
+    list_filter = ('date', 'status')
     inlines = [OTInline]
 
 
