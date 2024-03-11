@@ -54,7 +54,7 @@ class CustomUserAdmin(UserAdmin):
                                         'emergency_contact_number',
                                         )}),
                 ('Work Information', {'fields': ('employee_id',
-                                                 'employement_date',
+                                                 'employment_date',
                                                  'number_of_leaves',
                                                  'shift',
                                                  'career',

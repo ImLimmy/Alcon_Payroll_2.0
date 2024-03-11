@@ -47,11 +47,14 @@ class UserListSerializer(serializers.ModelSerializer):
         slug_field='position', read_only=True)
     employment_date = serializers.StringRelatedField(read_only=True)
     career = serializers.StringRelatedField(read_only=True)
+
     class Meta:
         model = User
         fields = [
             'id',
             'image',
+            'email',
+            'contact_number',
             'employee_id',
             'full_name',
             'department',
@@ -81,7 +84,6 @@ class UserDetailSerializer(serializers.ModelSerializer):
     pag_ibig_contribution = serializers.StringRelatedField()
     philhealth_contribution = serializers.StringRelatedField()
     sss_contribution = serializers.StringRelatedField()
-    
 
     pag_ibig_contributions = serializers.ReadOnlyField()
     phil_health_contributions = serializers.ReadOnlyField()

@@ -15,7 +15,7 @@ urlpatterns = [
     path('forms/', include('forms.urls'), name='forms'),
 
     # payroll app
-    path('payroll/', include('payroll.urls'), name='payroll'),
+    # path('payroll/', include('payroll.urls'), name='payroll'),
 
     # payroll_extras app
     path('extras/', include('extras.urls'), name='extras'),

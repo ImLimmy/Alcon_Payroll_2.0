@@ -73,8 +73,11 @@ class Shift(models.Model):
 
     @property
     def break_time(self):
-        for i in self.breaks.all():
-            return i.break_duration
+        if self.breaks.exists():
+            for i in self.breaks.all():
+                return i.break_duration
+        return 1 
+        # WARNING!!! Always put a break time for all of the shifts, this will cause problems to you, your employees, and the software.
 
     @property
     def total_hours(self):
