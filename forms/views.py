@@ -24,6 +24,7 @@ from .serializers import (
 )
 from .kpi_models import Kpi
 from api.mixins import UserPermissionMixin, AdminPermissionMixin
+from rest_framework.response import Response
 
 
 # Cash Advance Form
@@ -116,6 +117,22 @@ class LeaveList(UserPermissionMixin, generics.ListCreateAPIView):
     
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+    
+    # def list(self, request, *args, **kwargs):
+    #     user = request.user
+    #     image_of_user = user.image
+
+    #     # Serialize the queryset
+    #     queryset = self.get_queryset()
+    #     serializer = self.get_serializer(queryset, many=True)
+
+    #     # Construct the response data
+    #     data = serializer.data
+    #     for item in data:
+    #         item['image_of_user'] = image_of_user
+        
+        # return Response(data)
+        
 
 
 class LeaveDetail(UserPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
