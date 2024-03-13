@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
-
+from django.shortcuts import get_object_or_404
 from users.departments.models import Department
 from users.departments.serializers import DepartmentList_Serializer, DepartmentDetail_Serializer
 from users.positions.models import Position
@@ -47,7 +47,6 @@ class Register(AdminPermissionMixin, generics.CreateAPIView):
             account = Register_Serializer.save()
             data['response'] = 'User created successfully'
             data['username'] = account.username
-            data['email'] = account.email
             token = Token.objects.get(user=account).key
             data['token'] = token
         else:
@@ -106,16 +105,38 @@ class UserList(UserPermissionMixin, generics.ListAPIView):
     serializer_class = UserListSerializer
 
 
-class UserDetail(UserPermissionMixin, generics.RetrieveUpdateDestroyAPIView):
+    
+class UserDetail(UserPermissionMixin,generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserDetailSerializer
+    lookup_field = 'employee_id'
 
     def get_serializer_class(self):
-        if self.request.method == 'PUT' and self.request.user.is_staff:
-            return UserDetailSerializer
-        if self.request.method == 'DELETE' and self.request.user.is_staff:
+        if self.request.method in ['PUT', 'DELETE'] and self.request.user.is_staff:
             return UserDetailSerializer
         return super().get_serializer_class()
+
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+        obj = get_object_or_404(queryset, employee_id=self.kwargs.get('employee_id'))
+        self.check_object_permissions(self.request, obj)
+        return obj
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+        
 
 # Admin
 

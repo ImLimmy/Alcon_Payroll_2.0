@@ -1,10 +1,11 @@
 from rest_framework import serializers
-
+from .departments.models import Department
 from .models import User, Privilege
 from timesheets.serializers import TimeSheetSerializer
-
-# User
-
+from .positions.models import Position
+from shift.models import Shift
+from careers.models import Careers
+from extras.models import Incentives, Deductions
 
 class UserSerializer(serializers.ModelSerializer):
     basic_salary_per_month = serializers.ReadOnlyField()
@@ -68,18 +69,19 @@ class UserDetailSerializer(serializers.ModelSerializer):
     basic_salary_per_month = serializers.ReadOnlyField()
     full_name = serializers.CharField(read_only=True)
     department = serializers.SlugRelatedField(
-        slug_field='department', read_only=True)
+        slug_field='department', queryset=Department.objects.all())
     position = serializers.SlugRelatedField(
-        slug_field='position', read_only=True)
+        slug_field='position', queryset = Position.objects.all())
     shift = serializers.SlugRelatedField(
-        slug_field='shift_name', read_only=True)
-    career = serializers.SlugRelatedField(
-        slug_field='career_status', read_only=True)
+        slug_field='shift_name', queryset = Shift.objects.all())
     incentives = serializers.SlugRelatedField(
-        slug_field='incentive_name', many=True, read_only=True)
+        slug_field='incentive_name', many=True, queryset = Incentives.objects.all())
     deductions = serializers.SlugRelatedField(
-        slug_field='deduction_name', many=True, read_only=True)
+        slug_field='deduction_name', many=True, queryset = Deductions.objects.all())
+    career = serializers.SlugRelatedField(
+        slug_field='career_status', queryset=Careers.objects.all())
     privilege = serializers.StringRelatedField()
+    
 
     pag_ibig_contribution = serializers.StringRelatedField()
     philhealth_contribution = serializers.StringRelatedField()
@@ -157,7 +159,6 @@ class Register_Serializer(serializers.ModelSerializer):
         model = User
         fields = [
             'username',
-            'email',
             'password',
             'password2',
             'is_superuser',
@@ -172,11 +173,8 @@ class Register_Serializer(serializers.ModelSerializer):
         if password != password2:
             raise serializers.ValidationError(
                 {'password': 'Passwords must match'})
-        if User.objects.filter(email=self.validated_data['email']).exists():
-            raise serializers.ValidationError(
-                {'email': 'Email already exists'})
+        
         account = User(
-            email=self.validated_data['email'],
             username=self.validated_data['username'],
             is_superuser=self.validated_data['is_superuser']
         )

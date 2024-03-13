@@ -87,7 +87,7 @@ class Manager(UserManager):
 class User(AbstractUser):
     # Login
     username = models.CharField(max_length=100, unique=True)
-    email = models.EmailField(unique=True)
+    email = models.EmailField(unique=True, null= True, blank = True)
     password = models.CharField(max_length=128, unique=True)
 
     # Profile

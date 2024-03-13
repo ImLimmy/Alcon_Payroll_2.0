@@ -6,7 +6,7 @@ urlpatterns = [
 
     # http://127.0.0.1:8000/alcon_payroll/users/
     path('', views.UserList.as_view(), name='user_list'),
-    path('<int:pk>/', views.UserDetail.as_view(), name='user_detail'),
+    path('<int:employee_id>/', views.UserDetail.as_view(), name='user_detail'),
 
     # http://127.0.0.1:8000/alcon_payroll/users/departments/
     path('departments/', views.DepartmentList.as_view(), name='department_list'),
